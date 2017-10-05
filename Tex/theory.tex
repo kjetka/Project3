@@ -1,0 +1,22 @@
+
+Sentrifugal: $ a = \frac{v^2}{r} $. 
+
+We know that the earth needs one year to orbit the sun, meaning that $ v = \frac{2\pi r}{\text{1 year}} $. This can be rewritten with $ v = \tilde{v}v_0 $ and $ r = \tilde{r}r_0 $. The units of $ r $ and $ v $ are contained in  $ v_0 = \frac{1 \text{Au}}{1 \text{ year}} $ and $ r_0=1\text{ Au} $, giving that $ \tilde{v}^2\tilde{r} = 4\pi^2 $. In the same way $ t = \tilde{t}t_0 $, with $ t_0 = 1 \text{ year} $. 
+
+
+\begin{align}
+	a_E &= \frac{F_E}{M_E}= - G\frac{M_{sun}}{r^2}\\
+	&= \frac{v^2}{r}\\
+	GM_{sun}&= v^2 r = 4\pi^2 \frac{(\text{1 Au})^3}{(\text{1 year})^2}\\
+	\dv{\tilde{v}}{\tilde{t}} &=- \frac{4\pi^2}{\tilde{r}^2} \label{eq:}
+\end{align}
+
+For the rest of the paper we will assume all variables to be dimensionless. 
+In a two dimensional system $ r = (x,y) = (r\cos\theta, r\sin\theta) $. This gives the following relations:
+
+\begin{align}
+	\dv{{v}_x}{{t}} &=- \frac{4\pi^2r\cos\theta}{{r}^3}  =- \frac{4\pi^2x}{{r}^3} \\
+		\dv{{v}_y}{{t}} &=- \frac{4\pi^2r\sin\theta}{{r}^3}  = -\frac{4\pi^2y}{{r}^3}\\
+		\dv{x}{t} &= v_x\\
+				\dv{y}{t} &= v_y\\
+\end{align}
