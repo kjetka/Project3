@@ -9,26 +9,35 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
-#include "solver.h"
+//#include "solver.h"
+#include <new>
+
+using namespace arma;
 
 class Planet{
-    friend class Solver;
+    //friend class Solver;
 
     private:
         double m_pi;
         double m_fourpi2;
 
-        mat position;
-        mat velocity ;
-        mat acceleration;
 
-        int dimension;
+
+        int dimension = 2;
 
 
     public:
-        Planet(double mass, double &x, double &y, double &vx, double &vy);
-        void relativeDistance(double *r, int dimension);
-        void acceleration(double &ax, double &ay);
+        mat position;
+        mat velocity;
+        mat aks;
+        Planet();
+        Planet(double mass, double x, double y, double vx, double vy);
+        //~Planet () {}                        // destructor
+
+        void relativeDistance(mat &position, int dimension, double &distance);
+        void acceleration(mat& aks, double absDistance, int dimension, mat& position);
+
+
 
 };
 
