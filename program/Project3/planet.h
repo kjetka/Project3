@@ -15,21 +15,21 @@
 using namespace arma;
 
 class Planet{
-    //friend class Solver;
+    friend class Solver;
 
     private:
         double m_pi;
         double m_fourpi2;
-
+        mat position;
+        mat velocity;
+        mat aks;
 
 
         int dimension = 2;
 
 
     public:
-        mat position;
-        mat velocity;
-        mat aks;
+
         Planet();
         Planet(double mass, double x, double y, double vx, double vy);
         //~Planet () {}                        // destructor
