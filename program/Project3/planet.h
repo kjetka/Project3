@@ -1,5 +1,7 @@
 #ifndef PLANET_H
 #define PLANET_H
+#include <cmath>
+#include <vector>
 
 
 class Planet
