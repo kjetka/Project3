@@ -1,6 +1,6 @@
 #include "planet.h"
 
-planet::planet()
+Planet::Planet()
 {
 
 }

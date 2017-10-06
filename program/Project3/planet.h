@@ -2,10 +2,10 @@
 #define PLANET_H
 
 
-class planet
+class Planet
 {
 public:
-    planet();
+    Planet();
 };
 
 #endif // PLANET_H

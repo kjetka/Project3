@@ -5,7 +5,8 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
 #    non_interact.cpp
-    planet.cpp
+    planet.cpp \
+    solver.cpp
 
 #HEADERS += \
 #    non_interact.h
@@ -20,4 +21,5 @@ INCLUDEPATH += D:\armadillo-8.100.1/include
 #QMAKE_CXXFLAGS -= -O2
 
 HEADERS += \
-    planet.h
+    planet.h \
+    solver.h

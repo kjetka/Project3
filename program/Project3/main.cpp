@@ -12,8 +12,11 @@
 using namespace std;
 using namespace arma;
 
-int main()
-{
+int main(){
+
+
+
+
 //    class planet;
 
     double timeLimit = 1.0;
