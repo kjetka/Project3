@@ -15,12 +15,12 @@ using namespace arma;
 
 int main(){
 
-    Planet test1;
-    Solver test2;
+    //Solver* solv;
 
     double x, y, vx, vy;
 
-    test2.velocityVerlet(x, y, vx, vy);
+    Solver* solv = new Solver();
+    solv->velocityVerlet(x, y, vx, vy);
 /*
     double timeLimit = 1.0;
     int numberofsteps = 10000;

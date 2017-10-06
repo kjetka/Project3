@@ -16,7 +16,7 @@ class Solver
 
     public:
         Solver();
-        Planet();
+        //Planet();
         void velocity(double &vx, double &vy, double ax, double ay);
         void velocityVerlet(double &x, double &y, double &vx, double &vy);
 };

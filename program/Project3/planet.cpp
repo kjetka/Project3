@@ -1,8 +1,8 @@
 #include "planet.h"
-#include "solver.h"
 
 Planet::Planet(){
-
+    pi = acos(-1.0);
+    fourpi2 = 4*pi*pi;
 }
 
 void Planet::relativeDistance(double x, double y, double &r){
