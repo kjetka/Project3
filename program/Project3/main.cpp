@@ -59,26 +59,31 @@ int main(){
     y = 0.0;
     vx = 0;
     vy = 2*pi;
-    ax, ay, r;
 
     // Velocity Verlet:
 
-    double dt2 = pow(dt,2)/2;
     double dtdiv2 = dt/2;
 
-    double ax_new, ay_new;
+    double ax_new, ay_new, vx_half, vy_half;
+
+    r = sqrt(pow(x,2) + pow(y,2));
+    ax = (-fourpi2/pow(r,3))*x;
+    ay = (-fourpi2/pow(r,3))*y;
 
     while(time<=timeLimit){
+        vx_half = vx + dtdiv2*ax;
+        vy_half = vy + dtdiv2*ay;
+
+        x = x + dt*vx_half;
+        y = y + dt*vy_half;
+
         r = sqrt(pow(x,2) + pow(y,2));
 
         ax_new = (-fourpi2/pow(r,3))*x;
         ay_new = (-fourpi2/pow(r,3))*y;
 
-        x = x + dt*vx + dt2*ax;
-        y = y + dt*vy + dt2*ay;
-
-        vx = vx + dtdiv2*(ax_new + ax);
-        vy = vy + dtdiv2*(ay_new + ay);
+        vx = vx_half + dtdiv2*ax_new;
+        vy = vy_half + dtdiv2*ay_new;
 
         ax = ax_new;
         ay = ay_new;
