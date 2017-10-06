@@ -4,12 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-#    non_interact.cpp
     planet.cpp \
     solver.cpp
 
-#HEADERS += \
-#    non_interact.h
+HEADERS += \
+    planet.h \
+    solver.h
 
 #INCLUDEPATH += D:\armadillo-8.100.1/include
 
@@ -19,7 +19,3 @@ LIBS += -larmadillo -llapack -lblas
 
 #QMAKE_CXXFLAGS += -O3
 #QMAKE_CXXFLAGS -= -O2
-
-HEADERS += \
-    planet.h \
-    solver.h

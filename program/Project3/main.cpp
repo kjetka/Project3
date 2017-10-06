@@ -1,28 +1,23 @@
-#include <iostream>
-//#include "non_interact.h"
-#include <armadillo>
-#include <cstdlib>
-#include <cmath>
-#include <fstream>
-#include <time.h>
-#include <iomanip>
-#include <iostream>
-#include <fstream>
 #include "solver.h"
-#include "planet.h"
+//#include "planet.h"
 
-using namespace std;
-using namespace arma;
+#include <iostream>
+//using namespace std;
+//using namespace arma;
 
 int main(){
 
+    Solver* solv;
 
+    double x, y, vx, vy;
 
+    solv = new Solver();
+    solv->velocityVerlet(x, y, vx, vy);
 
-//    class planet;
-
-    double timelimit = 1.0;
-    int integration_points = 10000;
+  //  solv->
+/*
+    double timeLimit = 1.0;
+    int numberofsteps = 10000;
     double time = 0;
     double dt = timelimit/integration_points;
 
@@ -45,29 +40,31 @@ int main(){
     y = 0.0;
     vx = 0;
     vy = 2*pi;
-    ax, ay, r;
 
     // Velocity Verlet:
 
-    double dt2 = pow(dt,2)/2;
     double dtdiv2 = dt/2;
 
-    double ax_new, ay_new;
+    double ax_new, ay_new, vx_half, vy_half;
 
-    while(time<=timelimit){
+    r = sqrt(pow(x,2) + pow(y,2));
+    ax = (-fourpi2/pow(r,3))*x;
+    ay = (-fourpi2/pow(r,3))*y;
+
+    while(time<=timeLimit){
+        vx_half = vx + dtdiv2*ax;
+        vy_half = vy + dtdiv2*ay;
+
+        x = x + dt*vx_half;
+        y = y + dt*vy_half;
+
         r = sqrt(pow(x,2) + pow(y,2));
 
-        ax_new = (-fourpi2/pow(r,3))*x;
-        ay_new = (-fourpi2/pow(r,3))*y;
+        ax = (-fourpi2/pow(r,3))*x;
+        ay = (-fourpi2/pow(r,3))*y;
 
-        x = x + dt*vx + dt2*ax;
-        y = y + dt*vy + dt2*ay;
-
-        vx = vx + dtdiv2*(ax_new + ax);
-        vy = vy + dtdiv2*(ay_new + ay);
-
-        ax = ax_new;
-        ay = ay_new;
+        vx = vx_half + dtdiv2*ax;
+        vy = vy_half + dtdiv2*ay;
 
         time = time + dt;
     }
