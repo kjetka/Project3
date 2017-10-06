@@ -1,5 +1,4 @@
 #include <iostream>
-//#include "non_interact.h"
 #include <armadillo>
 #include <cstdlib>
 #include <cmath>
@@ -8,17 +7,21 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include "solver.h"
+#include "planet.h"
 
 using namespace std;
 using namespace arma;
 
 int main(){
 
+    Planet test1;
+    Solver test2;
 
+    double x, y, vx, vy;
 
-
-//    class planet;
-
+    test2.velocityVerlet(x, y, vx, vy);
+/*
     double timeLimit = 1.0;
     int numberofsteps = 10000;
     double time = 0;
@@ -79,17 +82,15 @@ int main(){
 
         r = sqrt(pow(x,2) + pow(y,2));
 
-        ax_new = (-fourpi2/pow(r,3))*x;
-        ay_new = (-fourpi2/pow(r,3))*y;
+        ax = (-fourpi2/pow(r,3))*x;
+        ay = (-fourpi2/pow(r,3))*y;
 
-        vx = vx_half + dtdiv2*ax_new;
-        vy = vy_half + dtdiv2*ay_new;
-
-        ax = ax_new;
-        ay = ay_new;
+        vx = vx_half + dtdiv2*ax;
+        vy = vy_half + dtdiv2*ay;
 
         time = time + dt;
     }
+*/
 cout << "Velocity Verlet:"<<endl;
 cout << "Position: " << "(" << x << " , " << y << " ) " << endl;
 cout << "Velocity: " << "(" << vx << " , " << vy << " ) " << endl;
