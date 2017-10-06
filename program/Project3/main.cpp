@@ -1,26 +1,20 @@
-#include <iostream>
-#include <armadillo>
-#include <cstdlib>
-#include <cmath>
-#include <fstream>
-#include <time.h>
-#include <iomanip>
-#include <iostream>
-#include <fstream>
 #include "solver.h"
-#include "planet.h"
+//#include "planet.h"
 
-using namespace std;
-using namespace arma;
+#include <iostream>
+//using namespace std;
+//using namespace arma;
 
 int main(){
 
-    //Solver* solv;
+    Solver* solv;
 
     double x, y, vx, vy;
 
-    Solver* solv = new Solver();
+    solv = new Solver();
     solv->velocityVerlet(x, y, vx, vy);
+
+  //  solv->
 /*
     double timeLimit = 1.0;
     int numberofsteps = 10000;
@@ -91,9 +85,9 @@ int main(){
         time = time + dt;
     }
 */
-cout << "Velocity Verlet:"<<endl;
-cout << "Position: " << "(" << x << " , " << y << " ) " << endl;
-cout << "Velocity: " << "(" << vx << " , " << vy << " ) " << endl;
+std::cout << "Velocity Verlet:"<<std::endl;
+std::cout << "Position: " << "(" << x << " , " << y << " ) " << std::endl;
+std::cout << "Velocity: " << "(" << vx << " , " << vy << " ) " << std::endl;
 
 }
 

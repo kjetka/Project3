@@ -12,13 +12,23 @@
 #include "solver.h"
 
 class Planet{
+    friend class Solver;
+
     private:
-        double pi;
-        double fourpi2;
+        double m_pi;
+        double m_fourpi2;
+
+        mat position;
+        mat velocity ;
+        mat acceleration;
+
+        int dimension;
+
+
     public:
-        Planet();
-        void relativeDistance(double x, double y, double &r);
-        void acceleration(double x, double y, double r, double &ax, double &ay);
+        Planet(double mass, double &x, double &y, double &vx, double &vy);
+        void relativeDistance(double *r, int dimension);
+        void acceleration(double &ax, double &ay);
 
 };
 
