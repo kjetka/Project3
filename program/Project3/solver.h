@@ -9,7 +9,6 @@
 class Solver
 {
     private:
-        double m_pi;
         double fourpi2;
 
         double time;
@@ -23,7 +22,7 @@ class Solver
     public:
         Solver();
         //Planet();
-        void velocity(double &vx, double &vy, double ax, double ay);
+        void velocity_funk(mat v, mat a);
         void velocityVerlet(double &x, double &y, double &vx, double &vy);
 
         void addPlanet(Planet* p);

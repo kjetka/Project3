@@ -4,8 +4,7 @@
 
 Solver::Solver(){
 
-    m_pi = acos(-1.0);
-    fourpi2 = 4*m_pi*m_pi;
+    fourpi2 = 4*M_PI*M_PI;
 
     timeLimit = 1.0;
     numberofsteps = 10000;
@@ -15,53 +14,26 @@ Solver::Solver(){
 
     m_planets.reserve(20);
 
-void Solver::euler(double x, double y, double vx, double vy, double timeLimit, double integrationPoints){
-    // Euler-Cromer method:
-    double r, ax,ay;
-
-    double fourpi2 = 4*m_pi*m_pi;
-
-    double time = 0;
-    double dt = timeLimit/integrationPoints;
-    ofstream outfile("../test.txt");
-
-    while(time<=timeLimit){
-        r = sqrt(pow(x,2) + pow(y,2));
-        ax = (-fourpi2/pow(r,3))*x;
-        ay = (-fourpi2/pow(r,3))*y;
-        vx = vx + dt*ax;
-        vy = vy + dt*ay;
-        x = x + dt*vx;
-        y = y + dt*vy;
-        writePosition(outfile, vec({x,y}), vec({vx,vy}), 3, time);
-
-        time = time + dt;
-    }
-
-    cout << "Euler:" << endl;
-    cout << "Position: " << "(" << x << " , " << y << " ) " << endl;
-    cout << "Velocity: " << "(" << vx << " , " << vy << " ) " << endl;
-
-
 }
-
-void Solver::velocity(double &vx, double &vy, double ax, double ay){
-    vx = vx + dt_half*ax;
-    vy = vy + dt_half*ay;
+void Solver::velocity_funk(mat v, mat a){
+    // problem with mat and vec? Make this inliner?
+   v = v + dt_half*a;
+    //vx = vx + dt_half*ax;
+    //vy = vy + dt_half*ay;
 }
 
 void Solver::velocityVerlet(double &x, double &y, double &vx, double &vy){
     x = 1.0;
     y = 0.0;
     vx = 0;
-    vy = 2*m_pi;
+    vy = 2*M_PI;
 
     double ax, ay, r;
 
     for (unsigned int i=0; i < m_planets.size(); i++) {
         Planet* planet_i = m_planets.at(i); // m_planets[i];
         double ax,ay;
-        planet_i->acceleration(ax,ay);
+        planet_i->acceleration(mat a);
     }
 
     p.relativeDistance(x,y,r);
@@ -83,7 +55,7 @@ void Solver::velocityVerlet(double &x, double &y, double &vx, double &vy){
 
     }
 }
-void Solver::addPlanet(Planet *p) {
+void Solver::addPlanet(Planet *p) { //Inliner?
     m_planets.push_back(p);
 }
 
