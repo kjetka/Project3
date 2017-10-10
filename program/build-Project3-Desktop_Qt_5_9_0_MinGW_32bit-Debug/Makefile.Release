@@ -104,8 +104,7 @@ compiler_clean:
 
 ####### Compile
 
-release/main.o: ../Project3/main.cpp ../Project3/solver.h \
-		../Project3/planet.h \
+release/main.o: ../Project3/main.cpp ../Project3/planet.h \
 		../../../../armadillo-8.100.1/include/armadillo \
 		../../../../armadillo-8.100.1/include/armadillo_bits/compiler_extra.hpp \
 		../../../../armadillo-8.100.1/include/armadillo_bits/config.hpp \
@@ -613,7 +612,8 @@ release/main.o: ../Project3/main.cpp ../Project3/solver.h \
 		../../../../armadillo-8.100.1/include/armadillo_bits/newarp_TridiagEigen_meat.hpp \
 		../../../../armadillo-8.100.1/include/armadillo_bits/newarp_UpperHessenbergEigen_meat.hpp \
 		../../../../armadillo-8.100.1/include/armadillo_bits/newarp_UpperHessenbergQR_meat.hpp \
-		../../../../armadillo-8.100.1/include/armadillo_bits/compiler_setup_post.hpp
+		../../../../armadillo-8.100.1/include/armadillo_bits/compiler_setup_post.hpp \
+		../Project3/solver.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\Project3\main.cpp
 
 release/planet.o: ../Project3/planet.cpp ../Project3/planet.h \
