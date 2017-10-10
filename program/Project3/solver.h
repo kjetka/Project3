@@ -3,6 +3,7 @@
 #include "planet.h"
 #include <vector>
 
+using namespace std;
 
     void euler(double x, double y, double vx, double vy, double timelimit, double integration_points);
     void writePosition(std::ofstream &output, mat r,mat v,  int dim, double time);
@@ -17,15 +18,18 @@ class Solver
         double timeLimit;
         double dt_half;
 
-        std::vector<Planet*> m_planets;
 
     public:
+        vector<Planet> m_listPlanets;
+
         Solver();
         //Planet();
-        void velocity_funk(mat v, mat a);
-        void velocityVerlet(double &x, double &y, double &vx, double &vy);
+        void velocity_update(mat &v, mat &a);
+        void velocityVerlet(mat& position, mat& velocity);
 
-        void addPlanet(Planet* p);
+        void add(Planet thisplanet);
+        void writePosition(ofstream &outfile, mat &r, mat &v, int dimension, double time);
+        void alt();
 };
 
 #endif // SOLVER_H

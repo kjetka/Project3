@@ -1,67 +1,96 @@
 #include "solver.h"
 #include "planet.h"
 
+#include <armadillo>
+using namespace arma;
 
 Solver::Solver(){
 
     fourpi2 = 4*M_PI*M_PI;
-
     timeLimit = 1.0;
     numberofsteps = 10000;
     time = 0;
     dt = timeLimit/numberofsteps;
     dt_half = dt/2;
 
-    m_planets.reserve(20);
+    m_listPlanets.reserve(20);
 
 }
-void Solver::velocity_funk(mat v, mat a){
-    // problem with mat and vec? Make this inliner?
+void Solver::velocity_update(mat& v, mat& a){
+    // question: Make this inliner?
    v = v + dt_half*a;
     //vx = vx + dt_half*ax;
     //vy = vy + dt_half*ay;
 }
 
-void Solver::velocityVerlet(double &x, double &y, double &vx, double &vy){
-    x = 1.0;
-    y = 0.0;
-    vx = 0;
-    vy = 2*M_PI;
+void Solver::velocityVerlet(mat &position, mat& velocity){
+    position = vec({1,0}); // (x,y)
+    velocity = vec({0,2*M_PI});
+    mat acleration = vec({0,0}); // question: destroys everything???
+    double distance; // asbolute value of position
 
-    double ax, ay, r;
+    for (unsigned int i=0; i < m_listPlanets.size(); i++) {
+        //Question: take out loop over sun? Is one extra loop....
+        Planet current = m_listPlanets.at(i); // m_planets[i];
 
-    for (unsigned int i=0; i < m_planets.size(); i++) {
-        Planet* planet_i = m_planets.at(i); // m_planets[i];
-        double ax,ay;
-        planet_i->acceleration(mat a);
-    }
+        current.acceleration(position,acleration, 2, distance);
+        // Question: fix relative distance between two different planets
 
-    p.relativeDistance(x,y,r);
-    p.accelaration(x,y,r,ax,ay);
+        current.relativeDistance(position, 2, distance); // (position, dimension, distance)
+        current.acceleration(position, acleration, 2,distance); //(mat& position, mat& aks, int dimension, double absDistance );
 
-    while(time<=timeLimit){
-        velocity(vx, vy, ax, ay);
+        ofstream outfile;
+        outfile.open("../../results/test1.txt");
+        outfile << "time "<< "\t" << "x"<< "\t" << "y"<< "\t" << "vx" << "\t" << "vy"<<endl;
+        double d =0;
+        double time = 0;
 
-        x = x + dt*vx;
-        y = y + dt*vy;
+        while(time<timeLimit){
 
-        p.relativeDistance(x,y,r);
+            velocity_update(velocity, acleration);
+            position = position + dt*velocity;
+            //x = x + dt*vx;
+            //y = y + dt*vy;
 
-        p.acceleration(x, y, r, ax, ay);
+            current.relativeDistance(position, 2,distance);
 
-        velocity(vx, vy, ax, ay);
+            current.acceleration(position, acleration, 2, distance);
 
-        time = time + dt;
+            velocity_update(velocity,acleration); // finale vel. per time step
+            time = time + dt;
 
-    }
+
+            writePosition(outfile, position, velocity, 2, time);
+
+        }
+        //cout <<"i="<<i<<  current.position<< endl;
+        //cout <<"i="<<i<<  "time ="<<time<< endl;
+
+        outfile.close();
+
+        }
+
 }
-void Solver::addPlanet(Planet *p) { //Inliner?
-    m_planets.push_back(p);
+
+void Solver::add(Planet thisplanet) { // question: Inliner?
+    m_listPlanets.push_back(thisplanet);
 }
 
-void Solver::writePosition(ofstream &output, mat r, mat v, int dimension, double time){
-    for(int i=0;i<dimension; i++){output << "\t" << r[i];}
-    for(int i=0;i<dimension; i++){output << "\t" << v[i];}
-    output << endl;
+void Solver::writePosition(ofstream& outfile, mat& r, mat& v, int dimension, double time){
+    outfile << time;
+    for(int i=0;i<dimension; i++){
+        outfile << "\t" << "\t" << r(i);
+    }
+    for(int i=0;i<dimension; i++){
+        outfile << "\t"<< "\t"  << v(i);}
+    outfile << endl;
 
+}
+
+void Solver::alt(){
+    Planet current = m_listPlanets.at(0); // m_planets[i];
+
+    velocityVerlet(current.position,  current.velocity);
+
+    //velocityVerlet(planet_i.position, planet_i.velocity);
 }
