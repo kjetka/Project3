@@ -6,74 +6,114 @@ using namespace arma;
 
 Solver::Solver(){
 
-    fourpi2 = 4*M_PI*M_PI;
+    pi = M_PI;
+    fourpi2 = 4*pi*pi;
     timeLimit = 1.0;
-    numberofsteps = 10000;
+    numberofsteps = 100;
     time = 0;
     dt = timeLimit/numberofsteps;
     dt_half = dt/2;
 
     m_listPlanets.reserve(20);
-
+    //outfile_list.reserve(20);
 }
-void Solver::velocity_update(mat& v, mat& a){
-    // question: Make this inliner?
-   v = v + dt_half*a;
-    //vx = vx + dt_half*ax;
-    //vy = vy + dt_half*ay;
+void Solver::totalVelocity(Planet currentPlanet){
+    currentPlanet.velocity = currentPlanet.velocity + dt_half*currentPlanet.aks;
 }
 
-void Solver::velocityVerlet(mat &position, mat& velocity){
-    position = vec({1,0}); // (x,y)
-    velocity = vec({0,2*M_PI});
-    mat acleration = vec({0,0}); // question: destroys everything???
+void Solver::totalPosition(Planet currentPlanet){
+    currentPlanet.position = currentPlanet.position + dt*currentPlanet.velocity;
+}
+
+void Solver::totalAcceleration(Planet currentPlanet){
+    for (unsigned int i=0; i < m_listPlanets.size(); i++) {
+        Planet otherPlanet = m_listPlanets.at(i);
+        currentPlanet.aks += currentPlanet.acceleration(otherPlanet);
+
+    }
+}
+
+void Solver::velocityVerlet(Planet currentPlanet){
+    /*    mat position = currentPlanet.position;  // vec({1,0}); // (x,y)
+    mat velocity = currentPlanet.velocity; // vec({0,2*pi});
+    mat accleration = currentPlanet.aks;
     double distance; // asbolute value of position
-
+*/
     for (unsigned int i=0; i < m_listPlanets.size(); i++) {
         //Question: take out loop over sun? Is one extra loop....
-        Planet current = m_listPlanets.at(i); // m_planets[i];
 
-        current.acceleration(position,acleration, 2, distance);
-        // Question: fix relative distance between two different planets
+        Planet otherPlanet = m_listPlanets.at(i); // m_planets[i];
 
-        current.relativeDistance(position, 2, distance); // (position, dimension, distance)
-        current.acceleration(position, acleration, 2,distance); //(mat& position, mat& aks, int dimension, double absDistance );
+        //double d =0;
 
-        ofstream outfile;
-        outfile.open("../../results/test1.txt");
-        outfile << "time "<< "\t" << "x"<< "\t" << "y"<< "\t" << "vx" << "\t" << "vy"<<endl;
-        double d =0;
-        double time = 0;
+        totalVelocity(currentPlanet);
+        totalPosition(currentPlanet);
+        //currentPlanet.velocity = currentPlanet.velocity + dt_half*currentPlanet.aks;
+        //currentPlanet.position = currentPlanet.position + dt*currentPlanet.velocity;
 
-        while(time<timeLimit){
+        totalAcceleration(currentPlanet);
 
-            velocity_update(velocity, acleration);
-            position = position + dt*velocity;
-            //x = x + dt*vx;
-            //y = y + dt*vy;
+        totalVelocity(currentPlanet); // finale vel. per time step
 
-            current.relativeDistance(position, 2,distance);
+    }
+    //cout <<"i="<<i<<  current.position<< endl;
+    //cout <<"i="<<i<<  "time ="<<time<< endl;
 
-            current.acceleration(position, acleration, 2, distance);
+}
 
-            velocity_update(velocity,acleration); // finale vel. per time step
-            time = time + dt;
+void Solver::algorithm(){
 
+    time = 0;
+    ofstream outfile;
+    outfile.open("../../results/position_all_planets.txt");
+    outfile << "time" << "\t";
+    for (unsigned int i=0; i < m_listPlanets.size(); i++) {
 
-            writePosition(outfile, position, velocity, 2, time);
+        Planet current = m_listPlanets.at(i);
 
+        //outfile_list.push_back = "file_" + to_string(m_listPlanets.at(i)) + ".txt";
+        //string path_to_file = "../../results/" + to_string(outfile_list(i));
+        //outfile.open(path_to_file);
+
+        outfile << current.name << "\t" << "\t";
+    }
+    outfile << endl;
+
+    while (time <timeLimit){
+
+        for (unsigned int i=0; i < m_listPlanets.size(); i++) {
+
+            Planet current = m_listPlanets.at(i); // m_planets[i];
+
+            //outfile << "time "<< "\t" << "x"<< "\t" << "y"<< "\t" << "vx" << "\t" << "vy"<<endl;
+
+            if (time <= pow(10,-8)) totalAcceleration(current);
+
+            velocityVerlet(current);
         }
-        //cout <<"i="<<i<<  current.position<< endl;
-        //cout <<"i="<<i<<  "time ="<<time<< endl;
 
-        outfile.close();
+        time = time + dt;
 
-        }
+        writeAllPlanetsPosition(outfile, time);
 
+        // question: writePosistions of all planets in one file?
+        //writePosition(outfile, current.position, current.velocity, current.position.size(), time);
+    }
+
+    outfile.close();
 }
 
 void Solver::add(Planet thisplanet) { // question: Inliner?
     m_listPlanets.push_back(thisplanet);
+}
+
+void Solver::writeAllPlanetsPosition(ofstream& outfile, double time){
+    outfile << time << "\t";
+    for(unsigned int i = 0; i<m_listPlanets.size();i++){
+        Planet current = m_listPlanets.at(i);
+        outfile << "(" << current.position(0) << ", " << current.position(1) << ")" << "\t";
+    }
+    outfile << endl;
 }
 
 void Solver::writePosition(ofstream& outfile, mat& r, mat& v, int dimension, double time){
@@ -82,15 +122,8 @@ void Solver::writePosition(ofstream& outfile, mat& r, mat& v, int dimension, dou
         outfile << "\t" << "\t" << r(i);
     }
     for(int i=0;i<dimension; i++){
-        outfile << "\t"<< "\t"  << v(i);}
+        outfile << "\t"<< "\t"  << v(i);
+    }
     outfile << endl;
-
 }
 
-void Solver::alt(){
-    Planet current = m_listPlanets.at(0); // m_planets[i];
-
-    velocityVerlet(current.position,  current.velocity);
-
-    //velocityVerlet(planet_i.position, planet_i.velocity);
-}

@@ -2,12 +2,15 @@
 #include "solver.h"
 #include <cmath>
 
-Planet::Planet(double mass_, double x, double y, double vx, double vy){
+Planet::Planet(double mass_, double x, double y, double vx, double vy, std::string name_){
 
     position = vec({x,y});
     velocity = vec({vx,vy});
+    a = vec({0, 0});
     aks = vec({0,0});
     mass = mass_;
+    name = name_;
+
     //dimension = position.size();
 
     pi = M_PI;
@@ -15,20 +18,22 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy){
 
 }
 
-void Planet::relativeDistance(mat &position, int dimension, double &distance){
+void Planet::relativeDistance(Planet otherPlanet, double &distance){
     double sum = 0;
-    for(int i=0;i<dimension;i++){
-        sum += position[i]*position[i];
+    for(unsigned int i=0;i<position.size() ;i++){
+        sum += position[i]*otherPlanet.position[i];
     }
     distance = sqrt(sum);
 }
 
 
+mat Planet::acceleration(Planet otherPlanet){
+    double absDistance;
+    relativeDistance(otherPlanet, absDistance);
 
-
-void Planet::acceleration(mat& position, mat& aks, int dimension, double absDistance){
-    for(int i=0;i<dimension; i++){
-    aks(i) = (-fourpi2/pow(absDistance,3))*position(i);}
+    for(unsigned int i=0;i<position.size(); i++){
+        a(i) = (-fourpi2*otherPlanet.mass/pow(absDistance,3))*(position(i)-otherPlanet.position[i]);}
+        return a;
 }
 
 

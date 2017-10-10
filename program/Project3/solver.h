@@ -10,8 +10,8 @@ using namespace std;
 class Solver
 {
     private:
+        double pi;
         double fourpi2;
-
         double time;
         int numberofsteps;
         double dt;
@@ -21,15 +21,20 @@ class Solver
 
     public:
         vector<Planet> m_listPlanets;
+        //vector<string> outfile_list;
 
         Solver();
         //Planet();
-        void velocity_update(mat &v, mat &a);
-        void velocityVerlet(mat& position, mat& velocity);
+        friend class Planet;
+        void velocityVerlet(Planet current);
 
         void add(Planet thisplanet);
         void writePosition(ofstream &outfile, mat &r, mat &v, int dimension, double time);
-        void alt();
+        void algorithm();
+        void totalAcceleration(Planet currentPlanet);
+        void totalVelocity(Planet currentPlanet);
+        void totalPosition(Planet surrentPlanet);
+        void writeAllPlanetsPosition(ofstream &outfile, double time);
 };
 
 #endif // SOLVER_H

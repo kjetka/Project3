@@ -24,20 +24,20 @@ class Planet{
         mat position;
         mat velocity;
         mat aks;
+        mat a;
         double mass;
+        std::string name;
 
 
         int dimension = 2;
 
 
     public:
-
-        Planet();
-        Planet(double mass, double x, double y, double vx, double vy);
+        Planet(double mass_, double x, double y, double vx, double vy, std::string name_);
         //~Planet () {}                        // destructor
 
-        void relativeDistance(mat &position, int dimension, double &distance);
-        void acceleration(mat& position, mat& aks, int dimension, double absDistance );
+        void relativeDistance(Planet otherPlanet, double &distance);
+        mat acceleration(Planet otherPlanet);
 
 
 
