@@ -42,7 +42,6 @@ void Solver::velocityVerlet(mat &position, mat& velocity){
         ofstream outfile;
         outfile.open("../../results/test1.txt");
         outfile << "time "<< "\t" << "x"<< "\t" << "y"<< "\t" << "vx" << "\t" << "vy"<<endl;
-        double d =0;
         double time = 0;
 
         while(time<timeLimit){
@@ -94,3 +93,44 @@ void Solver::alt(){
 
     //velocityVerlet(planet_i.position, planet_i.velocity);
 }
+
+
+void Solver::euler(mat& position,mat& velocity, double timeLimit, double integrationPoints){
+    // Euler-Cromer method:
+    /*double r;
+    mat a = vec({0,0});
+
+    double fourpi2 = 4*M_PI*M_PI;
+
+    double time = 0;
+    double dt = timeLimit/integrationPoints;
+    double r;
+
+    ofstream outfile("../../results/euler.txt");
+    for (unsigned int i=0; i < m_listPlanets.size(); i++) {
+        //Question: take out loop over sun? Is one extra loop....
+        Planet current = m_listPlanets.at(i); // m_planets[i];
+
+        current.acceleration(position,acleration, 2, distance);
+        // Question: fix relative distance between two different planets
+
+        current.relativeDistance(position, 2, r); // (position, dimension, distance)
+        current.acceleration(position, acleration, 2,distance); //(mat& position, mat& aks, int dimension, double absDistance );
+        while(time<=timeLimit){
+
+            a = (-fourpi2/pow(r,3))*position;
+            velocity += dt*a;
+            position = position + dt*velocity;
+            writePosition(outfile, position, position, 2, time);
+
+            time = time + dt;
+        }
+
+        cout << "Euler:" << endl;
+        cout << "Position: " << "(" << x << " , " << y << " ) " << endl;
+        cout << "Velocity: " << "(" << vx << " , " << vy << " ) " << endl;
+
+    }
+    */
+}
+

@@ -26,6 +26,7 @@ class Solver
         //Planet();
         void velocity_update(mat &v, mat &a);
         void velocityVerlet(mat& position, mat& velocity);
+        void euler(mat& position,mat& velocity, double timeLimit, double integrationPoints);
 
         void add(Planet thisplanet);
         void writePosition(ofstream &outfile, mat &r, mat &v, int dimension, double time);
