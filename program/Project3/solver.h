@@ -31,6 +31,8 @@ class Solver
         void add(Planet thisplanet);
         void writePosition(ofstream &outfile, mat &r, mat &v, int dimension, double time);
         void algorithm();
+        void test_algorithm();
+        void Euler(Planet &currentplanet);
         void totalAcceleration(Planet &currentPlanet);
         void totalVelocity(Planet &currentPlanet);
         void totalPosition(Planet &currentPlanet);

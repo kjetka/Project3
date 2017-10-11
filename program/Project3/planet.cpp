@@ -29,13 +29,12 @@ void Planet::relativeDistance(Planet otherPlanet, double &distance){
 
 mat Planet::acceleration(Planet otherPlanet){
     double absDistance;
+    // calculates the distance from this planet to the other planet
     relativeDistance(otherPlanet, absDistance);
-    //cout << name << ": " << absDistance << endl;
+
+    // Calculates the acceleration form the gravitational force between the planets
     for(unsigned int i=0;i<position.size(); i++){
-        a(i) = (-fourpi2*otherPlanet.mass/pow(absDistance,3))*(position(i)-otherPlanet.position[i]);}
-//        a.print("a: ");
-        return a;
+        a(i) = ((-fourpi2*otherPlanet.mass)/pow(absDistance,3))*(position(i)-otherPlanet.position[i]);
+    }
+    return a;
 }
-
-
-//Question: Make a force function - use to get acceleration.
