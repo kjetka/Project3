@@ -12,7 +12,7 @@ class Solver
     private:
         double pi;
         double fourpi2;
-        double time;
+        //double time;
         int numberofsteps;
         double dt;
         double timeLimit;
@@ -26,14 +26,14 @@ class Solver
         Solver();
         //Planet();
         friend class Planet;
-        void velocityVerlet(Planet current);
+        void velocityVerlet(Planet &current);
 
         void add(Planet thisplanet);
         void writePosition(ofstream &outfile, mat &r, mat &v, int dimension, double time);
         void algorithm();
-        void totalAcceleration(Planet currentPlanet);
-        void totalVelocity(Planet currentPlanet);
-        void totalPosition(Planet surrentPlanet);
+        void totalAcceleration(Planet &currentPlanet);
+        void totalVelocity(Planet &currentPlanet);
+        void totalPosition(Planet &currentPlanet);
         void writeAllPlanetsPosition(ofstream &outfile, double time);
 };
 

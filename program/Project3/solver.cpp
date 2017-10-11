@@ -10,52 +10,63 @@ Solver::Solver(){
     fourpi2 = 4*pi*pi;
     timeLimit = 1.0;
     numberofsteps = 100;
-    time = 0;
+    //time = 0;
     dt = timeLimit/numberofsteps;
     dt_half = dt/2;
 
     m_listPlanets.reserve(20);
     //outfile_list.reserve(20);
 }
-void Solver::totalVelocity(Planet currentPlanet){
-    currentPlanet.velocity = currentPlanet.velocity + dt_half*currentPlanet.aks;
+void Solver::totalVelocity(Planet &currentPlanet){
+  //  currentPlanet.aks.print("before v - a: ");
+  //  currentPlanet.aks.print("before v - v: ");
+    currentPlanet.velocity+= dt_half*currentPlanet.aks;
+    currentPlanet.velocity.print("v= ");
 }
 
-void Solver::totalPosition(Planet currentPlanet){
-    currentPlanet.position = currentPlanet.position + dt*currentPlanet.velocity;
+void Solver::totalPosition(Planet &currentPlanet){
+    currentPlanet.position += dt*currentPlanet.velocity;
+    currentPlanet.position.print("r= ");
 }
 
-void Solver::totalAcceleration(Planet currentPlanet){
+void Solver::totalAcceleration(Planet &currentPlanet){
     for (unsigned int i=0; i < m_listPlanets.size(); i++) {
-        Planet otherPlanet = m_listPlanets.at(i);
-        currentPlanet.aks += currentPlanet.acceleration(otherPlanet);
+        currentPlanet.aks = vec({0, 0});
+        Planet &otherPlanet = m_listPlanets.at(i);
 
+        if(currentPlanet.name == otherPlanet.name){
+            //           cout << "Don't get affected by myself" << endl;
+        }else{
+            //   cout << otherPlanet.name << endl;
+            currentPlanet.aks += currentPlanet.acceleration(otherPlanet);
+            currentPlanet.aks.print("a= ");
+        }
+        // question: should we instead have a get-function ans set-function?
     }
 }
 
-void Solver::velocityVerlet(Planet currentPlanet){
+
+void Solver::velocityVerlet(Planet &currentPlanet){
     /*    mat position = currentPlanet.position;  // vec({1,0}); // (x,y)
     mat velocity = currentPlanet.velocity; // vec({0,2*pi});
     mat accleration = currentPlanet.aks;
     double distance; // asbolute value of position
 */
-    for (unsigned int i=0; i < m_listPlanets.size(); i++) {
-        //Question: take out loop over sun? Is one extra loop....
+   // for (unsigned int i=0; i < m_listPlanets.size(); i++) {
 
-        Planet otherPlanet = m_listPlanets.at(i); // m_planets[i];
+       // if((currentPlanet.position(0) <= pow(10,-8)) & (currentPlanet.position(1) <= pow(10,-8))){ //If sun is origo, skip the sun
+         //   cout << "don't need the sun" << endl;
+        //}else{
+   //         Planet otherPlanet = m_listPlanets.at(i); // m_planets[i];
 
-        //double d =0;
+            totalVelocity(currentPlanet);
+            totalPosition(currentPlanet);
 
-        totalVelocity(currentPlanet);
-        totalPosition(currentPlanet);
-        //currentPlanet.velocity = currentPlanet.velocity + dt_half*currentPlanet.aks;
-        //currentPlanet.position = currentPlanet.position + dt*currentPlanet.velocity;
+            totalAcceleration(currentPlanet);
 
-        totalAcceleration(currentPlanet);
-
-        totalVelocity(currentPlanet); // finale vel. per time step
-
-    }
+            totalVelocity(currentPlanet); // finale vel. per time step
+        //}
+  //  }
     //cout <<"i="<<i<<  current.position<< endl;
     //cout <<"i="<<i<<  "time ="<<time<< endl;
 
@@ -63,55 +74,65 @@ void Solver::velocityVerlet(Planet currentPlanet){
 
 void Solver::algorithm(){
 
-    time = 0;
+    double time = 0;
     ofstream outfile;
     outfile.open("../../results/position_all_planets.txt");
-    outfile << "time" << "\t";
+    outfile << "time" << "\t \t \t";
     for (unsigned int i=0; i < m_listPlanets.size(); i++) {
 
-        Planet current = m_listPlanets.at(i);
-
-        //outfile_list.push_back = "file_" + to_string(m_listPlanets.at(i)) + ".txt";
-        //string path_to_file = "../../results/" + to_string(outfile_list(i));
-        //outfile.open(path_to_file);
-
-        outfile << current.name << "\t" << "\t";
+        Planet currentPlanet = m_listPlanets.at(i);
+        outfile << currentPlanet.name << "\t \t \t";
     }
+
     outfile << endl;
+    outfile << "\t \t";
 
-    while (time <timeLimit){
-
-        for (unsigned int i=0; i < m_listPlanets.size(); i++) {
-
-            Planet current = m_listPlanets.at(i); // m_planets[i];
-
-            //outfile << "time "<< "\t" << "x"<< "\t" << "y"<< "\t" << "vx" << "\t" << "vy"<<endl;
-
-            if (time <= pow(10,-8)) totalAcceleration(current);
-
-            velocityVerlet(current);
-        }
-
-        time = time + dt;
-
-        writeAllPlanetsPosition(outfile, time);
-
-        // question: writePosistions of all planets in one file?
-        //writePosition(outfile, current.position, current.velocity, current.position.size(), time);
+     for (unsigned int i=0; i < m_listPlanets.size(); i++) {
+        outfile << "x" << "\t \t" << "y" << "\t \t";
     }
+        outfile << endl;
 
-    outfile.close();
-}
+        while (time <timeLimit){
+            cout << "time: " << time << endl;
+            for (unsigned int i=0; i < m_listPlanets.size(); i++) {
+                Planet &currentPlanet = m_listPlanets.at(i); // m_planets[i];
+
+                if((abs(currentPlanet.position(0)) <= 0.000001) & (abs(currentPlanet.position(1)) <= 0.000001)){ //If sun is origo, skip the sun
+
+                }else{
+                    //outfile << "time "<< "\t" << "x"<< "\t" << "y"<< "\t" << "vx" << "\t" << "vy"<<endl;
+
+                    if (time <= pow(10,-8)) {  // if it is the first timestep we need to calculate the acceleration
+                        totalAcceleration(currentPlanet);
+                        //cout << "first a: " << currentPlanet.aks << endl;
+                    }
+
+                    velocityVerlet(currentPlanet);
+
+                    // question: writePosistions of all planets in one file?
+                    //writePosition(outfile, current.position, current.velocity, current.position.size(), time);
+                }
+            }
+
+            time = time + dt;
+       //     cout << currentPlanet.aks<< endl;
+            writeAllPlanetsPosition(outfile, time);
+
+        }
+        outfile.close();
+    }
 
 void Solver::add(Planet thisplanet) { // question: Inliner?
     m_listPlanets.push_back(thisplanet);
 }
 
 void Solver::writeAllPlanetsPosition(ofstream& outfile, double time){
+      outfile << std::fixed;
+      outfile << std::setprecision(4);
     outfile << time << "\t";
     for(unsigned int i = 0; i<m_listPlanets.size();i++){
-        Planet current = m_listPlanets.at(i);
-        outfile << "(" << current.position(0) << ", " << current.position(1) << ")" << "\t";
+        Planet &current = m_listPlanets.at(i);
+        outfile << current.position(0)<< "\t" << current.position(1) << "\t";
     }
     outfile << endl;
 }

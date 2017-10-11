@@ -21,7 +21,7 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
 void Planet::relativeDistance(Planet otherPlanet, double &distance){
     double sum = 0;
     for(unsigned int i=0;i<position.size() ;i++){
-        sum += position[i]*otherPlanet.position[i];
+        sum += (position[i]-otherPlanet.position[i])*(position[i]-otherPlanet.position[i]);
     }
     distance = sqrt(sum);
 }
@@ -30,9 +30,10 @@ void Planet::relativeDistance(Planet otherPlanet, double &distance){
 mat Planet::acceleration(Planet otherPlanet){
     double absDistance;
     relativeDistance(otherPlanet, absDistance);
-
+    //cout << name << ": " << absDistance << endl;
     for(unsigned int i=0;i<position.size(); i++){
         a(i) = (-fourpi2*otherPlanet.mass/pow(absDistance,3))*(position(i)-otherPlanet.position[i]);}
+//        a.print("a: ");
         return a;
 }
 
