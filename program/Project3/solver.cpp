@@ -112,9 +112,14 @@ void Solver::algorithm(){
     ofstream *outFiles = new ofstream [numberOfPlanets];
     initializeFiles(outFiles, systemtype);
 
-    while (time <timeLimit){
+    while (time <= timeLimit){
+        cout <<time<<"Why not time =1 counted?"<<endl;
+
         for (unsigned int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
+
+            writePosition(outFiles[i], current.position, current.velocity, current.dimension,  time);
+
             //cout <<filename<<endl;
             if(current.name != "sun"){
                 // if it is the first timestep we need to calculate the acceleration
@@ -125,7 +130,7 @@ void Solver::algorithm(){
                 velocityVerlet(current);
                 }
 
-            writePosition(outFiles[i], current.position, current.velocity, current.dimension,  time);
+            //writePosition(outFiles[i], current.position, current.velocity, current.dimension,  time);
 
         }
         time = time + dt;
