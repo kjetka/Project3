@@ -17,26 +17,32 @@ class Solver
         double dt;
         double timeLimit;
         double dt_half;
-
+        int numberOfPlanets;
+        string systemtype;
 
     public:
         vector<Planet> m_listPlanets;
         //vector<string> outfile_list;
 
-        Solver();
+        Solver(string systemtype_);
         //Planet();
         friend class Planet;
         void velocityVerlet(Planet &current);
 
         void add(Planet thisplanet);
         void writePosition(ofstream &outfile, mat &r, mat &v, int dimension, double time);
+        void writeheader(ofstream& outfile, int dimension);
+        void initializeFiles(ofstream *outFiles, string nameinfo);
         void algorithm();
         void test_algorithm();
         void Euler(Planet &currentplanet);
-        void totalAcceleration(Planet &currentPlanet);
-        void totalVelocity(Planet &currentPlanet);
-        void totalPosition(Planet &currentPlanet);
+        void updateTotalAcceleration(Planet &currentPlanet);
+        void updateVelocity(Planet &currentPlanet);
+        void updatePosition(Planet &currentPlanet);
         void writeAllPlanetsPosition(ofstream &outfile, double time);
+        void pretests();
+
+
 };
 
 #endif // SOLVER_H
