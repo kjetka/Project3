@@ -11,8 +11,8 @@ Solver::Solver(string systemtype_){
     // Variables ----------------------
     pi = M_PI;
     fourpi2 = 4*pi*pi;
-    timeLimit = 1.0;
-    numberofsteps = 100;
+    timeLimit = 20.0;
+    numberofsteps = 1000;
     //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
@@ -99,7 +99,7 @@ void Solver::algorithm(){
                 }
 
         time = time + dt;
-        cout << time<< endl;
+//        cout << time<< endl;
     }
     //closing open files
     for (unsigned int i=0; i < numberOfPlanets; i++) {

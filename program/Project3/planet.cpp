@@ -18,7 +18,7 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
 
 void Planet::relativeDistance(Planet otherPlanet, double &distance){
     double sum = 0;
-    for(unsigned int i=0;i<dimension;i++){
+    for(int i=0;i<dimension;i++){
         sum += (position[i]-otherPlanet.position[i])*(position[i]-otherPlanet.position[i]);
     }
     distance = sqrt(sum);
