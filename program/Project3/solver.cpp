@@ -22,21 +22,9 @@ Solver::Solver(string systemtype_){
     m_listPlanets.reserve(20);
 }
 
-void Solver::updateVelocity(Planet &current){
-    //Teacher: CHANGE NAME and can have this single line in the verlet function!!!!
-    // changed name
-    current.velocity += dt_half*current.acceleration;
-}
-
-void Solver::updatePosition(Planet &current){
-    //Teacher: CHANGE NAME and can have this single line in the verlet function!!!!
-    //Kjetil: changed name
-    current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
-}
 
 void Solver::updateTotalAcceleration_potEN(Planet &current){
     // finding force -> acceleration from all other planets
-    // Setting the acceleration to 0, so we can sum over all the forces with the new distances
 
     current.acceleration = vec({0, 0});
     current.potEnergy = 0;
@@ -59,16 +47,11 @@ void Solver::updateTotalAcceleration_potEN(Planet &current){
 }
 
 void Solver::velocityVerlet(Planet &current){
-    //totalVelocity(current);
 
     current.velocity += dt_half*current.acceleration;
     current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
-
-    //updatePosition(current);
     updateTotalAcceleration_potEN(current);
     current.velocity += dt_half*current.acceleration;
-
-    //totalVelocity(current);
 }
 
 void Solver::Euler(Planet &current){
@@ -116,8 +99,8 @@ void Solver::algorithm(){
             Planet &current = m_listPlanets.at(i);
             writevalues(outFiles[i], current.position, current.velocity,current.kinEnergy,  current.dimension,  time);
 
-            //if(current.name != "sun"){
                 // if it is the first timestep we need to calculate the acceleration
+            //if(current.name != "sun"){
                 if (time == 0) {
                     updateTotalAcceleration_potEN(current);
                     }
@@ -127,7 +110,6 @@ void Solver::algorithm(){
                 cout<< current.kinEnergy<<endl;
                 }
 
-       // }
         time = time + dt;
     }
     //closing open files
@@ -139,17 +121,6 @@ void Solver::algorithm(){
 void Solver::add(Planet thisplanet) {
     m_listPlanets.push_back(thisplanet);
     numberOfPlanets += 1;
-}
-
-void Solver::writeAllPlanetsPosition(ofstream& outfile, double time){
-    outfile << std::fixed;
-    outfile << std::setprecision(4);
-    outfile << time << "\t";
-    for(unsigned int i = 0; i<numberOfPlanets;i++){
-        Planet &current = m_listPlanets.at(i);
-        outfile << current.position(0)<< "\t" << current.position(1) << "\t";
-    }
-    outfile << endl;
 }
 
 void Solver::writevalues(ofstream& outfile, mat& r, mat& v, double& kineticenergy, int dimension, double time){
