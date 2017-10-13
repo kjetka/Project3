@@ -14,6 +14,7 @@
 #include <armadillo>
 
 using namespace arma;
+using namespace std;
 
 class Planet{
     friend class Solver;
@@ -26,7 +27,7 @@ class Planet{
         mat aks;
         mat a;
         double mass;
-        std::string name;
+        string name;
 
 
         int dimension = 2;
