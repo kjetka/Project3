@@ -36,7 +36,13 @@ class Solver
         void algorithm();
         void test_algorithm();
         void Euler(Planet &currentplanet);
+
         void updateTotalAcceleration_potEN(Planet &currentPlanet);
+        void updateVelocity(Planet &currentPlanet);
+        void updatePosition(Planet &currentPlanet);
+        void writeAllPlanetsPosition(ofstream &outfile, double time);
+        void updateTotalAcceleration(Planet &currentPlanet);
+
         void pretests();
 
 

@@ -100,7 +100,6 @@ void Solver::algorithm(){
             writevalues(outFiles[i], current.position, current.velocity,current.kinEnergy,  current.dimension,  time);
 
                 // if it is the first timestep we need to calculate the acceleration
-            //if(current.name != "sun"){
                 if (time == 0) {
                     updateTotalAcceleration_potEN(current);
                     }
