@@ -12,7 +12,7 @@ Solver::Solver(string systemtype_){
     pi = M_PI;
     fourpi2 = 4*pi*pi;
     timeLimit = 1.0;
-    numberofsteps = 100;
+    numberofsteps = 10000;
     //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
@@ -25,7 +25,7 @@ Solver::Solver(string systemtype_){
 void Solver::updateVelocity(Planet &current){
     //Teacher: CHANGE NAME and can have this single line in the verlet function!!!!
     // changed name
-    current.velocity += dt_half*current.aks;
+    current.velocity += dt_half*current.acceleration;
 }
 
 void Solver::updatePosition(Planet &current){
@@ -34,15 +34,24 @@ void Solver::updatePosition(Planet &current){
     current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
 }
 
-void Solver::updateTotalAcceleration(Planet &current){
+void Solver::updateTotalAcceleration_potEN(Planet &current){
     // finding force -> acceleration from all other planets
     // Setting the acceleration to 0, so we can sum over all the forces with the new distances
 
-    current.aks = vec({0, 0});
+    current.acceleration = vec({0, 0});
+    current.potEnergy = 0;
     for (unsigned int i=0; i < numberOfPlanets; i++) {
         Planet &other = m_listPlanets.at(i);
         if(current.name != other.name){
-            current.aks += current.acceleration(other);
+            double reldistance = current.relativeDistance(other);
+
+            current.acceleration += current.accelerationFromOther(other, reldistance);
+            mat accelerationFromOther(mat &a_other, double &distance);
+
+            //current.FromOtherPotEnergy must be after current.accelerationFromOther!!!!!!!!!!!
+
+            current.potEnergy += current.FromOtherPotEnergy(other, reldistance);
+
         }
 
     }
@@ -52,21 +61,23 @@ void Solver::updateTotalAcceleration(Planet &current){
 void Solver::velocityVerlet(Planet &current){
     //totalVelocity(current);
 
-    current.velocity += dt_half*current.aks;
+    current.velocity += dt_half*current.acceleration;
     current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
 
     //updatePosition(current);
-    updateTotalAcceleration(current);
-    current.velocity += dt_half*current.aks;
+    updateTotalAcceleration_potEN(current);
+    current.velocity += dt_half*current.acceleration;
 
     //totalVelocity(current);
 }
 
 void Solver::Euler(Planet &current){
-    //works only for earth sun
+    //works not only for earth sun
     Planet other = m_listPlanets.at(1);
-    current.aks = current.acceleration(other);
-    current.velocity += current.aks*dt;
+   double  distance = current.relativeDistance(other);
+
+    current.acceleration = current.accelerationFromOther(other, distance);
+    current.velocity += current.acceleration*dt;
     current.position += current.velocity*dt;
 }
 
@@ -82,7 +93,7 @@ void Solver::test_algorithm(){
 
 
         if (time <= pow(10,-8)) {  // if it is the first timestep we need to calculate the acceleration
-            updateTotalAcceleration(current);
+            updateTotalAcceleration_potEN(current);
         }
 
         velocityVerlet(current);
@@ -100,25 +111,24 @@ void Solver::algorithm(){
     initializeFiles(outFiles, systemtype);
 
     while (time <= timeLimit){
-        cout <<time<<"Why not time =1 counted?"<<endl;
 
         for (unsigned int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
-
-            writePosition(outFiles[i], current.position, current.velocity, current.dimension,  time);
+            writevalues(outFiles[i], current.position, current.velocity,current.kinEnergy,  current.dimension,  time);
 
             //if(current.name != "sun"){
                 // if it is the first timestep we need to calculate the acceleration
                 if (time == 0) {
-                    updateTotalAcceleration(current);
+                    updateTotalAcceleration_potEN(current);
                     }
                 //Euler(current);
                 velocityVerlet(current);
+                current.energyUpdate();
+                cout<< current.kinEnergy<<endl;
                 }
 
        // }
         time = time + dt;
-        cout << time<< endl;
     }
     //closing open files
     for (unsigned int i=0; i < numberOfPlanets; i++) {
@@ -142,7 +152,7 @@ void Solver::writeAllPlanetsPosition(ofstream& outfile, double time){
     outfile << endl;
 }
 
-void Solver::writePosition(ofstream& outfile, mat& r, mat& v, int dimension, double time){
+void Solver::writevalues(ofstream& outfile, mat& r, mat& v, double& kineticenergy, int dimension, double time){
     outfile << time;
     for(int i=0;i<dimension; i++){
         outfile << "\t" << "\t" << r(i);
@@ -150,6 +160,7 @@ void Solver::writePosition(ofstream& outfile, mat& r, mat& v, int dimension, dou
     for(int i=0;i<dimension; i++){
         outfile << "\t"<< "\t"  << v(i);
     }
+    outfile << kineticenergy;
     outfile << endl;
 }
 
@@ -177,7 +188,6 @@ void Solver::initializeFiles(ofstream *outFiles, string nameinfo){
         writeheader(outFiles[i], current.dimension);
     }
 }
-
 
 void Solver::pretests(){
     for(int i=0; i<numberOfPlanets; i++){

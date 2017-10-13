@@ -8,7 +8,7 @@ using namespace std;
 
 int main(){
     //Planet planet;
-    Planet earth(0.000010, 1.0, 0.000, 0.0, M_PI*2, "earth"); // (mass,x,y,vx,vy)
+    Planet earth(0.0000030, 1.0, 0.000, 0.0, M_PI*2, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
     Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
     Solver testing("sun_earth");

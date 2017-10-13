@@ -24,12 +24,13 @@ class Planet{
         double fourpi2;
         mat position;
         mat velocity;
-        mat aks;
-        mat a;
+        mat acceleration;
+        mat a_other;
         double mass;
         string name;
-
-
+        double kinEnergy;
+        double potEnergy;
+        double distance;
         int dimension = 2;
 
 
@@ -37,10 +38,11 @@ class Planet{
         Planet(double mass_, double x, double y, double vx, double vy, std::string name_);
         //~Planet () {}                        // destructor
 
-        void relativeDistance(Planet otherPlanet, double &distance);
-        mat acceleration(Planet otherPlanet);
+        double relativeDistance(Planet otherPlanet);
+        mat accelerationFromOther(Planet otherPlanet, double &distance);
 
-
+        void energyUpdate();
+        double FromOtherPotEnergy(Planet & other,double& distance);
 
 };
 
