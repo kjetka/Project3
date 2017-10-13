@@ -11,10 +11,10 @@ Solver::Solver(string systemtype_){
     // Variables ----------------------
     pi = M_PI;
     fourpi2 = 4*pi*pi;
-    timeLimit = 1;
+    timeLimit = 1.0;
     numberofsteps = 100;
     //time = 0;
-    dt = timeLimit/numberofsteps;
+    dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
     numberOfPlanets =0;
     systemtype = systemtype_;
@@ -47,28 +47,15 @@ void Solver::updateTotalAcceleration(Planet &current){
 
     }
     // question: should we instead have a get-function ans set-function?
-
-
-        /*
-        current.aks = vec({0, 0});
-
-        Planet &other = m_listPlanets.at(i);
-
-        if(current.name == other.name){
-            // "The planet does feel force from it self"
-        }else{
-            // Sum over accelaration from all planets
-            current.aks += current.acceleration(other);
-        }
-    }
-    */
 }
 
 void Solver::velocityVerlet(Planet &current){
     //totalVelocity(current);
 
     current.velocity += dt_half*current.aks;
-    updatePosition(current);
+    current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
+
+    //updatePosition(current);
     updateTotalAcceleration(current);
     current.velocity += dt_half*current.aks;
 
@@ -84,7 +71,7 @@ void Solver::Euler(Planet &current){
 }
 
 void Solver::test_algorithm(){
-    // question: What does this?
+    // question: Remove
 
     // This is just to test the velocityVerlet for the sun-earth-system
 
@@ -120,8 +107,7 @@ void Solver::algorithm(){
 
             writePosition(outFiles[i], current.position, current.velocity, current.dimension,  time);
 
-            //cout <<filename<<endl;
-            if(current.name != "sun"){
+            //if(current.name != "sun"){
                 // if it is the first timestep we need to calculate the acceleration
                 if (time == 0) {
                     updateTotalAcceleration(current);
@@ -130,44 +116,14 @@ void Solver::algorithm(){
                 velocityVerlet(current);
                 }
 
-            //writePosition(outFiles[i], current.position, current.velocity, current.dimension,  time);
-
-        }
+       // }
         time = time + dt;
+        cout << time<< endl;
     }
     //closing open files
     for (unsigned int i=0; i < numberOfPlanets; i++) {
         outFiles[i].close();
     }
-
-
-
-
-    //outfile.close();
-
-    /*
-    // all of this is for the file-printing ----------------
-    ofstream outfile;
-    outfile.open("../../results/position_all_planets.txt");
-    outfile << "time" << "\t \t \t";
-    for (unsigned int i=0; i < numberOfPlanets; i++) {
-
-        Planet current = m_listPlanets.at(i);
-        cout << "dimension: "<<current.dimension<<endl;
-
-        outfile << current.name << "\t \t \t";
-    }
-
-    outfile << endl;
-    outfile << "\t \t";
-
-    for (unsigned int i=0; i < numberOfPlanets; i++) {
-        outfile << "x" << "\t \t" << "y" << "\t \t";
-    }
-    outfile << endl;
-    */
-    // -----------------------------------------------------
-
 }
 
 void Solver::add(Planet thisplanet) {
