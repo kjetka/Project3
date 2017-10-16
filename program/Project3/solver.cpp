@@ -5,19 +5,20 @@
 using namespace arma;
 using namespace std;
 
-Solver::Solver(string systemtype_){
+Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     //Systemtype: appends to the filename - easy to see the variables.
 
     // Variables ----------------------
     pi = M_PI;
     fourpi2 = 4*pi*pi;
-    timeLimit = 1.0;
-    numberofsteps = 10000;
+    timeLimit = timelimit;
+    numberofsteps = timeLimit*100;
     //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
     numberOfPlanets =0;
     systemtype = systemtype_;
+    vverlet = vverlet_;
     // -------------------------------
     m_listPlanets.reserve(20);
 }
@@ -47,7 +48,6 @@ void Solver::updateTotalAcceleration_potEN(Planet &current){
 }
 
 void Solver::velocityVerlet(Planet &current){
-
     current.velocity += dt_half*current.acceleration;
     current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
     updateTotalAcceleration_potEN(current);
@@ -73,14 +73,10 @@ void Solver::test_algorithm(){
     Planet &current = m_listPlanets.at(0);
 
     while (time <timeLimit){
-
-
         if (time <= pow(10,-8)) {  // if it is the first timestep we need to calculate the acceleration
             updateTotalAcceleration_potEN(current);
         }
-
         velocityVerlet(current);
-
         time += dt;
         current.position.print("r:");
     }
@@ -94,22 +90,24 @@ void Solver::algorithm(){
     initializeFiles(outFiles, systemtype);
 
     while (time <= timeLimit){
-
-        for (unsigned int i=0; i < numberOfPlanets; i++) {
+       for (unsigned int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
-            writevalues(outFiles[i], current.position, current.velocity,current.kinEnergy,  current.dimension,  time);
+            writevalues(outFiles[i], current,  time);
 
                 // if it is the first timestep we need to calculate the acceleration
                 if (time == 0) {
                     updateTotalAcceleration_potEN(current);
                     }
-                //Euler(current);
-                velocityVerlet(current);
-                current.energyUpdate();
-                cout<< current.kinEnergy<<endl;
-                }
+                if (vverlet) {
+                    velocityVerlet(current);}
 
-        time = time + dt;
+                else {Euler(current);}
+
+                current.energyUpdate();
+
+               cout << current.kinEnergy+ current.potEnergy<<endl;
+        }
+        time  += dt;
     }
     //closing open files
     for (unsigned int i=0; i < numberOfPlanets; i++) {
@@ -122,15 +120,18 @@ void Solver::add(Planet thisplanet) {
     numberOfPlanets += 1;
 }
 
-void Solver::writevalues(ofstream& outfile, mat& r, mat& v, double& kineticenergy, int dimension, double time){
+void Solver::writevalues(ofstream& outfile, Planet& current, double time){
     outfile << time;
+    double dimension = current.dimension;
     for(int i=0;i<dimension; i++){
-        outfile << "\t" << "\t" << r(i);
+        outfile << "\t" << "\t" << current.position(i);
     }
     for(int i=0;i<dimension; i++){
-        outfile << "\t"<< "\t"  << v(i);
+        outfile << "\t"<< "\t"  << current.velocity(i);
     }
-    outfile << kineticenergy;
+    outfile << "\t"<< "\t" <<current.kinEnergy;
+    outfile << "\t"<< "\t" <<current.potEnergy;
+
     outfile << endl;
 }
 
@@ -144,6 +145,9 @@ void Solver::writeheader(ofstream &outfile, int dimension){
     for(int i=0;i<dimension; i++){
         outfile << "\t"<< "\t"  << v[i];
     }
+    outfile <<  "\t"<< "\t"  << "KineticEnergy";
+    outfile <<  "\t"<< "\t"  << "PotentialEnergy";
+
     outfile << endl;
 }
 

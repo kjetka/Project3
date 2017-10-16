@@ -19,18 +19,19 @@ class Solver
         double dt_half;
         int numberOfPlanets;
         string systemtype;
+        bool vverlet;
 
     public:
         vector<Planet> m_listPlanets;
         //vector<string> outfile_list;
 
-        Solver(string systemtype_);
+        Solver(string systemtype_, bool vverlet, double timelimit);
         //Planet();
         friend class Planet;
         void velocityVerlet(Planet &current);
 
         void add(Planet thisplanet);
-        void writevalues(ofstream &outfile, mat &r, mat &v,double& kineticenergy,  int dimension, double time);
+        void writevalues(ofstream& outfile, Planet& current, double time);
         void writeheader(ofstream& outfile, int dimension);
         void initializeFiles(ofstream *outFiles, string nameinfo);
         void algorithm();
