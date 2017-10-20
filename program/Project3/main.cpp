@@ -7,13 +7,22 @@ using namespace std;
 //using namespace arma;
 
 int main(){
-    //Planet planet;
-    Planet earth(0.0000030, 1.0, 0.000, 0.0, M_PI*2, "earth"); // (mass,x,y,vx,vy)
-    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+    float speed_years = 1./(365);
+
+    double m_sun = 2.0*1e30;
+
+    Planet earth(6*1e24/m_sun,   1.364125053119183       ,  1.661119876735337e-1   ,  3.841445104127103e-03*speed_years ,   4.372876237736002e-02*speed_years  , "earth"); // (mass,x,y,vx,vy)
+
+    Planet sun(1.0,     0,    0 ,0,0   , "sun");
+
     //Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
 
-    int years = 10;
+    //Planet jupiter(1./1000,-4.25662680436108, -2.868197076870578,   1.118281447057823e-2*speed_years,  2.080737970677697e-02*speed_years ,  "jupiter"); // (mass,x,y,vx,vy)
+    int years = 100;
 
+    vec pos_e = {(1.364125053119183       ,  1.661119876735337e-1)};
+    cout << dot(pos_e,pos_e)<<endl;
+cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years +   4.372876237736002e-02*speed_years* 4.372876237736002e-02*speed_years)<<"   " << 2*M_PI<<endl;
     clock_t start_2, finish_2;
     start_2 = clock();
 
@@ -49,8 +58,17 @@ int main(){
 
     cout<< time_euler<<endl;
 
+/*
 
+    Solver threebody("3body", true, years);
 
+    threebody.add(earth);
+    threebody.add(sun);
+    threebody.add(jupiter);
 
+    threebody.pretests();
+    threebody.algorithm();
+
+*/
     return 0;
 }

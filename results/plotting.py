@@ -19,8 +19,10 @@ def findFiles(stikkord):
 			planets.append(planet)
 	return filer, planets
 
+
+
+"""
 algoritmer = ["euler", "verlet"]
-figure()
 for algoritme in algoritmer:
 	files, planets = findFiles(algoritme)
 	totkin =[]
@@ -40,9 +42,9 @@ for algoritme in algoritmer:
 	#ylim([0.000059, 0.0000595])
 	title("Totkin ")
 
-
 	legend()
-
+show()
+"""
 
 algoritmer = ["euler", "verlet"]
 for algoritme in algoritmer:
@@ -64,10 +66,10 @@ for algoritme in algoritmer:
 		plot(x,y, label = planets[i] + ' '+ algoritme)
 	legend()
 show()
-
-
-
 """
+
+
+
 time,x,y,vx,vy = loadtxt('mars-sun_earth_mars.txt',unpack=True, skiprows=1)
 plot(x,y, label = 'mars')
 time,x,y,vx,vy = loadtxt('earth-sun_earth_mars.txt',unpack=True, skiprows=1)

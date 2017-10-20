@@ -16,7 +16,7 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     pi = M_PI;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
-    numberofsteps = timeLimit*100;
+    numberofsteps = timeLimit*600;
     //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
@@ -95,7 +95,6 @@ void Solver::velocityVerlet(Planet &current){
 void Solver::Euler(Planet &current){
     //works only for earth sun
     Planet other = m_listPlanets.at(1);
-   // double  distance = current.relativeDistance(other);
     updateTotalAcceleration_potEN(current);
     //current.acceleration = current.accelerationFromOther(other, distance);
     current.velocity += current.acceleration*dt;
