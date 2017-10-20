@@ -6,17 +6,18 @@ import matplotlib.ticker
 from scipy.optimize import curve_fit
 
 import glob, os
-
+mappe = "text/"
 def findFiles(stikkord):
 	filer = []
 	planets = []
-	for file in glob.glob("*.txt"):
+	for file in glob.glob(mappe + "*.txt"):
 		a = file.find("_")
 		if stikkord in file:
 			filer.append(file)
 			planet = file.find("-")
-			planet = file[0:planet] #+ " "+ file[planet +1:a]
+			planet = file[len(mappe):planet] #+ " "+ file[planet +1:a]
 			planets.append(planet)
+
 	return filer, planets
 
 
@@ -45,7 +46,7 @@ for algoritme in algoritmer:
 	legend()
 show()
 """
-
+"""
 algoritmer = ["euler", "verlet"]
 for algoritme in algoritmer:
 	figure()
@@ -70,12 +71,20 @@ show()
 
 
 
-time,x,y,vx,vy = loadtxt('mars-sun_earth_mars.txt',unpack=True, skiprows=1)
-plot(x,y, label = 'mars')
-time,x,y,vx,vy = loadtxt('earth-sun_earth_mars.txt',unpack=True, skiprows=1)
-plot(x,y, label = 'earth')
-time,x,y,vx,vy = loadtxt('sun-sun_earth_mars.txt',unpack=True, skiprows=1)
-plot(x,y, '*', label = 'earth')
+files, planets = findFiles("3body")
+totkin =[]
+totpot = []
+for i in range(len(files)):
+
+	time, x,y,vx,vy,KineticEnergy,PotentialEnergy = loadtxt(files[i],unpack=True, skiprows=1)
+	if i==0:
+		totkin = KineticEnergy
+		totpot = PotentialEnergy
+	else:
+		totkin += KineticEnergy
+		totpot += PotentialEnergy
+
+	plot(x,y, label = planets[i])
 legend()
 show()
-"""
+
