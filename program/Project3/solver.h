@@ -1,5 +1,9 @@
 #ifndef SOLVER_H
 #define SOLVER_H
+#include <ctime>
+#include <ratio>
+#include <chrono>
+
 #include "planet.h"
 #include <vector>
 
@@ -19,22 +23,23 @@ class Solver
         double dt_half;
         int numberOfPlanets;
         string systemtype;
+        bool vverlet;
+        double energy_prev;
 
     public:
         vector<Planet> m_listPlanets;
         //vector<string> outfile_list;
 
-        Solver(string systemtype_);
+        Solver(string systemtype_, bool vverlet, double timelimit);
         //Planet();
         friend class Planet;
         void velocityVerlet(Planet &current);
 
         void add(Planet thisplanet);
-        void writevalues(ofstream &outfile, mat &r, mat &v,double& kineticenergy,  int dimension, double time);
+        void writevalues(ofstream& outfile, Planet& current, double time);
         void writeheader(ofstream& outfile, int dimension);
         void initializeFiles(ofstream *outFiles, string nameinfo);
         void algorithm();
-        void test_algorithm();
         void Euler(Planet &currentplanet);
 
         void updateTotalAcceleration_potEN(Planet &currentPlanet);
@@ -43,8 +48,10 @@ class Solver
         void writeAllPlanetsPosition(ofstream &outfile, double time);
         void updateTotalAcceleration(Planet &currentPlanet);
 
+        void test_energy( Planet current);
+        void test_circular(Planet current, double time);
         void pretests();
-
+        void test_angularmoment(Planet current);
 
 };
 

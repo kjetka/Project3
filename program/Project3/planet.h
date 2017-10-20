@@ -32,9 +32,12 @@ class Planet{
         double potEnergy;
         double distance;
         int dimension = 2;
+       double angularMomentum;
+        double absposition_start;
 
 
     public:
+
         Planet(double mass_, double x, double y, double vx, double vy, std::string name_);
         //~Planet () {}                        // destructor
 

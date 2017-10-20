@@ -13,10 +13,11 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
     dimension = position.size();
     pi = M_PI;
     fourpi2 = 4*pi*pi;
-    kinEnergy = 0;
+    kinEnergy = 0.5*mass*dot(velocity, velocity);
     potEnergy = 0;
     distance = 0;
-    //0.5*mass*dot(velocity,velocity);
+    absposition_start = dot(position,position);
+    angularMomentum = mass*absposition_start* pow(dot(velocity,velocity), 0.5);
 }
 
 double Planet::relativeDistance(Planet otherPlanet){
