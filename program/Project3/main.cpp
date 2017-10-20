@@ -10,7 +10,7 @@ void finding_initial_velocity_escape();
 void finding_initial_velocity_cirkular();
 
 int main(){
-    float speed_years = 1./(365);
+    float speed_years = (365.);
     int years = 100;
 
 /*
@@ -24,20 +24,19 @@ int main(){
 
 
     double m_sun = 2.0*1e30;
+    //Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, -5.245593715780954E-06*speed_years ,  5.482120330588081E-06*speed_years   , "sun");
+    Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, 0 , 0   , "sun");
 
-    Planet earth(6*1e24/m_sun,   0      ,  1   ,  2*M_PI,   0  , "earth"); // (mass,x,y,vx,vy)
+    Planet earth(6*1e24/m_sun,    8.930309961463524E-01, 4.508411860073833E-01   ,-7.978069853256020E-03*speed_years, 1.533806773162681E-02 *speed_years   , "earth"); // (mass,x,y,vx,vy)
 
-    Planet sun(1.0,     0,    0 ,0,0   , "sun");
 
     //Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
 
-    //Planet jupiter(1./1000,-4.25662680436108, -2.868197076870578,   1.118281447057823e-2*speed_years,  2.080737970677697e-02*speed_years ,  "jupiter"); // (mass,x,y,vx,vy)
+    Planet jupiter(1./1000, -4.572777635194016E+00, -2.939093897020645E+00,  3.991864886961527E-03*speed_years, -5.989606308601243E-03*speed_years   ,  "jupiter"); // (mass,x,y,vx,vy)
 
 
 
-    vec pos_e = {(1.364125053119183       ,  1.661119876735337e-1)};
-    cout << dot(pos_e,pos_e)<<endl;
-cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years +   4.372876237736002e-02*speed_years* 4.372876237736002e-02*speed_years)<<"   " << 2*M_PI<<endl;
+/*
     clock_t start_2, finish_2;
     start_2 = clock();
 
@@ -73,7 +72,7 @@ cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years
 
     cout<< time_euler<<endl;
 
-/*
+*/
 
     Solver threebody("3body", true, years);
 
@@ -84,7 +83,7 @@ cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years
     threebody.pretests();
     threebody.algorithm();
 
-*/
+
     return 0;
 }
 
