@@ -14,9 +14,10 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
 
     // Variables ----------------------
     pi = M_PI;
+    stepsPerYear = 10;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
-    numberofsteps = timeLimit*600;
+    numberofsteps = timeLimit*stepsPerYear;
     //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
@@ -29,7 +30,7 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
 }
 
 
-void Solver::updateTotalAcceleration_potEN(Planet &current){
+void Solver::updateTotalAcceleration_potEN(Planet &current, double beta){
     // finding force -> acceleration from all other planets
 
     current.acceleration = vec({0, 0});
@@ -39,7 +40,7 @@ void Solver::updateTotalAcceleration_potEN(Planet &current){
         if(current.name != other.name){
             double reldistance = current.relativeDistance(other);
 
-            current.acceleration += current.accelerationFromOther(other, reldistance);
+            current.acceleration += current.accelerationFromOther(other, reldistance, beta);
             mat accelerationFromOther(mat &a_other, double &distance);
 
             //current.FromOtherPotEnergy must be after current.accelerationFromOther!!!!!!!!!!!
@@ -49,7 +50,6 @@ void Solver::updateTotalAcceleration_potEN(Planet &current){
         }
 
     }
-    // question: should we instead have a get-function ans set-function?
 }
 
 void Solver::test_energy(Planet current){
@@ -85,45 +85,25 @@ void Solver::test_circular(Planet current, double time){
 
 }
 
-void Solver::velocityVerlet(Planet &current){
+void Solver::velocityVerlet(Planet &current, double beta){
     current.velocity += dt_half*current.acceleration;
-    current.position += dt*current.velocity; //  + (dt*dt/2)*current.acceleration;
-    updateTotalAcceleration_potEN(current);
+    current.position += dt*current.velocity;
+    updateTotalAcceleration_potEN(current, beta);
     current.velocity += dt_half*current.acceleration;
 }
 
-void Solver::Euler(Planet &current){
+void Solver::Euler(Planet &current, double beta){
     //works only for earth sun
     Planet other = m_listPlanets.at(1);
-    updateTotalAcceleration_potEN(current);
+    updateTotalAcceleration_potEN(current, beta);
     //current.acceleration = current.accelerationFromOther(other, distance);
     current.velocity += current.acceleration*dt;
     current.position += current.velocity*dt;
 
-
-
-
-
-
-    /*
-    //ONLYE SUN EARTH!!!!!!!
-    distance = sqrt(dot(current.position, current.position));
-
-    ax = (-fourpi2/pow(r,3))*x;
-    ay = (-fourpi2/pow(r,3))*y;
-    vx = vx + dt*ax;
-    vy = vy + dt*ay;
-    x = x + dt*vx;
-    y = y + dt*vy;
-
-    */
-
-
 }
 
-
-
-void Solver::algorithm(){
+void Solver::algorithm(double beta){
+    cout <<"Steps:  "<< stepsPerYear<<endl;
     if (vverlet==true){     cout << "Running velocity verlet"<<endl;}
     else                    cout << "running Euler" << endl;
     double time = 0;
@@ -139,12 +119,12 @@ void Solver::algorithm(){
 
                 // if it is the first timestep we need to calculate the acceleration
                 if (time == 0) {
-                    updateTotalAcceleration_potEN(current);
+                    updateTotalAcceleration_potEN(current, beta);
                     }
                 if (vverlet==true) {
-                    velocityVerlet(current);}
+                    velocityVerlet(current, beta);}
 
-                else {Euler(current);}
+                else {Euler(current, beta);}
 
 
 
@@ -226,5 +206,21 @@ void Solver::pretests(){
             }
         }
     }
+}
+
+void Solver::check_convergence(Planet& planet){
+    double beta = 2;
+    double eps = 1e-5;
+    double start_energy = planet.kinEnergy + planet.potEnergy;
+    cout << start_energy<<endl;
+    double end_energy = 2.0*start_energy;
+
+    while (abs(start_energy - end_energy) > eps){
+        algorithm(beta);
+        end_energy =  planet.kinEnergy + planet.potEnergy;
+        cout << "Energy difference: " << start_energy - end_energy << endl;
+            stepsPerYear = stepsPerYear*10;
+    }
+    cout << "For the energy to be converged, dt has to be:" << dt << endl;
 }
 

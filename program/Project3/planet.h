@@ -42,7 +42,7 @@ class Planet{
         //~Planet () {}                        // destructor
 
         double relativeDistance(Planet otherPlanet);
-        mat accelerationFromOther(Planet otherPlanet, double &distance);
+        mat accelerationFromOther(Planet otherPlanet, double &distance, double beta);
 
         void energyUpdate();
         double FromOtherPotEnergy(Planet & other,double& distance);

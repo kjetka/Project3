@@ -25,6 +25,7 @@ class Solver
         string systemtype;
         bool vverlet;
         double energy_prev;
+        double stepsPerYear;
 
     public:
         vector<Planet> m_listPlanets;
@@ -33,16 +34,16 @@ class Solver
         Solver(string systemtype_, bool vverlet, double timelimit);
         //Planet();
         friend class Planet;
-        void velocityVerlet(Planet &current);
+        void velocityVerlet(Planet &current, double beta);
 
         void add(Planet thisplanet);
         void writevalues(ofstream& outfile, Planet& current, double time);
         void writeheader(ofstream& outfile, int dimension);
         void initializeFiles(ofstream *outFiles, string nameinfo);
-        void algorithm();
-        void Euler(Planet &currentplanet);
+        void algorithm(double beta);
+        void Euler(Planet &currentplanet, double beta);
 
-        void updateTotalAcceleration_potEN(Planet &currentPlanet);
+        void updateTotalAcceleration_potEN(Planet &currentPlanet, double beta);
         void updateVelocity(Planet &currentPlanet);
         void updatePosition(Planet &currentPlanet);
         void writeAllPlanetsPosition(ofstream &outfile, double time);
@@ -52,7 +53,7 @@ class Solver
         void test_circular(Planet current, double time);
         void pretests();
         void test_angularmoment(Planet current);
-
+        void check_convergence(Planet &planet);
 };
 
 #endif // SOLVER_H

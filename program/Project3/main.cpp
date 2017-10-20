@@ -25,7 +25,7 @@ int main(){
 
     double m_sun = 2.0*1e30;
 
-    Planet earth(6*1e24/m_sun,   1.364125053119183       ,  1.661119876735337e-1   ,  3.841445104127103e-03*speed_years ,   4.372876237736002e-02*speed_years  , "earth"); // (mass,x,y,vx,vy)
+    Planet earth(6*1e24/m_sun,   0      ,  1   ,  2*M_PI,   0  , "earth"); // (mass,x,y,vx,vy)
 
     Planet sun(1.0,     0,    0 ,0,0   , "sun");
 
@@ -46,15 +46,13 @@ cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years
     verlet.add(earth);
     verlet.add(sun);
     verlet.pretests();
-    verlet.algorithm();
+    verlet.algorithm(2);
     finish_2 = clock();
     double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
 
+//    verlet.check_convergence(earth);
 
     cout << time_verlet<<endl;
-
-
-
 
     clock_t start_, finish_;
     start_ = clock();
@@ -67,9 +65,11 @@ cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years
     // Should the kinetic and pot energy be conserved independently? (3c)
     euler.add(earth);
     euler.add(sun);
-    euler.algorithm();
+    euler.algorithm(2);
     finish_ = clock();
     double time_euler = (double) (finish_ - start_)/double((CLOCKS_PER_SEC ));
+
+//    euler.check_convergence(earth);
 
     cout<< time_euler<<endl;
 
@@ -104,7 +104,7 @@ void finding_initial_velocity_cirkular(int years){
 
        test_initial.add(earth);
        test_initial.add(sun);
-       test_initial.algorithm();
+       test_initial.algorithm(2);
        v += dv;
    }
 }
@@ -125,7 +125,7 @@ void finding_initial_velocity_escape(int years ){
 
         test_initial.add(earth);
         test_initial.add(sun);
-        test_initial.algorithm();
+        test_initial.algorithm(2);
 
         v += dv;
     }

@@ -29,14 +29,14 @@ double Planet::relativeDistance(Planet otherPlanet){
 }
 
 
-mat Planet::accelerationFromOther(Planet otherPlanet, double &distance){
+mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double beta){
     mat a_other;
     //double absDistance=0; //Question: fjerne? add in function header?
     // calculates the distance from this planet to the other planet
     //relativeDistance(otherPlanet, absDistance);
     // Calculates the acceleration form the gravitational force between the planets
 
-    a_other = ((-fourpi2*otherPlanet.mass)/pow(distance,3))*(position-otherPlanet.position);
+    a_other = ((-fourpi2*otherPlanet.mass)/pow(distance,beta+1))*(position-otherPlanet.position);
 
     return a_other;
 }
