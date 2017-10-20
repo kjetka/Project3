@@ -11,8 +11,8 @@ Solver::Solver(string systemtype_){
     // Variables ----------------------
     pi = M_PI;
     fourpi2 = 4*pi*pi;
-    timeLimit = 20.0;
-    numberofsteps = 1000;
+    timeLimit = 1500;
+    numberofsteps = 15000;
     //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
@@ -147,7 +147,6 @@ void Solver::initializeFiles(ofstream *outFiles, string nameinfo){
         writeheader(outFiles[i], current.dimension);
     }
 }
-
 
 void Solver::pretests(){
     for(int i=0; i<numberOfPlanets; i++){

@@ -19,12 +19,10 @@ for filename in filelist:
 
 x_circ = np.linspace(-1,1,100)
 
-plt.axis([-1.2,2.0,-1.2,1.2])
-plt.title('Finding the circular orbit')
+#plt.axis([-90,23,-5,50])
+plt.title('Result for the exact escape velocity')
 plt.xlabel('Posistion, x-direction')
 plt.ylabel('Posistion, y-direction')
 plt.plot(0,0,'o', label = "The sun")
-plt.plot(x_circ, np.sqrt(1-x_circ**2),'y--', label='The circuar orbit')
-plt.plot(x_circ, -np.sqrt(1-x_circ**2),'y--')
 plt.legend()
-plt.savefig('circular_orbit.pdf')
+plt.savefig('escape_velocity_exact.pdf')

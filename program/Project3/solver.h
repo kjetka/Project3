@@ -38,6 +38,7 @@ class Solver
         void Euler(Planet &currentplanet);
         void updateTotalAcceleration(Planet &currentPlanet);
         void pretests();
+        void find_velocity();
 
 
 };
