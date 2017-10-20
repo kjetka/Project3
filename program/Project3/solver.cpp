@@ -1,9 +1,13 @@
 #include "solver.h"
 #include "planet.h"
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 #include <armadillo>
 using namespace arma;
 using namespace std;
+using namespace std::chrono;
 
 Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     //Systemtype: appends to the filename - easy to see the variables.
@@ -21,6 +25,7 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     vverlet = vverlet_;
     // -------------------------------
     m_listPlanets.reserve(20);
+    energy_prev = 0;
 }
 
 
@@ -40,50 +45,88 @@ void Solver::updateTotalAcceleration_potEN(Planet &current){
             //current.FromOtherPotEnergy must be after current.accelerationFromOther!!!!!!!!!!!
 
             current.potEnergy += current.FromOtherPotEnergy(other, reldistance);
-
+           // cout << "carefull with the potential energy "<<endl;
         }
 
     }
     // question: should we instead have a get-function ans set-function?
 }
 
+void Solver::test_energy(Planet current){
+    double Kinetic = 0.5*current.mass*dot(current.velocity,current.velocity);
+    double energy_current = current.potEnergy+ Kinetic;
+    double tolerance_energy= 8e-5;
+    if (fabs( energy_current - energy_prev)>tolerance_energy){
+         cout << "Exit: energy not conserved within " << tolerance_energy<<endl;
+        exit(3);
+        }
+    //cout << energy_current << "\t" << current.potEnergy<<endl;
+
+
+    energy_prev = energy_current;
+}
+
+void Solver::test_angularmoment(Planet current){
+    double L = current.mass*current.distance*pow(dot(current.velocity, current.velocity),0.5);
+   // cout << current.name <<"   "<<L<< endl;
+    //cout << current.velocity<<endl;
+}
+
+
+
+void Solver::test_circular(Planet current, double time){
+    double tolerance_pos= 1e-2;
+    double r_now = dot(current.position, current.position);
+
+    if (fabs(r_now-current.absposition_start)>tolerance_pos){
+        cout << "Exit: Not a circular motion for planet " << current.name <<"Diverged after time = "<< time<< endl;
+        exit(3);
+    }
+
+}
+
 void Solver::velocityVerlet(Planet &current){
     current.velocity += dt_half*current.acceleration;
-    current.position += dt*current.velocity; // + (dt*dt/2)*current.aks;
+    current.position += dt*current.velocity; //  + (dt*dt/2)*current.acceleration;
     updateTotalAcceleration_potEN(current);
     current.velocity += dt_half*current.acceleration;
 }
 
 void Solver::Euler(Planet &current){
-    //works not only for earth sun
+    //works only for earth sun
     Planet other = m_listPlanets.at(1);
-   double  distance = current.relativeDistance(other);
-
-    current.acceleration = current.accelerationFromOther(other, distance);
+   // double  distance = current.relativeDistance(other);
+    updateTotalAcceleration_potEN(current);
+    //current.acceleration = current.accelerationFromOther(other, distance);
     current.velocity += current.acceleration*dt;
     current.position += current.velocity*dt;
+
+
+
+
+
+
+    /*
+    //ONLYE SUN EARTH!!!!!!!
+    distance = sqrt(dot(current.position, current.position));
+
+    ax = (-fourpi2/pow(r,3))*x;
+    ay = (-fourpi2/pow(r,3))*y;
+    vx = vx + dt*ax;
+    vy = vy + dt*ay;
+    x = x + dt*vx;
+    y = y + dt*vy;
+
+    */
+
+
 }
 
-void Solver::test_algorithm(){
-    // question: Remove
-
-    // This is just to test the velocityVerlet for the sun-earth-system
-
-    double time = 0;
-    Planet &current = m_listPlanets.at(0);
-
-    while (time <timeLimit){
-        if (time <= pow(10,-8)) {  // if it is the first timestep we need to calculate the acceleration
-            updateTotalAcceleration_potEN(current);
-        }
-        velocityVerlet(current);
-        time += dt;
-        current.position.print("r:");
-    }
-}
 
 
 void Solver::algorithm(){
+    if (vverlet==true){     cout << "Running velocity verlet"<<endl;}
+    else                    cout << "running Euler" << endl;
     double time = 0;
     //initializing and opening files
     ofstream *outFiles = new ofstream [numberOfPlanets];
@@ -93,19 +136,26 @@ void Solver::algorithm(){
        for (unsigned int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
             writevalues(outFiles[i], current,  time);
+                // Timing:
 
                 // if it is the first timestep we need to calculate the acceleration
                 if (time == 0) {
                     updateTotalAcceleration_potEN(current);
                     }
-                if (vverlet) {
+                if (vverlet==true) {
                     velocityVerlet(current);}
 
                 else {Euler(current);}
 
+
+
+                //test_energy(current);
+                //test_circular( current, time);
+                //test_angularmoment(current);
                 current.energyUpdate();
 
-               cout << current.kinEnergy+ current.potEnergy<<endl;
+                //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
+
         }
         time  += dt;
     }
@@ -129,7 +179,7 @@ void Solver::writevalues(ofstream& outfile, Planet& current, double time){
     for(int i=0;i<dimension; i++){
         outfile << "\t"<< "\t"  << current.velocity(i);
     }
-    outfile << "\t"<< "\t" <<current.kinEnergy;
+    outfile << "\t"<< "\t" << setprecision(10) << current.kinEnergy;
     outfile << "\t"<< "\t" <<current.potEnergy;
 
     outfile << endl;
@@ -178,3 +228,4 @@ void Solver::pretests(){
         }
     }
 }
+
