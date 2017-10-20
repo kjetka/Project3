@@ -6,10 +6,21 @@
 using namespace std;
 //using namespace arma;
 
+void finding_initial_velocity_escape();
+void finding_initial_velocity_cirkular();
+
 int main(){
     float speed_years = 1./(365);
+//    Planet planet;
+/*
+    Planet earth(0.000030, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
+    Solver testing("sun_earth");
 
     double m_sun = 2.0*1e30;
+    finding_initial_velocity_escape();
+//    finding_intial_velocity_circular();
 
     Planet earth(6*1e24/m_sun,   1.364125053119183       ,  1.661119876735337e-1   ,  3.841445104127103e-03*speed_years ,   4.372876237736002e-02*speed_years  , "earth"); // (mass,x,y,vx,vy)
 
@@ -71,4 +82,47 @@ cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years
 
 */
     return 0;
+}
+
+void finding_initial_velocity_cirkular(){
+   double start_v = 1.9*M_PI;
+   double end_v = 2.1*M_PI;
+
+   double v = start_v;
+
+   double dv = (end_v - start_v)/7.0;
+
+   while (v <= end_v){
+       Planet earth(0.000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
+       Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+       string type = "sun_earth_initial_velocity_" + to_string(v);
+       Solver test_initial(type);
+
+       test_initial.add(earth);
+       test_initial.add(sun);
+       test_initial.algorithm();
+       v += dv;
+   }
+}
+
+void finding_initial_velocity_escape(){
+    double start_v = 0.97*2*sqrt(2)*M_PI;
+    double end_v = 2*M_PI*sqrt(2);
+
+    double v = start_v;
+
+    double dv = (end_v - start_v)/5.0;
+
+    while (v <= end_v){
+        Planet earth(0.0000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
+        Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+        string type = "sun_earth_initial_velocity_" + to_string(v);
+        Solver test_initial(type);
+
+        test_initial.add(earth);
+        test_initial.add(sun);
+        test_initial.algorithm();
+
+        v += dv;
+    }
 }
