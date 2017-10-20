@@ -109,7 +109,7 @@ void Solver::algorithm(double beta){
     initializeFiles(outFiles, systemtype);
 
     while (time <= timeLimit){
-       for (unsigned int i=0; i < numberOfPlanets; i++) {
+       for (signed int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
             writevalues(outFiles[i], current,  time);
                 // Timing:
@@ -134,7 +134,7 @@ void Solver::algorithm(double beta){
         time  += dt;
     }
     //closing open files
-    for (unsigned int i=0; i < numberOfPlanets; i++) {
+    for (signed int i=0; i < numberOfPlanets; i++) {
         outFiles[i].close();
     }
 }
@@ -210,19 +210,23 @@ void Solver::check_convergence(){
     double end_energy = 2.0;
     double V = 2*pi;
     double start_energy = 0.5*planet.mass*V*V-fourpi2*planet.mass;
-    double stepsPerYear = 1.0;
+    stepsPerYear = 1.0;
     while (abs(start_energy - end_energy) > eps){
         planet.kinEnergy = 0.5*planet.mass*V*V;
         planet.potEnergy = -fourpi2*planet.mass;
         cout << planet.name << "start:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
-        cout << "V: "<< V << endl;
+
         algorithm(beta);
+
         end_energy =  planet.kinEnergy + planet.potEnergy;
+
         cout << planet.name <<"end:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
         cout << planet.name <<"Energy difference: " << start_energy - end_energy << endl;
+
         stepsPerYear = stepsPerYear*10;
         numberofsteps = timeLimit*stepsPerYear;
         dt = timeLimit/(numberofsteps-1);
+
         cout << "dt: "<< dt << endl;
     }
     cout << "For the energy to be converged, dt has to be:" << dt << endl;

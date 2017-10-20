@@ -43,7 +43,6 @@ mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double b
 
 void Planet::kinEnergyUpdate(){
     kinEnergy = 0.5*mass*dot(velocity, velocity);
-
 }
 
 double Planet::FromOtherPotEnergy(Planet& other, double &distance){

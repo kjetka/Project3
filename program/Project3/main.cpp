@@ -14,56 +14,53 @@ int main(){
     float speed_years = (365.);
     int years = 3;
 
-
+// Original initial values ---------------------------------------------------
     Planet earth(0.000030, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
-//    Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
-//    Solver testing("sun_earth");
 
     //    finding_initial_velocity_escape(years);
     //    finding_intial_velocity_circular(years);
+// ---------------------------------------------------------------------------
 
 
-    double m_sun = 2.0*1e30;
-    //Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, -5.245593715780954E-06*speed_years ,  5.482120330588081E-06*speed_years   , "sun");
-//    Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, 0 , 0   , "sun");
-
-//    Planet earth(6*1e24/m_sun,    8.930309961463524E-01, 4.508411860073833E-01   ,-7.978069853256020E-03*speed_years, 1.533806773162681E-02 *speed_years   , "earth"); // (mass,x,y,vx,vy)
-
-//    checking_gravitation(years, earth, sun);
-
-    /*
-
-    //Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
-
+// New initial values from NASA ----------------------------------------------
+/*    double m_sun = 2.0*1e30;
+    Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, -5.245593715780954E-06*speed_years ,  5.482120330588081E-06*speed_years   , "sun");
+    Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, 0 , 0   , "sun");
     Planet jupiter(1./1000, -4.572777635194016E+00, -2.939093897020645E+00,  3.991864886961527E-03*speed_years, -5.989606308601243E-03*speed_years   ,  "jupiter"); // (mass,x,y,vx,vy)
-
-
-    clock_t start_2, finish_2;
-    start_2 = clock();
+    Planet earth(6*1e24/m_sun,    8.930309961463524E-01, 4.508411860073833E-01   ,-7.978069853256020E-03*speed_years, 1.533806773162681E-02 *speed_years   , "earth"); // (mass,x,y,vx,vy)
 */
+// ----------------------------------------------------------------------------
+
+    checking_gravitation(years, earth, sun);
+
+
+// Velocity Verlet-------------------------------------------------------------
+/*    clock_t start_2, finish_2;
+    start_2 = clock();
+
     Solver verlet("verlet", true, years);
 
     verlet.add(earth);
     verlet.add(sun);
     verlet.pretests();
 //    verlet.algorithm(2);
-//    finish_2 = clock();
-    verlet.check_convergence();
-    /*
+    finish_2 = clock();
+//    verlet.check_convergence();
+
     double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
-
-
-
-    cout << time_verlet<<endl;
+//    cout << time_verlet<<endl;
 */
+// ----------------------------------------------------------------------------
+
+
+// Euler's method -------------------------------------------------------------
     /*
     clock_t start_, finish_;
     start_ = clock();
     //test.pretests();
 
     Solver euler("euler", false, years);
-
 
     //Looks like euler method conserves energy. KinEn varies a lot, potential not.!!! How test for energy?
     // Should the kinetic and pot energy be conserved independently? (3c)
@@ -76,9 +73,13 @@ int main(){
 //    euler.check_convergence(earth);
 
     cout<< time_euler<<endl;
+*/
+
+// -------------------------------------------------------------------------------
 
 
-
+// Three-body --------------------------------------------------------------------
+/*
     Solver threebody("3body", true, years);
 
     threebody.add(earth);
@@ -88,7 +89,7 @@ int main(){
     threebody.pretests();
     threebody.algorithm();
 */
-
+// --------------------------------------------------------------------------------
     return 0;
 }
 
