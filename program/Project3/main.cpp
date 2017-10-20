@@ -4,23 +4,26 @@
 #include "solver.h"
 
 using namespace std;
-//using namespace arma;
+using namespace arma;
 
 void finding_initial_velocity_escape();
 void finding_initial_velocity_cirkular();
 
 int main(){
     float speed_years = 1./(365);
-//    Planet planet;
+    int years = 100;
+
 /*
     Planet earth(0.000030, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
     Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
     Solver testing("sun_earth");
+*/
+//    finding_initial_velocity_escape(years);
+//    finding_intial_velocity_circular(years);
+
 
     double m_sun = 2.0*1e30;
-    finding_initial_velocity_escape();
-//    finding_intial_velocity_circular();
 
     Planet earth(6*1e24/m_sun,   1.364125053119183       ,  1.661119876735337e-1   ,  3.841445104127103e-03*speed_years ,   4.372876237736002e-02*speed_years  , "earth"); // (mass,x,y,vx,vy)
 
@@ -29,7 +32,8 @@ int main(){
     //Planet mars(0.000002, 0.0, 0.1, 0.0, M_PI, "mars");
 
     //Planet jupiter(1./1000,-4.25662680436108, -2.868197076870578,   1.118281447057823e-2*speed_years,  2.080737970677697e-02*speed_years ,  "jupiter"); // (mass,x,y,vx,vy)
-    int years = 100;
+
+
 
     vec pos_e = {(1.364125053119183       ,  1.661119876735337e-1)};
     cout << dot(pos_e,pos_e)<<endl;
@@ -84,7 +88,7 @@ cout << sqrt(3.841445104127103e-03*speed_years*3.841445104127103e-03*speed_years
     return 0;
 }
 
-void finding_initial_velocity_cirkular(){
+void finding_initial_velocity_cirkular(int years){
    double start_v = 1.9*M_PI;
    double end_v = 2.1*M_PI;
 
@@ -96,7 +100,7 @@ void finding_initial_velocity_cirkular(){
        Planet earth(0.000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
        Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
        string type = "sun_earth_initial_velocity_" + to_string(v);
-       Solver test_initial(type);
+       Solver test_initial("verlet", true, years);
 
        test_initial.add(earth);
        test_initial.add(sun);
@@ -105,7 +109,7 @@ void finding_initial_velocity_cirkular(){
    }
 }
 
-void finding_initial_velocity_escape(){
+void finding_initial_velocity_escape(int years ){
     double start_v = 0.97*2*sqrt(2)*M_PI;
     double end_v = 2*M_PI*sqrt(2);
 
@@ -117,7 +121,7 @@ void finding_initial_velocity_escape(){
         Planet earth(0.0000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "sun_earth_initial_velocity_" + to_string(v);
-        Solver test_initial(type);
+        Solver test_initial("v_test", true, years);
 
         test_initial.add(earth);
         test_initial.add(sun);
