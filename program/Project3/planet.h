@@ -32,7 +32,7 @@ class Planet{
         double potEnergy;
         double distance;
         int dimension = 2;
-       double angularMomentum;
+        double angularMomentum;
         double absposition_start;
 
 
@@ -44,7 +44,7 @@ class Planet{
         double relativeDistance(Planet otherPlanet);
         mat accelerationFromOther(Planet otherPlanet, double &distance, double beta);
 
-        void energyUpdate();
+        void kinEnergyUpdate();
         double FromOtherPotEnergy(Planet & other,double& distance);
 
 };

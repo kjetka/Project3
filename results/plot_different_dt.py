@@ -4,27 +4,30 @@ import glob, os
 
 filelist = []
 
-for filename in glob.glob("*.txt"):
-    a = filename.find("sun-")
-    if a<0:
-        filelist.append(filename)
+for filename in glob.glob("earth-beta-is*"):
+    filelist.append(filename)
 
 print filelist
 plt.figure()
 for filename in filelist:  
-    time,x,y,vx,vy = np.loadtxt(filename,unpack=True, skiprows=2)
-    
-    plt.plot(x,y, label = "earth's orbit")
+    time,x,y,vx,vy,kin,pot = np.loadtxt(filename,unpack=True, skiprows=2)
+    name = filename[:-4]
+    for i in name.split('-'):
+        try:
+            #trying to convert i to float
+            beta = float(i)
+            #break the loop if i is the first string that's successfully converted
+            break
+        except:
+            continue
+        
+    plt.plot(x,y, label = "$\beta = $ %.2f"%beta)
     plt.hold('on')
 
-x_circ = np.linspace(-1,1,100)
-
-dt = time[2]-time[1]
-
-plt.axis([-1.2,2.0,-1.2,1.2])
-plt.title('The circular orbit for dt = %.3f' %dt)
+#plt.axis([-1.2,2.0,-1.2,1.2])
+plt.title('The earth orbit for beta = %.2f' %beta)
 plt.xlabel('Posistion, x-direction')
 plt.ylabel('Posistion, y-direction')
-plt.plot(0,0,'o', label = "The sun")
+#plt.plot(0,0,'o', label = "The sun")
 plt.legend()
-plt.savefig('circular_orbit_dt_%.3f.pdf'%dt)
+plt.savefig('orbit_beta_is_%.2f.pdf'%beta)

@@ -14,7 +14,7 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
     pi = M_PI;
     fourpi2 = 4*pi*pi;
     kinEnergy = 0.5*mass*dot(velocity, velocity);
-    potEnergy = 0;
+    potEnergy = -fourpi2*mass;
     distance = 0;
     absposition_start = dot(position,position);
     angularMomentum = mass*absposition_start* pow(dot(velocity,velocity), 0.5);
@@ -41,10 +41,9 @@ mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double b
     return a_other;
 }
 
-void Planet::energyUpdate(){
+void Planet::kinEnergyUpdate(){
     kinEnergy = 0.5*mass*dot(velocity, velocity);
-    //potEnergy = -4*pi*pi*mass;
-    //((-fourpi2*otherPlanet.mass*mass)/pow(absDistance,2))
+
 }
 
 double Planet::FromOtherPotEnergy(Planet& other, double &distance){

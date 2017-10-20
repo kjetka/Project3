@@ -14,11 +14,10 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
 
     // Variables ----------------------
     pi = M_PI;
-    stepsPerYear = 10;
+    stepsPerYear = 100;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
     numberofsteps = timeLimit*stepsPerYear;
-    //time = 0;
     dt = timeLimit/(numberofsteps-1);
     dt_half = dt/2;
     numberOfPlanets =0;
@@ -72,8 +71,6 @@ void Solver::test_angularmoment(Planet current){
     //cout << current.velocity<<endl;
 }
 
-
-
 void Solver::test_circular(Planet current, double time){
     double tolerance_pos= 1e-2;
     double r_now = dot(current.position, current.position);
@@ -103,7 +100,7 @@ void Solver::Euler(Planet &current, double beta){
 }
 
 void Solver::algorithm(double beta){
-    cout <<"Steps:  "<< stepsPerYear<<endl;
+    //cout <<"Steps:  "<< stepsPerYear<<endl;
     if (vverlet==true){     cout << "Running velocity verlet"<<endl;}
     else                    cout << "running Euler" << endl;
     double time = 0;
@@ -126,12 +123,10 @@ void Solver::algorithm(double beta){
 
                 else {Euler(current, beta);}
 
-
-
                 //test_energy(current);
                 //test_circular( current, time);
                 //test_angularmoment(current);
-                current.energyUpdate();
+                current.kinEnergyUpdate();
 
                 //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
 
@@ -208,18 +203,27 @@ void Solver::pretests(){
     }
 }
 
-void Solver::check_convergence(Planet& planet){
+void Solver::check_convergence(){
+    Planet &planet = m_listPlanets.at(0);
     double beta = 2;
-    double eps = 1e-5;
-    double start_energy = planet.kinEnergy + planet.potEnergy;
-    cout << start_energy<<endl;
-    double end_energy = 2.0*start_energy;
-
+    double eps = 1e-10;
+    double end_energy = 2.0;
+    double V = 2*pi;
+    double start_energy = 0.5*planet.mass*V*V-fourpi2*planet.mass;
+    double stepsPerYear = 1.0;
     while (abs(start_energy - end_energy) > eps){
+        planet.kinEnergy = 0.5*planet.mass*V*V;
+        planet.potEnergy = -fourpi2*planet.mass;
+        cout << planet.name << "start:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
+        cout << "V: "<< V << endl;
         algorithm(beta);
         end_energy =  planet.kinEnergy + planet.potEnergy;
-        cout << "Energy difference: " << start_energy - end_energy << endl;
-            stepsPerYear = stepsPerYear*10;
+        cout << planet.name <<"end:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
+        cout << planet.name <<"Energy difference: " << start_energy - end_energy << endl;
+        stepsPerYear = stepsPerYear*10;
+        numberofsteps = timeLimit*stepsPerYear;
+        dt = timeLimit/(numberofsteps-1);
+        cout << "dt: "<< dt << endl;
     }
     cout << "For the energy to be converged, dt has to be:" << dt << endl;
 }
