@@ -22,7 +22,7 @@ int main(){
     testing.pretests();
     testing.algorithm();
 */
-    finding_initial_velocity_escape();
+//    finding_initial_velocity_escape();
 //    finding_intial_velocity_circular();
 
     return 0;
