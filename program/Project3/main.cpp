@@ -13,7 +13,6 @@ void reading_init_values(string filename, double& x, double& y, double& z, doubl
 int main(){
     string planetname;
     cout << "check if the initial potential energy is correct for many bodies!!!"<<endl;
-    double speed_years = (365.);
     int years = 3;
     double m_sun = 2.0*1e30;
 
@@ -26,6 +25,7 @@ int main(){
 // ---------------------------------------------------------------------------
 
     double x,y,z,vx,vy,vz;
+
     planetname ="earth";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet earth(3e-6, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
@@ -33,18 +33,56 @@ int main(){
     planetname ="sun";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet sun(1.0, x,y,vx,vy, planetname);
+/*
+    planetname ="mars";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet mars(6.6e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+
+    planetname ="uranus";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet uranus(8.8e25/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+    planetname ="jupiter";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet jupiter(1.9e27/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+
+    planetname ="mercury";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet mercury(3.3e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+    planetname ="neptun";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet neptun(1.03e26/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+    planetname ="pluto";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet pluto(1.31e22/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+    planetname ="saturn";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet saturn(5.5e26/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+    planetname ="venus";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet venus(4.9e24/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+
+*/
 
 // ----------------------------------------------------------------------------
 
     //checking_gravitation(years, earth, sun);
 
-/*
+
     Solver convergence("converg", true, 10);
     convergence.add(earth);
     convergence.add(sun);
-    double convergence_crit = 1e-9;
-    convergence.check_convergence(convergence_crit);
-*/
+    double convergence_crit = 3e-6;
+    double dt = 1;
+    convergence.check_convergence(convergence_crit, dt);
+    cout <<dt;
 
 // Velocity Verlet-------------------------------------------------------------
 /*    clock_t start_2, finish_2;
@@ -55,7 +93,7 @@ int main(){
     verlet.add(earth);
     verlet.add(sun);
     verlet.pretests();
-//    verlet.algorithm(2);
+//    verlet.algorithm(true, 2);
     finish_2 = clock();
 //    verlet.check_convergence();
 
@@ -76,7 +114,7 @@ int main(){
     // Should the kinetic and pot energy be conserved independently? (3c)
     euler.add(earth);
     euler.add(sun);
-    euler.algorithm(2);
+    euler.algorithm(true, 2);
     finish_ = clock();
     double time_euler = (double) (finish_ - start_)/double((CLOCKS_PER_SEC ));
 
@@ -97,7 +135,7 @@ int main(){
         Solver threebody(filename[i], true, years);
 
     threebody.pretests();
-    threebody.algorithm();
+    threebody.algorithm(true, 2);
 */
 // --------------------------------------------------------------------------------
 
@@ -111,6 +149,8 @@ int main(){
 
 
 void reading_init_values(string filename, double &x, double &y , double &z, double &vx, double &vy, double &vz){
+    double speed_years = (365.);
+
     string fileloc = "../Initial_cond/"+filename + "_.txt";
     ifstream inf(fileloc);
     string line;
@@ -129,9 +169,9 @@ void reading_init_values(string filename, double &x, double &y , double &z, doub
     x = stod(myLines[0]);
     y = stod(myLines[1]);
     z = stod(myLines[2]);
-    vx = stod(myLines[3]);
-    vz = stod(myLines[4]);
-    vz = stod(myLines[5]);
+    vx = stod(myLines[3])*speed_years;
+    vy = stod(myLines[4])*speed_years;
+    vz = stod(myLines[5])*speed_years;
 }
 
 
@@ -154,7 +194,7 @@ void finding_initial_velocity_circular(int years){
 
         test_initial.add(earth);
         test_initial.add(sun);
-        test_initial.algorithm(2);
+        test_initial.algorithm(true, 2);
         v += dv;
     }
 }
@@ -175,7 +215,7 @@ void finding_initial_velocity_escape(int years ){
 
         test_initial.add(earth);
         test_initial.add(sun);
-        test_initial.algorithm(2);
+        test_initial.algorithm(true, 2);
 
         v += dv;
     }
@@ -189,7 +229,7 @@ void checking_gravitation(int years, Planet earth, Planet sun){
 
         gravitation.add(earth);
         gravitation.add(sun);
-        gravitation.algorithm(beta);
+        gravitation.algorithm(true, beta);
 
         beta += 0.1;
     }

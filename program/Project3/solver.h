@@ -40,7 +40,7 @@ class Solver
         void writevalues(ofstream& outfile, Planet& current, double time);
         void writeheader(ofstream& outfile, int dimension);
         void initializeFiles(ofstream *outFiles, string nameinfo);
-        void algorithm(double beta);
+        void algorithm(bool printfile, double beta);
         void Euler(Planet &currentplanet, double beta);
 
         void updateTotalAcceleration_potEN(Planet &currentPlanet, double beta);
@@ -53,7 +53,7 @@ class Solver
         void test_circular(Planet current, double time);
         void pretests();
         void test_angularmoment(Planet current);
-        void check_convergence(double eps);
+        void check_convergence(double eps, double dt);
 };
 
 #endif // SOLVER_H

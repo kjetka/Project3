@@ -1,0 +1,5 @@
+Timelimit= 10. Convergence criteria: dE <  3e-06
+
+dt 	Total energy 	 Change in energy 	
+0.10101	0.0527934	0.0529667
+0.01001	-0.000174467	1.16444e-06

@@ -99,19 +99,20 @@ void Solver::Euler(Planet &current, double beta){
 
 }
 
-void Solver::algorithm(double beta){
+void Solver::algorithm(bool printfile, double beta){
     //cout <<"Steps:  "<< stepsPerYear<<endl;
     if (vverlet==true){     cout << "Running velocity verlet"<<endl;}
     else                    cout << "running Euler" << endl;
     double time = 0;
     //initializing and opening files
     ofstream *outFiles = new ofstream [numberOfPlanets];
-    initializeFiles(outFiles, systemtype);
+    if (printfile) initializeFiles(outFiles, systemtype);
 
     while (time <= timeLimit){
        for (signed int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
-            writevalues(outFiles[i], current,  time);
+
+                writevalues(outFiles[i], current,  time);
                 // Timing:
 
                 // if it is the first timestep we need to calculate the acceleration
@@ -134,9 +135,10 @@ void Solver::algorithm(double beta){
         time  += dt;
     }
     //closing open files
+    if (printfile){
     for (signed int i=0; i < numberOfPlanets; i++) {
         outFiles[i].close();
-    }
+    }}
 }
 
 void Solver::add(Planet thisplanet) {
@@ -203,11 +205,17 @@ void Solver::pretests(){
     }
 }
 
-void Solver::check_convergence(double eps){
+void Solver::check_convergence(double eps, double dt){
     Planet &planet = m_listPlanets.at(0);
     Planet &sun = m_listPlanets.at(1);
     double beta = 2;
-    //double eps = 1e-9;
+
+
+
+
+    ofstream outfile;
+    outfile.open("../../results/text/convergence.txt");
+
     mat pos_start_e, vel_start_e, acc_start_e;
     double kin_start_e, pot_start_e, r_start_e, dist_start_e;
     pos_start_e = planet.position;
@@ -218,16 +226,38 @@ void Solver::check_convergence(double eps){
     r_start_e = planet.absposition_start;
     dist_start_e = planet.distance;
 
+
+
+    mat pos_start_s, vel_start_s, acc_start_s;
+    double kin_start_s, pot_start_s, r_start_s, dist_start_s;
+    pos_start_s = sun.position;
+    vel_start_s = sun.velocity;
+    acc_start_s = sun.acceleration;
+    kin_start_s= sun.kinEnergy;
+    pot_start_s = sun.potEnergy;
+    r_start_s = sun.absposition_start;
+    dist_start_s = sun.distance;
+
+
+
     double start_energy = kin_start_e + pot_start_e + sun.potEnergy + sun.kinEnergy;
-    //cout << "Energy : " << setprecision(10)<< " kin e "<<planet.kinEnergy << " pot e " <<planet.potEnergy <<" kin s "<< sun.kinEnergy << " pot sun "<<  sun.potEnergy << endl;
 
     double end_energy = start_energy*2;
-    double kin_start_s= sun.kinEnergy;
-    double pot_start_s = sun.potEnergy;
+    //double kin_start_s= sun.kinEnergy;
+    //double pot_start_s = sun.potEnergy;
     //cout << sun.potEnergy + sun.kinEnergy << endl;
     stepsPerYear = 1.0;
+    outfile << "Timelimit= "<< timeLimit << ". Convergence criteria: dE <  "<< eps  <<endl;
+    outfile <<endl;
+
+    outfile << "dt \t" << "Total energy \t " << "Change in energy \t"<<endl;
+
 
     while (abs(start_energy - end_energy) > eps){
+        stepsPerYear= stepsPerYear*10;
+      numberofsteps = timeLimit*stepsPerYear;
+      dt = timeLimit/(numberofsteps-1);
+      dt_half= dt/2.;
         cout << "-------------------"<<endl;
         planet.position = pos_start_e;
         planet.position=  pos_start_e;
@@ -238,15 +268,16 @@ void Solver::check_convergence(double eps){
         planet.absposition_start = r_start_e;
         planet.distance =   dist_start_e;
 
-        sun.position= vec({0,0});
-        sun.velocity= vec({0,0});
-        sun.acceleration= vec({0,0});
+        sun.position = pos_start_s;
+        sun.position=  pos_start_s;
+        sun.velocity = vel_start_s;
+        sun.acceleration = acc_start_s;
         sun.kinEnergy = kin_start_s;
-        sun.potEnergy =   pot_start_s;
+        sun.potEnergy = pot_start_s;
+        sun.absposition_start = r_start_s;
+        sun.distance =   dist_start_s;
 
-        sun.distance = 0;
-        algorithm(beta);
-        cout << "sol energi "<<sun.potEnergy + sun.kinEnergy << endl;
+        algorithm(false, beta); //not printing!!!
 
         end_energy =  planet.kinEnergy + planet.potEnergy + sun.kinEnergy + sun.potEnergy;
 
@@ -254,14 +285,12 @@ void Solver::check_convergence(double eps){
         //cout << planet.name <<"end:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
         //cout << "Energy : " << setprecision(10)<< " kin e "<<planet.kinEnergy << " pot e " <<planet.potEnergy <<" kin s "<< sun.kinEnergy << " pot sun "<<  sun.potEnergy << endl;
 
-          stepsPerYear= stepsPerYear*10;
-        numberofsteps = timeLimit*stepsPerYear;
-        dt = timeLimit/(numberofsteps-1);
-        dt_half= dt/2.;
+        outfile <<dt  << "\t"<< end_energy<< "\t"<<abs(start_energy-end_energy)<<endl;
 
-        cout << "dt: "<< dt << endl;
+
     }
     cout << "For the energy to be converged, stepsPerYear has to be:" << stepsPerYear << endl;
-    cout << planet.name <<"Energy difference: " << start_energy - end_energy << endl;
+    cout << "Energy difference: " << start_energy - end_energy << endl;
+outfile.close();
 }
 
