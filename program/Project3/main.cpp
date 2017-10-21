@@ -82,9 +82,10 @@ int main(){
 /*
     Solver threebody("3body", true, years);
 
-    threebody.add(earth);
-    threebody.add(sun);
-    threebody.add(jupiter);
+    mat massJupiter = vec({1./1e3, 10./1e3, 1.});
+    string filename[] = {"3body_m1e0", "3body_m1e1", "3body_m1e3"};
+    for (int i =0; i<3; i++){
+        Solver threebody(filename[i], true, years);
 
     threebody.pretests();
     threebody.algorithm();

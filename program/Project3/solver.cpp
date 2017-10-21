@@ -177,7 +177,7 @@ void Solver::writeheader(ofstream &outfile, int dimension){
 
 void Solver::initializeFiles(ofstream *outFiles, string nameinfo){
     string filename;
-    string location = "../../results/";
+    string location = "../../results/text/";
     string filetype = ".txt";
     for (unsigned int i=0; i < numberOfPlanets; i++) {
         Planet &current = m_listPlanets.at(i);
