@@ -14,7 +14,7 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
     pi = M_PI;
     fourpi2 = 4*pi*pi;
     kinEnergy = 0.5*mass*dot(velocity, velocity);
-    potEnergy = -fourpi2*mass;
+    potEnergy = -fourpi2*3e-6;
     distance = 0;
     absposition_start = dot(position,position);
     angularMomentum = mass*absposition_start* pow(dot(velocity,velocity), 0.5);

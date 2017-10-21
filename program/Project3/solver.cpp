@@ -203,32 +203,65 @@ void Solver::pretests(){
     }
 }
 
-void Solver::check_convergence(){
+void Solver::check_convergence(double eps){
     Planet &planet = m_listPlanets.at(0);
+    Planet &sun = m_listPlanets.at(1);
     double beta = 2;
-    double eps = 1e-10;
-    double end_energy = 2.0;
-    double V = 2*pi;
-    double start_energy = 0.5*planet.mass*V*V-fourpi2*planet.mass;
+    //double eps = 1e-9;
+    mat pos_start_e, vel_start_e, acc_start_e;
+    double kin_start_e, pot_start_e, r_start_e, dist_start_e;
+    pos_start_e = planet.position;
+    vel_start_e = planet.velocity;
+    acc_start_e = planet.acceleration;
+    kin_start_e= planet.kinEnergy;
+    pot_start_e = planet.potEnergy;
+    r_start_e = planet.absposition_start;
+    dist_start_e = planet.distance;
+
+    double start_energy = kin_start_e + pot_start_e + sun.potEnergy + sun.kinEnergy;
+    //cout << "Energy : " << setprecision(10)<< " kin e "<<planet.kinEnergy << " pot e " <<planet.potEnergy <<" kin s "<< sun.kinEnergy << " pot sun "<<  sun.potEnergy << endl;
+
+    double end_energy = start_energy*2;
+    double kin_start_s= sun.kinEnergy;
+    double pot_start_s = sun.potEnergy;
+    //cout << sun.potEnergy + sun.kinEnergy << endl;
     stepsPerYear = 1.0;
+
     while (abs(start_energy - end_energy) > eps){
-        planet.kinEnergy = 0.5*planet.mass*V*V;
-        planet.potEnergy = -fourpi2*planet.mass;
-        cout << planet.name << "start:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
+        cout << "-------------------"<<endl;
+        planet.position = pos_start_e;
+        planet.position=  pos_start_e;
+        planet.velocity = vel_start_e;
+        planet.acceleration = acc_start_e;
+        planet.kinEnergy = kin_start_e;
+        planet.potEnergy = pot_start_e;
+        planet.absposition_start = r_start_e;
+        planet.distance =   dist_start_e;
 
+        sun.position= vec({0,0});
+        sun.velocity= vec({0,0});
+        sun.acceleration= vec({0,0});
+        sun.kinEnergy = kin_start_s;
+        sun.potEnergy =   pot_start_s;
+
+        sun.distance = 0;
         algorithm(beta);
+        cout << "sol energi "<<sun.potEnergy + sun.kinEnergy << endl;
 
-        end_energy =  planet.kinEnergy + planet.potEnergy;
+        end_energy =  planet.kinEnergy + planet.potEnergy + sun.kinEnergy + sun.potEnergy;
 
-        cout << planet.name <<"end:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
-        cout << planet.name <<"Energy difference: " << start_energy - end_energy << endl;
+        //cout << "position end: " << planet.position << endl;
+        //cout << planet.name <<"end:   Kinetic, Potential:   " << planet.kinEnergy << ", "<< planet.potEnergy << endl;
+        //cout << "Energy : " << setprecision(10)<< " kin e "<<planet.kinEnergy << " pot e " <<planet.potEnergy <<" kin s "<< sun.kinEnergy << " pot sun "<<  sun.potEnergy << endl;
 
-        stepsPerYear = stepsPerYear*10;
+          stepsPerYear= stepsPerYear*10;
         numberofsteps = timeLimit*stepsPerYear;
         dt = timeLimit/(numberofsteps-1);
+        dt_half= dt/2.;
 
         cout << "dt: "<< dt << endl;
     }
-    cout << "For the energy to be converged, dt has to be:" << dt << endl;
+    cout << "For the energy to be converged, stepsPerYear has to be:" << stepsPerYear << endl;
+    cout << planet.name <<"Energy difference: " << start_energy - end_energy << endl;
 }
 

@@ -9,31 +9,42 @@ using namespace arma;
 void finding_initial_velocity_escape();
 void finding_initial_velocity_circular();
 void checking_gravitation(int years, Planet earth, Planet sun);
-
+void reading_init_values(string filename, double& x, double& y, double& z, double& vx, double& vy, double& vz);
 int main(){
-    float speed_years = (365.);
+    string planetname;
+    cout << "check if the initial potential energy is correct for many bodies!!!"<<endl;
+    double speed_years = (365.);
     int years = 3;
+    double m_sun = 2.0*1e30;
 
 // Original initial values ---------------------------------------------------
-    Planet earth(0.000030, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
-    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+    //Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    //Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
 
     //    finding_initial_velocity_escape(years);
     //    finding_intial_velocity_circular(years);
 // ---------------------------------------------------------------------------
 
+    double x,y,z,vx,vy,vz;
+    planetname ="earth";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet earth(3e-6, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-// New initial values from NASA ----------------------------------------------
-/*    double m_sun = 2.0*1e30;
-    Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, -5.245593715780954E-06*speed_years ,  5.482120330588081E-06*speed_years   , "sun");
-    Planet sun(1.0,     2.208054875983525E-03, 5.746280454272564E-03, 0 , 0   , "sun");
-    Planet jupiter(1./1000, -4.572777635194016E+00, -2.939093897020645E+00,  3.991864886961527E-03*speed_years, -5.989606308601243E-03*speed_years   ,  "jupiter"); // (mass,x,y,vx,vy)
-    Planet earth(6*1e24/m_sun,    8.930309961463524E-01, 4.508411860073833E-01   ,-7.978069853256020E-03*speed_years, 1.533806773162681E-02 *speed_years   , "earth"); // (mass,x,y,vx,vy)
-*/
+    planetname ="sun";
+    reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet sun(1.0, x,y,vx,vy, planetname);
+
 // ----------------------------------------------------------------------------
 
-    checking_gravitation(years, earth, sun);
+    //checking_gravitation(years, earth, sun);
 
+/*
+    Solver convergence("converg", true, 10);
+    convergence.add(earth);
+    convergence.add(sun);
+    double convergence_crit = 1e-9;
+    convergence.check_convergence(convergence_crit);
+*/
 
 // Velocity Verlet-------------------------------------------------------------
 /*    clock_t start_2, finish_2;
@@ -52,7 +63,6 @@ int main(){
 //    cout << time_verlet<<endl;
 */
 // ----------------------------------------------------------------------------
-
 
 // Euler's method -------------------------------------------------------------
     /*
@@ -74,7 +84,6 @@ int main(){
 
     cout<< time_euler<<endl;
 */
-
 // -------------------------------------------------------------------------------
 
 
@@ -91,8 +100,43 @@ int main(){
     threebody.algorithm();
 */
 // --------------------------------------------------------------------------------
+
+
+
+
     return 0;
 }
+
+
+
+
+void reading_init_values(string filename, double &x, double &y , double &z, double &vx, double &vy, double &vz){
+    string fileloc = "../Initial_cond/"+filename + "_.txt";
+    ifstream inf(fileloc);
+    string line;
+
+    vector<std::string> myLines;
+    if (!inf){
+        // Print an error and exit
+        cout << "Uh oh, could not open that file for reading!" << endl;
+        exit(1);
+    }
+    while (std::getline(inf, line))
+    {
+       myLines.push_back(line);
+    }
+
+    x = stod(myLines[0]);
+    y = stod(myLines[1]);
+    z = stod(myLines[2]);
+    vx = stod(myLines[3]);
+    vz = stod(myLines[4]);
+    vz = stod(myLines[5]);
+}
+
+
+
+
 
 void finding_initial_velocity_circular(int years){
     double start_v = 1.9*M_PI;
