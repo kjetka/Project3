@@ -17,11 +17,15 @@ int main(){
     double m_sun = 2.0*1e30;
 
 // Original initial values ---------------------------------------------------
-    //Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
-    //Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+//    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+//    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
 
-    //    finding_initial_velocity_escape(years);
-    //    finding_intial_velocity_circular(years);
+// Different functions -------------------------------------------------------
+
+//    checking_gravitation(years, earth, sun);
+//    finding_initial_velocity_escape(years);
+//    finding_intial_velocity_circular(years);
+
 // ---------------------------------------------------------------------------
 
     double x,y,z,vx,vy,vz;
@@ -33,6 +37,8 @@ int main(){
     planetname ="sun";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet sun(1.0, x,y,vx,vy, planetname);
+
+    checking_gravitation(years, earth, sun);
 /*
     planetname ="mars";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
@@ -73,9 +79,9 @@ int main(){
 
 // ----------------------------------------------------------------------------
 
-    //checking_gravitation(years, earth, sun);
 
-
+// Check energy convergence ---------------------------------------------------
+    /*
     Solver convergence("converg", true, 10);
     convergence.add(earth);
     convergence.add(sun);
@@ -83,6 +89,7 @@ int main(){
     double dt = 1;
     convergence.check_convergence(convergence_crit, dt);
     cout <<dt;
+*/
 
 // Velocity Verlet-------------------------------------------------------------
 /*    clock_t start_2, finish_2;
@@ -140,13 +147,8 @@ int main(){
 // --------------------------------------------------------------------------------
 
 
-
-
     return 0;
 }
-
-
-
 
 void reading_init_values(string filename, double &x, double &y , double &z, double &vx, double &vy, double &vz){
     double speed_years = (365.);
@@ -173,10 +175,6 @@ void reading_init_values(string filename, double &x, double &y , double &z, doub
     vy = stod(myLines[4])*speed_years;
     vz = stod(myLines[5])*speed_years;
 }
-
-
-
-
 
 void finding_initial_velocity_circular(int years){
     double start_v = 1.9*M_PI;
@@ -222,15 +220,15 @@ void finding_initial_velocity_escape(int years ){
 }
 
 void checking_gravitation(int years, Planet earth, Planet sun){
-    double beta = 2;
-    while (beta <= 3){
+    double beta = 2.3;
+    while (beta <= 3.2){
         string type = "beta-is-" + to_string(beta);
-        Solver gravitation(type, true, years);
+        Solver gravitation(type, true, 3);
 
         gravitation.add(earth);
         gravitation.add(sun);
         gravitation.algorithm(true, beta);
 
-        beta += 0.1;
+        beta += 0.3;
     }
 }

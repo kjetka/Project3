@@ -45,7 +45,7 @@ void Solver::updateTotalAcceleration_potEN(Planet &current, double beta){
             //current.FromOtherPotEnergy must be after current.accelerationFromOther!!!!!!!!!!!
 
             current.potEnergy += current.FromOtherPotEnergy(other, reldistance);
-           // cout << "carefull with the potential energy "<<endl;
+            // cout << "carefull with the potential energy "<<endl;
         }
 
     }
@@ -56,9 +56,9 @@ void Solver::test_energy(Planet current){
     double energy_current = current.potEnergy+ Kinetic;
     double tolerance_energy= 8e-5;
     if (fabs( energy_current - energy_prev)>tolerance_energy){
-         cout << "Exit: energy not conserved within " << tolerance_energy<<endl;
+        cout << "Exit: energy not conserved within " << tolerance_energy<<endl;
         exit(3);
-        }
+    }
     //cout << energy_current << "\t" << current.potEnergy<<endl;
 
 
@@ -67,7 +67,7 @@ void Solver::test_energy(Planet current){
 
 void Solver::test_angularmoment(Planet current){
     double L = current.mass*current.distance*pow(dot(current.velocity, current.velocity),0.5);
-   // cout << current.name <<"   "<<L<< endl;
+    // cout << current.name <<"   "<<L<< endl;
     //cout << current.velocity<<endl;
 }
 
@@ -102,43 +102,46 @@ void Solver::Euler(Planet &current, double beta){
 void Solver::algorithm(bool printfile, double beta){
     //cout <<"Steps:  "<< stepsPerYear<<endl;
     if (vverlet==true){     cout << "Running velocity verlet"<<endl;}
-    else                    cout << "running Euler" << endl;
+    else                    cout << "Running Euler" << endl;
+
     double time = 0;
+
     //initializing and opening files
     ofstream *outFiles = new ofstream [numberOfPlanets];
+
     if (printfile) initializeFiles(outFiles, systemtype);
 
     while (time <= timeLimit){
-       for (signed int i=0; i < numberOfPlanets; i++) {
+        for (signed int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
 
-                writevalues(outFiles[i], current,  time);
-                // Timing:
+            writevalues(outFiles[i], current,  time);
+            // Timing:
 
-                // if it is the first timestep we need to calculate the acceleration
-                if (time == 0) {
-                    updateTotalAcceleration_potEN(current, beta);
-                    }
-                if (vverlet==true) {
-                    velocityVerlet(current, beta);}
+            // if it is the first timestep we need to calculate the acceleration
+            if (time == 0) {
+                updateTotalAcceleration_potEN(current, beta);
+            }
+            if (vverlet==true) {
+                velocityVerlet(current, beta);}
 
-                else {Euler(current, beta);}
+            else {Euler(current, beta);}
 
-                //test_energy(current);
-                //test_circular( current, time);
-                //test_angularmoment(current);
-                current.kinEnergyUpdate();
+            //test_energy(current);
+            //test_circular( current, time);
+            //test_angularmoment(current);
+            current.kinEnergyUpdate();
 
-                //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
+            //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
 
         }
         time  += dt;
     }
     //closing open files
     if (printfile){
-    for (signed int i=0; i < numberOfPlanets; i++) {
-        outFiles[i].close();
-    }}
+        for (signed int i=0; i < numberOfPlanets; i++) {
+            outFiles[i].close();
+        }}
 }
 
 void Solver::add(Planet thisplanet) {
@@ -210,9 +213,6 @@ void Solver::check_convergence(double eps, double dt){
     Planet &sun = m_listPlanets.at(1);
     double beta = 2;
 
-
-
-
     ofstream outfile;
     outfile.open("../../results/text/convergence.txt");
 
@@ -255,9 +255,9 @@ void Solver::check_convergence(double eps, double dt){
 
     while (abs(start_energy - end_energy) > eps){
         stepsPerYear= stepsPerYear*10;
-      numberofsteps = timeLimit*stepsPerYear;
-      dt = timeLimit/(numberofsteps-1);
-      dt_half= dt/2.;
+        numberofsteps = timeLimit*stepsPerYear;
+        dt = timeLimit/(numberofsteps-1);
+        dt_half= dt/2.;
         cout << "-------------------"<<endl;
         planet.position = pos_start_e;
         planet.position=  pos_start_e;
@@ -291,6 +291,6 @@ void Solver::check_convergence(double eps, double dt){
     }
     cout << "For the energy to be converged, stepsPerYear has to be:" << stepsPerYear << endl;
     cout << "Energy difference: " << start_energy - end_energy << endl;
-outfile.close();
+    outfile.close();
 }
 
