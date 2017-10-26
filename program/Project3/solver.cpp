@@ -15,7 +15,7 @@ Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit){
 
     // Variables ----------------------
     pi = M_PI;
-    stepsPerYear = 2*7*3600*360;
+    stepsPerYear = 20000;
     //for Mercury: 7*3600*360;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
@@ -131,6 +131,7 @@ void Solver::algorithm(bool printfile, double beta){
 
             else {Euler(current, beta);}
 
+            findingPerihelion(Planet &current)
 
             //test_energy(current);
             //test_circular( current, time);
@@ -139,15 +140,6 @@ void Solver::algorithm(bool printfile, double beta){
             //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
 
             // This is for calculation the Perihelion
-
-            if((current.name != "sun") && ( time > 100-0.241)){
-                findingPerihelion(current);
-            }
-            if((current.name != "sun") && (time > timeLimit-dt)){
-                cout << "Perihelion position after 100 years: " << current.min_x_after <<", " << current.min_y_after << endl;
-                cout << "Perihelion angle after 100 years: " << atan(current.min_y_after/current.min_x_after)*206264.806 << " arc seconds" << endl;
-
-                }
 
         }
 
@@ -164,11 +156,19 @@ void Solver::algorithm(bool printfile, double beta){
 }
 
 void Solver::findingPerihelion(Planet &current){
-    current.sunDistance = sqrt(current.position[0]*current.position[0] + current.position[1]*current.position[1]);
-    if (current.sunDistance < current.minimum){
-        current.minimum = current.sunDistance;
-        current.min_x_after = current.position[0];
-        current.min_y_after = current.position[1];
+    if((current.name != "sun") && ( time > 100-0.241)){
+        current.sunDistance = sqrt(current.position[0]*current.position[0] + current.position[1]*current.position[1]);
+        if (current.sunDistance < current.minimum){
+            current.minimum = current.sunDistance;
+            current.min_x_after = current.position[0];
+            current.min_y_after = current.position[1];
+    }
+    if((current.name != "sun") && (time > timeLimit-dt)){
+        cout << "Perihelion position after 100 years: " << current.min_x_after <<", " << current.min_y_after << endl;
+        cout << "Perihelion angle after 100 years: " << atan(current.min_y_after/current.min_x_after)*206264.806 << " arc seconds" << endl;
+
+        }
+
     }
 }
 

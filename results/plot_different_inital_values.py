@@ -32,7 +32,7 @@ savefig('plots/circular_orbit.pdf')
 
 """
 
-findFiles("convergence")
+findFiles("convergence_euler")
 
 figure()
 for file in filer:  
@@ -44,7 +44,7 @@ legend()
 title('Energy convergence - circular orbit')
 xlabel('log(Timestep [year])')
 ylabel('$\log(\Delta E_{tot}) $')
-savefig('plots/convergence.pdf')
+savefig('plots/convergence_euler.pdf')
 
 # I think we have reach the occillation
     
