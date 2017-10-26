@@ -34,22 +34,23 @@ class Planet{
         int dimension = 2;
         double angularMomentum;
         double absposition_start;
-        double min_x_after;
-        double min_y_after;
-        double minimum;
+        double min_x_Periphelion;
+        double min_y_Periphelion;
+        double minPeriphelion;
         double sunDistance;
+
 
 
     public:
 
         Planet(double mass_, double x, double y, double vx, double vy, std::string name_);
-        //~Planet () {}                        // destructor
 
         double relativeDistance(Planet otherPlanet);
         mat accelerationFromOther(Planet otherPlanet, double &distance, double beta);
 
         void kinEnergyUpdate();
         double FromOtherPotEnergy(Planet & other,double& distance);
+       void AngularMomentum_update();
 
 };
 

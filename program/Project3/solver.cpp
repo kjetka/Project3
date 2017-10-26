@@ -10,12 +10,12 @@ using namespace arma;
 using namespace std;
 using namespace std::chrono;
 
-Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit){
+Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit, double stepsPerYear_){
     //Systemtype: appends to the filename - easy to see the variables.
 
     // Variables ----------------------
     pi = M_PI;
-    stepsPerYear = 2*7*3600*360;
+    stepsPerYear = stepsPerYear_;
     //for Mercury: 7*3600*360;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
@@ -135,17 +135,18 @@ void Solver::algorithm(bool printfile, double beta){
             //test_energy(current);
             //test_circular( current, time);
             //test_angularmoment(current);
+
             current.kinEnergyUpdate();
+            current.AngularMomentum_update();
             //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
 
             // This is for calculation the Perihelion
-
             if((current.name != "sun") && ( time > 100-0.241)){
                 findingPerihelion(current);
             }
             if((current.name != "sun") && (time > timeLimit-dt)){
-                cout << "Perihelion position after 100 years: " << current.min_x_after <<", " << current.min_y_after << endl;
-                cout << "Perihelion angle after 100 years: " << atan(current.min_y_after/current.min_x_after)*206264.806 << " arc seconds" << endl;
+                cout << "Perihelion position after 100 years: " << current.min_x_Periphelion <<", " << current.min_y_Periphelion << endl;
+                cout << "Perihelion angle after 100 years: " << atan(current.min_y_Periphelion/current.min_x_Periphelion)*206264.806 << " arc seconds" << endl;
 
                 }
 
@@ -164,11 +165,13 @@ void Solver::algorithm(bool printfile, double beta){
 }
 
 void Solver::findingPerihelion(Planet &current){
-    current.sunDistance = sqrt(current.position[0]*current.position[0] + current.position[1]*current.position[1]);
-    if (current.sunDistance < current.minimum){
-        current.minimum = current.sunDistance;
-        current.min_x_after = current.position[0];
-        current.min_y_after = current.position[1];
+     Planet& sun_ = m_listPlanets[0];
+     mat rel_distance = sun_.position-current.position;
+     current.sunDistance =  sqrt(dot(rel_distance, rel_distance));
+     if (current.sunDistance < current.minPeriphelion){
+        current.minPeriphelion = current.sunDistance;
+        current.min_x_Periphelion = current.position[0];
+        current.min_y_Periphelion = current.position[1];
     }
 }
 
@@ -188,6 +191,7 @@ void Solver::writevalues(ofstream& outfile, Planet& current, double time){
     }
     outfile << "\t"<< "\t" << setprecision(10) << current.kinEnergy;
     outfile << "\t"<< "\t" <<current.potEnergy;
+    outfile << "\t"<< "\t" <<current.angularMomentum;
 
     outfile << endl;
 }
@@ -204,6 +208,7 @@ void Solver::writeheader(ofstream &outfile, int dimension){
     }
     outfile <<  "\t"<< "\t"  << "KineticEnergy";
     outfile <<  "\t"<< "\t"  << "PotentialEnergy";
+    outfile <<  "\t"<< "\t"  << "AngularMomentum";
 
     outfile << endl;
 }

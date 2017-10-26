@@ -31,7 +31,7 @@ class Solver
         vector<Planet> m_listPlanets;
         //vector<string> outfile_list;
 
-        Solver(string systemtype_, bool choiseOfMethod, double timelimit);
+        Solver(string systemtype_, bool choiseOfMethod, double timelimit, double stepsPerYear_);
         //Planet();
         friend class Planet;
         void velocityVerlet(Planet &current, double beta);

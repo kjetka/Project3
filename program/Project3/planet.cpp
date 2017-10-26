@@ -17,10 +17,10 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
     potEnergy = -fourpi2*3e-6;
     distance = 0;
     absposition_start = dot(position,position);
-    angularMomentum = mass*absposition_start* pow(dot(velocity,velocity), 0.5);
-    min_x_after = 1.0;
-    min_y_after = 1.0;
-    minimum = 1.0;
+    angularMomentum = mass* (x*vy-y*vx);
+    min_x_Periphelion = 1.0;
+    min_y_Periphelion = 1.0;
+    minPeriphelion = 1.0;
 }
 
 double Planet::relativeDistance(Planet otherPlanet){
@@ -36,6 +36,7 @@ double Planet::relativeDistance(Planet otherPlanet){
 mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double beta){
 
     // Defining the relativistic part:
+    // EASIER TO DO 3D????
     double l = abs(position[0]*velocity[1]-velocity[0]*position[1]);
     double c = 63239.7263; // AU per year
     double relativistic = (1+(3*l*l/(distance*distance*c*c)));
@@ -55,4 +56,8 @@ double Planet::FromOtherPotEnergy(Planet& other, double &distance){
     return -fourpi2*mass*other.mass / distance;
     //unit: Joule/mass_sun
 
+}
+
+void Planet::AngularMomentum_update(){
+    Angularmoment = mass * cross(position, velocity);
 }
