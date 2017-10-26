@@ -60,5 +60,5 @@ double Planet::FromOtherPotEnergy(Planet& other, double &distance){
 }
 
 void Planet::AngularMomentum_update(){
-    angularMomentum = mass* (x*vy-y*vx);;
+    angularMomentum = mass* (position[0]*velocity[1]-position[1]*velocity[0]);
 }

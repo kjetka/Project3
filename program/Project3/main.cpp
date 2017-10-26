@@ -89,7 +89,6 @@ int main(){
     // ADD SUN FIRST!!!!!
     verlet.add(sun);
     verlet.add(mercury);
-    verlet.pretests();
     verlet.algorithm(false, 2);
     finish_2 = clock();
 //    verlet.check_convergence();
@@ -104,7 +103,6 @@ int main(){
     /*
     clock_t start_, finish_;
     start_ = clock();
-    //test.pretests();
 
     Solver euler("euler", false, years, stepsPerYear);
 
@@ -133,7 +131,6 @@ int main(){
     for (int i =0; i<3; i++){
         Solver threebody(filename[i], true, years, stepsPerYear);
 
-    threebody.pretests();
     threebody.algorithm(true, 2);
 */
 // -----------------------------------------------------------------------------
