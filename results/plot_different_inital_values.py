@@ -46,7 +46,7 @@ xlabel('log(Timestep [year])')
 ylabel('$\log(\Delta E_{tot}) $')
 savefig('plots/convergence.pdf')
 
-    
+# I think we have reach the occillation
     
     
     

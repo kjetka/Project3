@@ -12,13 +12,11 @@ void checking_gravitation(int years, Planet earth, Planet sun);
 void reading_init_values(string filename, double& x, double& y, double& z, double& vx, double& vy, double& vz);
 int main(){
 
-    private:
-        double m_sun = 2.0*1e30;
-        string planetname;
-    public:
+    double m_sun = 2.0*1e30;
+    string planetname;
 
     // The length of the simulation:
-    int years = 1;
+    int years = 100;
 
 // First choose how you want to initialize the planets, and which plantes you want:
 
@@ -73,16 +71,16 @@ int main(){
 
 
 // Sun as origo ---------------------------------------------------------------
-    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+//    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
-//    Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
+    Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
 
 // ----------------------------------------------------------------------------
 
 // Then you chose what method you want to simuate with (Euler or Velocity Verlet):
 
 // Velocity Verlet-------------------------------------------------------------
-    /*
+
     clock_t start_2, finish_2;
     start_2 = clock();
 
@@ -98,7 +96,7 @@ int main(){
 
     double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
     cout << "CPU time: " << time_verlet<<endl;
-*/
+
 // ----------------------------------------------------------------------------
 
 
@@ -143,7 +141,7 @@ int main(){
 // Here you can check the energy convergence for different timesteps:
 
 // Check energy convergence ----------------------------------------------------
-
+/*
         Solver convergence("converg", true, 10);
         convergence.add(earth);
         convergence.add(sun);
@@ -151,6 +149,7 @@ int main(){
         double dt = 1;
         convergence.check_convergence(convergence_crit, dt);
         cout <<dt;
+*/
 // ----------------------------------------------------------------------------
 
 
