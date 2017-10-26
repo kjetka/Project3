@@ -9,7 +9,7 @@ using namespace arma;
 using namespace std;
 using namespace std::chrono;
 
-Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
+Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit){
     //Systemtype: appends to the filename - easy to see the variables.
 
     // Variables ----------------------
@@ -18,12 +18,12 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     //for Mercury: 7*3600*360;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
-    numberofsteps = timeLimit*stepsPerYear;
-    dt = timeLimit/(numberofsteps-1);
+    numberOfSteps = timeLimit*stepsPerYear;
+    dt = timeLimit/(numberOfSteps-1);
     dt_half = dt/2;
     numberOfPlanets =0;
     systemtype = systemtype_;
-    vverlet = vverlet_;
+    choiseOfMethod = choiseOfMethod_; // True -> velocity verlet // False -> Euler
 
     // -------------------------------
     m_listPlanets.reserve(20);
@@ -103,7 +103,7 @@ void Solver::Euler(Planet &current, double beta){
 
 void Solver::algorithm(bool printfile, double beta){
     //cout <<"Steps:  "<< stepsPerYear<<endl;
-    if (vverlet==true){     cout << "Running velocity verlet"<<endl;}
+    if (choiseOfMethod==true){     cout << "Running velocity verlet"<<endl;}
     else                    cout << "Running Euler" << endl;
 
     double time = 0;
@@ -125,7 +125,7 @@ void Solver::algorithm(bool printfile, double beta){
             }
 
 
-            if (vverlet==true) {
+            if (choiseOfMethod==true) {
                 velocityVerlet(current, beta);}
 
             else {Euler(current, beta);}
@@ -277,8 +277,8 @@ void Solver::check_convergence(double eps, double dt){
 
     while (abs(start_energy - end_energy) > eps){
         stepsPerYear= stepsPerYear*10;
-        numberofsteps = timeLimit*stepsPerYear;
-        dt = timeLimit/(numberofsteps-1);
+        numberOfSteps = timeLimit*stepsPerYear;
+        dt = timeLimit/(numberOfSteps-1);
         dt_half= dt/2.;
         cout << "-------------------"<<endl;
         planet.position = pos_start_e;

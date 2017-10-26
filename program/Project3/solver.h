@@ -17,13 +17,13 @@ class Solver
         double pi;
         double fourpi2;
         //double time;
-        int numberofsteps;
+        int numberOfSteps;
         double dt;
         double timeLimit;
         double dt_half;
         int numberOfPlanets;
         string systemtype;
-        bool vverlet;
+        bool choiseOfMethod;
         double energy_prev;
         double stepsPerYear;
 
@@ -31,7 +31,7 @@ class Solver
         vector<Planet> m_listPlanets;
         //vector<string> outfile_list;
 
-        Solver(string systemtype_, bool vverlet, double timelimit);
+        Solver(string systemtype_, bool choiseOfMethod, double timelimit);
         //Planet();
         friend class Planet;
         void velocityVerlet(Planet &current, double beta);
