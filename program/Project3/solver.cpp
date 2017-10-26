@@ -14,7 +14,7 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
 
     // Variables ----------------------
     pi = M_PI;
-    stepsPerYear = 1000;
+    stepsPerYear = 7*36*360;
     //for Mercury: 7*3600*360;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
@@ -24,8 +24,6 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     numberOfPlanets =0;
     systemtype = systemtype_;
     vverlet = vverlet_;
-
-    minimum = 1.0;
 
     // -------------------------------
     m_listPlanets.reserve(20);
@@ -161,8 +159,8 @@ void Solver::algorithm(bool printfile, double beta){
 
 void Solver::findingPerihelion(Planet &current){
     current.sunDistance = sqrt(current.position[0]*current.position[0] + current.position[1]*current.position[1]);
-    if (current.sunDistance < minimum){
-        minimum = current.sunDistance;
+    if (current.sunDistance < current.minimum){
+        current.minimum = current.sunDistance;
         current.min_x_after = current.position[0];
         current.min_y_after = current.position[1];
     }

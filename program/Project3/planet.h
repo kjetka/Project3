@@ -34,6 +34,10 @@ class Planet{
         int dimension = 2;
         double angularMomentum;
         double absposition_start;
+        double min_x_after;
+        double min_y_after;
+        double minimum;
+        double sunDistance;
 
 
     public:

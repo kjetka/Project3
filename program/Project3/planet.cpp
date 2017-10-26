@@ -18,6 +18,9 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
     distance = 0;
     absposition_start = dot(position,position);
     angularMomentum = mass*absposition_start* pow(dot(velocity,velocity), 0.5);
+    min_x_after = 1.0;
+    min_y_after = 1.0;
+    minimum = 1.0;
 }
 
 double Planet::relativeDistance(Planet otherPlanet){
@@ -36,7 +39,11 @@ mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double b
     //relativeDistance(otherPlanet, absDistance);
     // Calculates the acceleration form the gravitational force between the planets
 
-    a_other = ((-fourpi2*otherPlanet.mass)/pow(distance,beta+1))*(position-otherPlanet.position);
+    double l = abs(position[0]*velocity[1]-velocity[0]*position[1]);
+    double c = 63239.7263; // AU per year
+    // question: should we make it an option to use the relativitstic one or not?
+    double relativistic = (1+(3*l*l/(distance*distance*c*c)));
+    a_other = ((-fourpi2*otherPlanet.mass)/pow(distance,beta+1))*(position-otherPlanet.position)*relativistic;
 
     return a_other;
 }

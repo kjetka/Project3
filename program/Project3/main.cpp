@@ -12,13 +12,14 @@ void checking_gravitation(int years, Planet earth, Planet sun);
 void reading_init_values(string filename, double& x, double& y, double& z, double& vx, double& vy, double& vz);
 int main(){
     string planetname;
-    cout << "check if the initial potential energy is correct for many bodies!!!"<<endl;
-    int years = 3;
+    //cout << "check if the initial potential energy is correct for many bodies!!!"<<endl;
+    int years = 100;
     double m_sun = 2.0*1e30;
 
 // Original initial values ---------------------------------------------------
 //    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
-//    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
 
 // Different functions -------------------------------------------------------
 
@@ -27,7 +28,7 @@ int main(){
 //    finding_intial_velocity_circular(years);
 
 // ---------------------------------------------------------------------------
-
+/*
     double x,y,z,vx,vy,vz;
 
     planetname ="earth";
@@ -39,7 +40,7 @@ int main(){
     Planet sun(1.0, x,y,vx,vy, planetname);
 
     checking_gravitation(years, earth, sun);
-/*
+
     planetname ="mars";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet mars(6.6e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
@@ -92,21 +93,22 @@ int main(){
 */
 
 // Velocity Verlet-------------------------------------------------------------
-/*    clock_t start_2, finish_2;
+    clock_t start_2, finish_2;
     start_2 = clock();
 
     Solver verlet("verlet", true, years);
 
-    verlet.add(earth);
+    //verlet.add(earth);
     verlet.add(sun);
+    verlet.add(mercury);
     verlet.pretests();
-//    verlet.algorithm(true, 2);
+    verlet.algorithm(true, 2);
     finish_2 = clock();
 //    verlet.check_convergence();
 
     double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
-//    cout << time_verlet<<endl;
-*/
+    cout << "CPU time: " << time_verlet<<endl;
+
 // ----------------------------------------------------------------------------
 
 // Euler's method -------------------------------------------------------------
