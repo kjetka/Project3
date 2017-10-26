@@ -8,15 +8,14 @@ using namespace arma;
 
 void finding_initial_velocity_escape(int years);
 void finding_initial_velocity_circular(int years);
-void checking_gravitation(int years, Planet earth, Planet sun);
+void checking_gravitation(int years, Planet earth, Planet sun, double stepsPerYear);
 void reading_init_values(string filename, double& x, double& y, double& z, double& vx, double& vy, double& vz);
 int main(){
 
     double m_sun = 2.0*1e30;
     string planetname;
-
-    // The length of the simulation:
     int years = 100;
+    double stepsPerYear = 50;
 
 // First choose how you want to initialize the planets, and which plantes you want:
 
@@ -83,13 +82,13 @@ int main(){
 
     clock_t start_2, finish_2;
     start_2 = clock();
-
-    Solver verlet("verlet", true, years);
+    stepsPerYear = 7*3600*360;
+    Solver verlet("verlet", true, years, stepsPerYear);
 
     //verlet.add(earth);
+    // ADD SUN FIRST!!!!!
     verlet.add(sun);
     verlet.add(mercury);
-    verlet.pretests();
     verlet.algorithm(false, 2);
     finish_2 = clock();
 //    verlet.check_convergence();
@@ -104,9 +103,8 @@ int main(){
     /*
     clock_t start_, finish_;
     start_ = clock();
-    //test.pretests();
 
-    Solver euler("euler", false, years);
+    Solver euler("euler", false, years, stepsPerYear);
 
     //Looks like euler method conserves energy. KinEn varies a lot, potential not.!!! How test for energy?
     // Should the kinetic and pot energy be conserved independently? (3c)
@@ -126,14 +124,13 @@ int main(){
 
 // Three-body ------------------------------------------------------------------
     /*
-    Solver threebody("3body", true, years);
+    Solver threebody("3body", true, years, stepsPerYear);
 
     mat massJupiter = vec({1./1e3, 10./1e3, 1.});
     string filename[] = {"3body_m1e0", "3body_m1e1", "3body_m1e3"};
     for (int i =0; i<3; i++){
-        Solver threebody(filename[i], true, years);
+        Solver threebody(filename[i], true, years, stepsPerYear);
 
-    threebody.pretests();
     threebody.algorithm(true, 2);
 */
 // -----------------------------------------------------------------------------
@@ -142,7 +139,7 @@ int main(){
 
 // Check energy convergence ----------------------------------------------------
 /*
-        Solver convergence("converg", true, 10);
+        Solver convergence("converg", true, 10, stepsPerYear);
         convergence.add(earth);
         convergence.add(sun);
         double convergence_crit = 1e-5;
@@ -157,7 +154,7 @@ int main(){
 
 // Different functions --------------------------------------------------------
 
-//    checking_gravitation(years, earth, sun); // only works for earth and sun
+//    checking_gravitation(years, earth, sun, stepsPerYear); // only works for earth and sun
 //    finding_initial_velocity_escape(years);  // only works for earth and sun
 //    finding_initial_velocity_circular(years);  // only works for earth and sun
 
@@ -165,6 +162,9 @@ int main(){
 
     return 0;
 }
+
+
+
 
 void reading_init_values(string filename, double &x, double &y , double &z, double &vx, double &vy, double &vz){
     double speed_years = (365.);
@@ -195,7 +195,7 @@ void reading_init_values(string filename, double &x, double &y , double &z, doub
 void finding_initial_velocity_circular(int years){
     double start_v = 1.9*M_PI;
     double end_v = 2.1*M_PI;
-
+    double stepsPerYear = 50;
     double v = start_v;
 
     double dv = (end_v - start_v)/7.0;
@@ -204,7 +204,7 @@ void finding_initial_velocity_circular(int years){
         Planet earth(0.000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, years);
+        Solver test_initial(type, true, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -216,7 +216,7 @@ void finding_initial_velocity_circular(int years){
 void finding_initial_velocity_escape(int years ){
     double start_v = 0.97*2*sqrt(2)*M_PI;
     double end_v = 2*M_PI*sqrt(2);
-
+    double stepsPerYear = 50;
     double v = start_v;
 
     double dv = (end_v - start_v)/5.0;
@@ -225,7 +225,7 @@ void finding_initial_velocity_escape(int years ){
         Planet earth(0.0000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, years);
+        Solver test_initial(type, true, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -235,11 +235,12 @@ void finding_initial_velocity_escape(int years ){
     }
 }
 
-void checking_gravitation(int years, Planet earth, Planet sun){
+void checking_gravitation(int years, Planet earth, Planet sun, double stepsPerYear){
     double beta = 2.3;
+
     while (beta <= 3.2){
         string type = "beta-is-" + to_string(beta);
-        Solver gravitation(type, true, 3);
+        Solver gravitation(type, true, 3, stepsPerYear);
 
         gravitation.add(earth);
         gravitation.add(sun);
