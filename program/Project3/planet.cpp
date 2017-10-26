@@ -39,6 +39,7 @@ mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double b
     // EASIER TO DO 3D????
     double l = abs(position[0]*velocity[1]-velocity[0]*position[1]);
     double c = 63239.7263; // AU per year
+    // Morten: c = 63198
     double relativistic = (1+(3*l*l/(distance*distance*c*c)));
     //double relativistic = 1.0;
     // Calculating the acceleration contribution from "otherPlanet"
@@ -59,5 +60,5 @@ double Planet::FromOtherPotEnergy(Planet& other, double &distance){
 }
 
 void Planet::AngularMomentum_update(){
-    Angularmoment = mass * cross(position, velocity);
+    angularMomentum = mass* (x*vy-y*vx);;
 }

@@ -32,6 +32,24 @@ Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit, doubl
 }
 
 
+void Solver::velocityVerlet(Planet &current, double beta){
+    current.velocity += dt_half*current.acceleration;
+    current.position += dt*current.velocity;
+    updateTotalAcceleration_potEN(current, beta);
+    current.velocity += dt_half*current.acceleration;
+}
+
+void Solver::Euler(Planet &current, double beta){
+    //works only for earth sun
+    Planet other = m_listPlanets.at(1);
+    updateTotalAcceleration_potEN(current, beta);
+    //current.acceleration = current.accelerationFromOther(other, distance);
+    current.velocity += current.acceleration*dt;
+    current.position += current.velocity*dt;
+
+}
+
+
 void Solver::updateTotalAcceleration_potEN(Planet &current, double beta){
     // finding force -> acceleration from all other planets
 
@@ -84,24 +102,6 @@ void Solver::test_circular(Planet current, double time){
     }
 
 }
-
-void Solver::velocityVerlet(Planet &current, double beta){
-    current.velocity += dt_half*current.acceleration;
-    current.position += dt*current.velocity;
-    updateTotalAcceleration_potEN(current, beta);
-    current.velocity += dt_half*current.acceleration;
-}
-
-void Solver::Euler(Planet &current, double beta){
-    //works only for earth sun
-    Planet other = m_listPlanets.at(1);
-    updateTotalAcceleration_potEN(current, beta);
-    //current.acceleration = current.accelerationFromOther(other, distance);
-    current.velocity += current.acceleration*dt;
-    current.position += current.velocity*dt;
-
-}
-
 void Solver::algorithm(bool printfile, double beta){
     //cout <<"Steps:  "<< stepsPerYear<<endl;
     if (choiseOfMethod==true){     cout << "Running velocity verlet"<<endl;}
