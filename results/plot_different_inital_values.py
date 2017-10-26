@@ -1,30 +1,56 @@
-import numpy as np
-import matplotlib.pyplot as plt
+from numpy import *
+from matplotlib.pyplot import *
 import glob, os
+mappe = "text/"
+filer = []
+def findFiles(stikkord):    
+    for file in glob.glob(mappe + "*.txt"):
+        if stikkord in file:
+            filer.append(file)
+    return filer
+"""
+findFiles("earth-v_ini")
 
-filelist = []
+print filer
 
-for filename in glob.glob("*.txt"):
-    a = filename.find("sun-")
-    if a<0:
-        filelist.append(filename)
-
-print filelist
-plt.figure()
-for filename in filelist:  
-    time,x,y,vx,vy = np.loadtxt(filename,unpack=True, skiprows=2)
-    
-    plt.plot(x,y, label = "$v_{ini}$ = %.2f" %vy[0])
-    plt.hold('on')
+figure()
+for file in filer:  
+    time,x,y,vx,vy,kin, pot = loadtxt(file,unpack=True, skiprows=1)
+    plot(x,y, label = "$v_{ini}$ = %.2f" %vy[0])
 
 x_circ = np.linspace(-1,1,100)
 
-plt.axis([-1.2,2.0,-1.2,1.2])
-plt.title('Finding the circular orbit')
-plt.xlabel('Posistion, x-direction')
-plt.ylabel('Posistion, y-direction')
-plt.plot(0,0,'o', label = "The sun")
-plt.plot(x_circ, np.sqrt(1-x_circ**2),'y--', label='The circuar orbit')
-plt.plot(x_circ, -np.sqrt(1-x_circ**2),'y--')
-plt.legend()
-plt.savefig('circular_orbit.pdf')
+axis([-1.2,2.0,-1.2,1.2])
+title('Finding the circular orbit')
+xlabel('Posistion, x-direction')
+ylabel('Posistion, y-direction')
+plot(0,0,'o', label = "The sun")
+plot(x_circ, np.sqrt(1-x_circ**2),'y--', label='Circuar orbit')
+plot(x_circ, -np.sqrt(1-x_circ**2),'y--')
+legend()
+savefig('plots/circular_orbit.pdf')
+
+"""
+
+findFiles("convergence")
+
+figure()
+for file in filer:  
+    dt, energy, delta_energy = loadtxt(file,unpack=True, skiprows=3)
+    
+#plot(dt, energy, label='Total energy')
+plot(log10(dt)[1:], log10(delta_energy)[1:], label = 'Change in energy')
+legend()
+title('Energy convergence - circular orbit')
+xlabel('log(Timestep [year])')
+ylabel('$\log(\Delta E_{tot}) $')
+savefig('plots/convergence.pdf')
+
+    
+    
+    
+    
+    
+    
+    
+    

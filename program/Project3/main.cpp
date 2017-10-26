@@ -6,29 +6,24 @@
 using namespace std;
 using namespace arma;
 
-void finding_initial_velocity_escape();
-void finding_initial_velocity_circular();
+void finding_initial_velocity_escape(int years);
+void finding_initial_velocity_circular(int years);
 void checking_gravitation(int years, Planet earth, Planet sun);
 void reading_init_values(string filename, double& x, double& y, double& z, double& vx, double& vy, double& vz);
 int main(){
-    string planetname;
-    //cout << "check if the initial potential energy is correct for many bodies!!!"<<endl;
-    int years = 100;
-    double m_sun = 2.0*1e30;
 
-// Original initial values ---------------------------------------------------
-//    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
-    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
-    Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
+    private:
+        double m_sun = 2.0*1e30;
+        string planetname;
+    public:
 
-// Different functions -------------------------------------------------------
+    // The length of the simulation:
+    int years = 1;
 
-//    checking_gravitation(years, earth, sun);
-//    finding_initial_velocity_escape(years);
-//    finding_intial_velocity_circular(years);
+// First choose how you want to initialize the planets, and which plantes you want:
 
-// ---------------------------------------------------------------------------
-/*
+// Bodycentric coordinates --------------------------------------------------
+    /*
     double x,y,z,vx,vy,vz;
 
     planetname ="earth";
@@ -39,12 +34,9 @@ int main(){
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet sun(1.0, x,y,vx,vy, planetname);
 
-    checking_gravitation(years, earth, sun);
-
     planetname ="mars";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet mars(6.6e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
-
 
     planetname ="uranus";
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
@@ -75,24 +67,22 @@ int main(){
     reading_init_values(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet venus(4.9e24/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-
 */
 
 // ----------------------------------------------------------------------------
 
 
-// Check energy convergence ---------------------------------------------------
-    /*
-    Solver convergence("converg", true, 10);
-    convergence.add(earth);
-    convergence.add(sun);
-    double convergence_crit = 3e-6;
-    double dt = 1;
-    convergence.check_convergence(convergence_crit, dt);
-    cout <<dt;
-*/
+// Sun as origo ---------------------------------------------------------------
+    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+//    Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
+
+// ----------------------------------------------------------------------------
+
+// Then you chose what method you want to simuate with (Euler or Velocity Verlet):
 
 // Velocity Verlet-------------------------------------------------------------
+    /*
     clock_t start_2, finish_2;
     start_2 = clock();
 
@@ -102,14 +92,15 @@ int main(){
     verlet.add(sun);
     verlet.add(mercury);
     verlet.pretests();
-    verlet.algorithm(true, 2);
+    verlet.algorithm(false, 2);
     finish_2 = clock();
 //    verlet.check_convergence();
 
     double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
     cout << "CPU time: " << time_verlet<<endl;
-
+*/
 // ----------------------------------------------------------------------------
+
 
 // Euler's method -------------------------------------------------------------
     /*
@@ -131,11 +122,12 @@ int main(){
 
     cout<< time_euler<<endl;
 */
-// -------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
+// Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
 
-// Three-body --------------------------------------------------------------------
-/*
+// Three-body ------------------------------------------------------------------
+    /*
     Solver threebody("3body", true, years);
 
     mat massJupiter = vec({1./1e3, 10./1e3, 1.});
@@ -146,8 +138,31 @@ int main(){
     threebody.pretests();
     threebody.algorithm(true, 2);
 */
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
+// Here you can check the energy convergence for different timesteps:
+
+// Check energy convergence ----------------------------------------------------
+
+        Solver convergence("converg", true, 10);
+        convergence.add(earth);
+        convergence.add(sun);
+        double convergence_crit = 1e-5;
+        double dt = 1;
+        convergence.check_convergence(convergence_crit, dt);
+        cout <<dt;
+// ----------------------------------------------------------------------------
+
+
+// These are function to find different values and check different things:
+
+// Different functions --------------------------------------------------------
+
+//    checking_gravitation(years, earth, sun); // only works for earth and sun
+//    finding_initial_velocity_escape(years);  // only works for earth and sun
+//    finding_initial_velocity_circular(years);  // only works for earth and sun
+
+// ----------------------------------------------------------------------------
 
     return 0;
 }
@@ -167,7 +182,7 @@ void reading_init_values(string filename, double &x, double &y , double &z, doub
     }
     while (std::getline(inf, line))
     {
-       myLines.push_back(line);
+        myLines.push_back(line);
     }
 
     x = stod(myLines[0]);

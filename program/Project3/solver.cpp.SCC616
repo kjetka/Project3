@@ -240,7 +240,7 @@ void Solver::check_convergence(double eps, double &dt){
     Planet &planet = m_listPlanets.at(0);
     Planet &sun = m_listPlanets.at(1);
     double beta = 2;
-    dt = 1.0;
+    dt = 1;
 
     ofstream outfile;
     outfile.open("../../results/text/convergence.txt");
@@ -279,7 +279,6 @@ void Solver::check_convergence(double eps, double &dt){
 
     int interaction = 0;
     int interactionLimit = 15;
-
     while ((abs(start_energy - end_energy) > eps) && (interaction < interactionLimit)){
         dt = dt/10.0;
         dt_half= dt/2.;
@@ -317,9 +316,6 @@ void Solver::check_convergence(double eps, double &dt){
     if(interaction == interactionLimit){
         cout << "Did not reach the convergence criteria" << endl;
         cout << "The energy difference reached was: " << start_energy - end_energy << endl;
-        cout << "I think we have reached the difference in the occillation, so we can't get it smaller." << endl;
-        cout << "Maybe we can find the occillation ampltude and substract it from this difference. Is the amplitude constant?" << endl;
-        cout << "Is dE = 10^-3 good enough?" << endl;
     }else{
         cout << "For the energy to be converged, the timestep has to be:" << dt << endl;
         cout << "Energy difference: " << start_energy - end_energy << endl;

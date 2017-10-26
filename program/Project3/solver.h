@@ -53,7 +53,7 @@ class Solver
         void test_circular(Planet current, double time);
         void pretests();
         void test_angularmoment(Planet current);
-        void check_convergence(double eps, double dt);
+        void check_convergence(double eps, double &dt);
 
         void findingPerihelion(Planet &current);
         mat find_center_of_mass();

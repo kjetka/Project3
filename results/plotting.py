@@ -20,58 +20,7 @@ def findFiles(stikkord):
 
 	return filer, planets
 
-
-
-"""
-algoritmer = ["euler", "verlet"]
-for algoritme in algoritmer:
-	files, planets = findFiles(algoritme)
-	totkin =[]
-	totpot = []
-	for i in range(len(files)):
-
-		time, x,y,vx,vy,KineticEnergy,PotentialEnergy = loadtxt(files[i],unpack=True, skiprows=1)
-		if i==0:
-			totkin = KineticEnergy
-			totpot = PotentialEnergy
-		else:
-			totkin += KineticEnergy
-			totpot += PotentialEnergy
-	#plot(time, totkin+totpot)
-	figure()
-	plot (time, totkin +totpot, label = algoritme)
-	#ylim([0.000059, 0.0000595])
-	title("Totkin ")
-
-	legend()
-show()
-"""
-"""
-algoritmer = ["euler", "verlet"]
-for algoritme in algoritmer:
-	figure()
-	#ylim([0.8,1.05])
-	files, planets = findFiles(algoritme)
-	totkin =[]
-	totpot = []
-	for i in range(len(files)):
-
-		time, x,y,vx,vy,KineticEnergy,PotentialEnergy = loadtxt(files[i],unpack=True, skiprows=1)
-		if i==0:
-			totkin = KineticEnergy
-			totpot = PotentialEnergy
-		else:
-			totkin += KineticEnergy
-			totpot += PotentialEnergy
-
-		plot(x,y, label = planets[i] + ' '+ algoritme)
-	legend()
-show()
-"""
-
-
-
-files, planets = findFiles("3body")
+files, planets = findFiles("")
 totkin =[]
 totpot = []
 for i in range(len(files)):
