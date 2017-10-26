@@ -14,7 +14,8 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
 
     // Variables ----------------------
     pi = M_PI;
-    stepsPerYear = 100;
+    stepsPerYear = 1000;
+    //for Mercury: 7*3600*360;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
     numberofsteps = timeLimit*stepsPerYear;
@@ -23,6 +24,9 @@ Solver::Solver(string systemtype_, bool vverlet_, double timelimit){
     numberOfPlanets =0;
     systemtype = systemtype_;
     vverlet = vverlet_;
+
+    minimum = 1.0;
+
     // -------------------------------
     m_listPlanets.reserve(20);
     energy_prev = 0;
@@ -34,7 +38,7 @@ void Solver::updateTotalAcceleration_potEN(Planet &current, double beta){
 
     current.acceleration = vec({0, 0});
     current.potEnergy = 0;
-    for (unsigned int i=0; i < numberOfPlanets; i++) {
+    for (int i=0; i < numberOfPlanets; i++) {
         Planet &other = m_listPlanets.at(i);
         if(current.name != other.name){
             double reldistance = current.relativeDistance(other);
@@ -66,7 +70,7 @@ void Solver::test_energy(Planet current){
 }
 
 void Solver::test_angularmoment(Planet current){
-    double L = current.mass*current.distance*pow(dot(current.velocity, current.velocity),0.5);
+    //double L = current.mass*current.distance*pow(dot(current.velocity, current.velocity),0.5);
     // cout << current.name <<"   "<<L<< endl;
     //cout << current.velocity<<endl;
 }
@@ -107,44 +111,64 @@ void Solver::algorithm(bool printfile, double beta){
     double time = 0;
 
     //initializing and opening files
-    ofstream *outFiles = new ofstream [numberOfPlanets];
-
-    if (printfile) initializeFiles(outFiles, systemtype);
+    //ofstream *outFiles = new ofstream [numberOfPlanets];
+    //if (printfile) initializeFiles(outFiles, systemtype);
 
     while (time <= timeLimit){
         for (signed int i=0; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
 
-            writevalues(outFiles[i], current,  time);
-            // Timing:
+            //writevalues(outFiles[i], current,  time);
 
-            // if it is the first timestep we need to calculate the acceleration
+            /*  If it is the first timestep we need to
+                calculate the acceleration from the initial values */
             if (time == 0) {
                 updateTotalAcceleration_potEN(current, beta);
             }
+
+
             if (vverlet==true) {
                 velocityVerlet(current, beta);}
 
             else {Euler(current, beta);}
 
+
             //test_energy(current);
             //test_circular( current, time);
             //test_angularmoment(current);
             current.kinEnergyUpdate();
-
             //cout << current.kinEnergy << "\t" << current.potEnergy << "\t " << current.kinEnergy+ current.potEnergy<<endl;
 
+            // This is for calculation the Perihelion
+            if((current.name != "sun") && ( time > 100-0.241)){
+                findingPerihelion(current);
+            }
+            if((current.name != "sun") && (time > timeLimit-dt)){
+                cout << "Perihelion posistion after 100 years: " << current.min_x_after <<", " << current.min_y_after << endl;
+            }
         }
+
         time  += dt;
     }
+   /*
     //closing open files
     if (printfile){
         for (signed int i=0; i < numberOfPlanets; i++) {
             outFiles[i].close();
         }}
+*/
 }
 
-void Solver::add(Planet thisplanet) {
+void Solver::findingPerihelion(Planet &current){
+    current.sunDistance = sqrt(current.position[0]*current.position[0] + current.position[1]*current.position[1]);
+    if (current.sunDistance < minimum){
+        minimum = current.sunDistance;
+        current.min_x_after = current.position[0];
+        current.min_y_after = current.position[1];
+    }
+}
+
+void Solver::add(Planet thisplanet){
     m_listPlanets.push_back(thisplanet);
     numberOfPlanets += 1;
 }
@@ -184,7 +208,7 @@ void Solver::initializeFiles(ofstream *outFiles, string nameinfo){
     string filename;
     string location = "../../results/text/";
     string filetype = ".txt";
-    for (unsigned int i=0; i < numberOfPlanets; i++) {
+    for (int i=0; i < numberOfPlanets; i++) {
         Planet &current = m_listPlanets.at(i);
         filename = location + current.name +"-"+ nameinfo+ filetype;
         outFiles[i].open(filename);
@@ -199,7 +223,7 @@ void Solver::pretests(){
         for(int j=0; j<numberOfPlanets; j++){
             if (j!=i){
                 Planet other = m_listPlanets.at(j);
-                if(current.dimension =! other.dimension){
+                if((current.dimension =! other.dimension)){
                     cout <<"Dimensions doesn't match"<<endl;
                     exit(2);
                 }
@@ -294,3 +318,14 @@ void Solver::check_convergence(double eps, double dt){
     outfile.close();
 }
 
+mat Solver::find_center_of_mass(){
+    mat top = vec({0,0});
+    mat bottom = vec({0,0});
+    for(unsigned int i = 0; i<m_listPlanets.size(); i++){
+        Planet current = m_listPlanets[i];
+        top += current.mass*current.position;
+        bottom += current.mass;
+    }
+    mat centerofmass = top/bottom;
+    return centerofmass;
+}
