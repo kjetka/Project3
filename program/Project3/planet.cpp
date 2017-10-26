@@ -24,6 +24,7 @@ Planet::Planet(double mass_, double x, double y, double vx, double vy, std::stri
 }
 
 double Planet::relativeDistance(Planet otherPlanet){
+    // Calculates the distance between this planet and "otherPlanet"
     double sum = 0;
     for(int i=0;i<dimension;i++){
         sum += (position[i]-otherPlanet.position[i])*(position[i]-otherPlanet.position[i]);
@@ -33,28 +34,25 @@ double Planet::relativeDistance(Planet otherPlanet){
 
 
 mat Planet::accelerationFromOther(Planet otherPlanet, double &distance, double beta){
-    mat a_other;
-    //double absDistance=0; //Question: fjerne? add in function header?
-    // calculates the distance from this planet to the other planet
-    //relativeDistance(otherPlanet, absDistance);
-    // Calculates the acceleration form the gravitational force between the planets
 
+    // Defining the relativistic part:
     double l = abs(position[0]*velocity[1]-velocity[0]*position[1]);
     double c = 63239.7263; // AU per year
-    // question: should we make it an option to use the relativitstic one or not?
     double relativistic = (1+(3*l*l/(distance*distance*c*c)));
-    a_other = ((-fourpi2*otherPlanet.mass)/pow(distance,beta+1))*(position-otherPlanet.position)*relativistic;
 
-    return a_other;
+    // Calculating the acceleration contribution from "otherPlanet"
+    return ((-fourpi2*otherPlanet.mass)/pow(distance,beta+1))*(position-otherPlanet.position)*relativistic;
+
 }
 
 void Planet::kinEnergyUpdate(){
+    // Calculating the kinetic energy for updated velocity
     kinEnergy = 0.5*mass*dot(velocity, velocity);
 }
 
 double Planet::FromOtherPotEnergy(Planet& other, double &distance){
+    // Calculating the potential energy contribution from "otherPlanet"
     return -fourpi2*mass*other.mass / distance;
     //unit: Joule/mass_sun
 
-   // ((-fourpi2*otherPlanet.mass*mass)/pow(absDistance,2))
 }

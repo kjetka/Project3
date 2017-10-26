@@ -3,6 +3,7 @@
 #include <ctime>
 #include <ratio>
 #include <chrono>
+#include <cmath>
 
 #include <armadillo>
 using namespace arma;
@@ -14,7 +15,7 @@ Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit){
 
     // Variables ----------------------
     pi = M_PI;
-    stepsPerYear = 7*36*360;
+    stepsPerYear = 1000;
     //for Mercury: 7*3600*360;
     fourpi2 = 4*pi*pi;
     timeLimit = timelimit;
@@ -143,6 +144,8 @@ void Solver::algorithm(bool printfile, double beta){
             }
             if((current.name != "sun") && (time > timeLimit-dt)){
                 cout << "Perihelion posistion after 100 years: " << current.min_x_after <<", " << current.min_y_after << endl;
+                cout << "Perihelion angle after 100 years: " << atan(current.min_y_after/current.min_x_after)*206264.806 << " arc seconds" << endl;
+
             }
         }
 
