@@ -1,32 +1,91 @@
+Utgangspunkt - oppgavetekst
+	Også relativistisk effekter!
+	
+scaling, enheter
 
+
+
+
+
+
+\subsection{Classical Solar system}
+In the classical description of the solar system, there is only a single force working:
+\begin{equation}
+ F_G = - G\frac{M_{1}M_2}{r ^2} \label{eq:F_G}
+\end{equation}
+
+By applying Newtons 2.law on component form we achieve two more equations, in the case of a two dimensional system. 
+\begin{equation}
+\dv[2]{\vec{r	}}{t} = \frac{\vec{F}_G}{M_2} \label{eq:Newton}
+\end{equation}
+
+Equation \ref{eq:Newton} is in reality two seperate, independent equations, one for the x directon and the other for the y direction. 
+ 
 Sentrifugal: $ a = \frac{v^2}{r} $. 
 
-We know that the earth needs one year to orbit the sun, meaning that $ v = \frac{2\pi r}{\text{1 year}} $. This can be rewritten with $ v = \tilde{v}v_0 $ and $ r = \tilde{r}r_0 $. The units of $ r $ and $ v $ are contained in  $ v_0 = \frac{1 \text{Au}}{1 \text{ year}} $ and $ r_0=1\text{ Au} $, giving that $ \tilde{v}^2\tilde{r} = 4\pi^2 $. In the same way $ t = \tilde{t}t_0 $, with $ t_0 = 1 \text{ year} $. 
 
+\section{Units and scaling}
+
+A computer has a limited bit-resolution and the distances and timescale are large when computing the solar system. This means that it is important to use appropriate units. The distance between the sun and the earth is defined as 1 Astronomical unit (1 Au) and the timescale used in this project will be in units of 1 year. 
+
+We know that the earth needs one year to orbit the sun, meaning that $ v = \frac{2\pi r}{\text{1 year}} $. This can be rewritten with $ v = \tilde{v}v_0 $ and $ r = \tilde{r}r_0 $. The units of $ r $ and $ v $ are contained in  $ v_0 = \frac{1 \text{Au}}{1 \text{ year}} $ and $ r_0=1\text{ Au} $, giving that $ \tilde{v}^2\tilde{r} = 4\pi^2 $. In the same way $ t = \tilde{t}t_0 $, with $ t_0 = 1 \text{ year} $. For the rest of the paper, we will assume all variables to be dimensionless.
+
+For the case of the earth - sun system one can assume that the sun is stationary, as $ M_{sun}>> M_{earth} $. The force experienced by the earth is thus centrifugal, which means that $ a = \frac{v^2}{r} $, with $ v = 2\pi r /1year $.  
+Combining this with equations \ref{eq:F_G} and \ref{eq:Newton} it is possible to scale the equations in the following manner:
 
 \begin{align}
-	a_E &= \frac{F_E}{M_E}= - G\frac{M_{sun}}{r^2}\\
-	&= \frac{v^2}{r}\\
+	{a}_E &= \frac{{F}_E}{M_E}= G\frac{M_{sun}}{r^2} 
+= \frac{v^2}{r}\\
 	GM_{sun}&= v^2 r = 4\pi^2 \frac{(\text{1 Au})^3}{(\text{1 year})^2}\\
-	\dv{\tilde{v}}{\tilde{t}} &=- \frac{4\pi^2}{\tilde{r}^2} \label{eq:}
+	\dv{\tilde{v}}{\tilde{t}} &= \frac{4\pi^2}{\tilde{r}^2} \label{eq:}
 \end{align}
 
-For the rest of the paper we will assume all variables to be dimensionless. 
-In a two dimensional system $ r = (x,y) = (r\cos\theta, r\sin\theta) $. This gives the following parametrized relations :
+In the two dimensional system $ r = (x,y) = (r\cos\theta, r\sin\theta) $. Using the notation $ 	\dot{p}  = \dv{p}{t}$, this gives the following coupled differential equations: 
+\begin{align}
+\dot{v}_x  &=  \frac{4\pi^2r\cos\theta}{{r}^3}  = \frac{4\pi^2x}{{r}^3} \\
+\dot{v}_y	 &= -\frac{4\pi^2r\sin\theta}{{r}^3}  = \frac{4\pi^2y}{{r}^3}\\
+	\dot{x}  &= v_x\\
+	\dot{y}  &= v_y\\
+\end{align}
+
+\subsection{Energy considerations}
+
+As with any physical system, the total energy has to be conserved. The potential energy $ E_p = \int_{r'}^{\infty} \vec{F}(r') \cdot  d\vec{r}' = -\frac{G	M_1M_2}{r} $, while the kinetic energy is $ E_K  = \frac{1}{2}mv^2$. This gives a total energy of:
+
+\begin{equation}
+	E_{tot} = \frac{1}{2}mv^2 - \frac{G	M_1M_2}{r} \label{eq: toten}
+\end{equation}
+
+ In addition, the angular momentum of the system has to be preserved. This is because there are no additional sources of torque ($ \tau $) once the system has been initialized and $ \tau = \dv{{L}}{t} =0 \Rightarrow  {L} =$ constant. 
+\textbf{For a circular motion the angular momentum $	\vec{L} = m (\vec{r} \times \vec{v})$ can be described as:}
 
 \begin{align}
-	\dv{{v}_x}{{t}} &=- \frac{4\pi^2r\cos\theta}{{r}^3}  =- \frac{4\pi^2x}{{r}^3} \\
-		\dv{{v}_y}{{t}} &=- \frac{4\pi^2r\sin\theta}{{r}^3}  = -\frac{4\pi^2y}{{r}^3}\\
-		\dv{x}{t} &= v_x\\
-				\dv{y}{t} &= v_y\\
+	L &=  I v^2 r
 \end{align}
+\textbf{For pointparticles: $ 	I = r^2m $ and for sircular motion $ v = \frac{v}{r} $.}
 
 
-
-Angular momentum: 
+In order to maintain in the gravitational field of another object, the distance between them needs to be smaller than $ \infty $. However, with a large enough velocity it is possible to escape, with the lowest velocity given when setting eguation \ref{eq: toten} equal to 0:
 
 \begin{align}
-	L &= I\omega\\
-	&= mrv
+&\frac{1}{2}mv^2 - \frac{G	M_1M_2}{r}  = 0\\
+& v_{escape} = \sqrt{ \frac{2G	M_1M_2}{mr}}
 \end{align}
-For pointparticles: $ 	I = r^2m $ and for sircular motion $ v = \frac{v}{r} $.
+
+Any planet with a constant velocity equal to or grater than $ v_{escape} $ will escape the other  mass object. 
+
+
+
+
+
+
+Nevne approksimasjon med barrycentre v sol i sentrum v pos sol @ t=0:
+Vi har ingen beregninger med sol i sentrum, men bruker sol ved t=0 som posisjon. 
+
+Hvorfor bør egentlig være barrycentre til univers?
+
+
+Can the observed perihelion precession of Mercury be explained by the general theory of relativity?
+
+
+
