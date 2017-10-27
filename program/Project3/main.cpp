@@ -22,12 +22,12 @@ int main(){
     double m_sun = 2.0*1e30;
     int years = 20;
     double stepsPerYear = 1000;
-
+    bool Relativistic = false;
     // Checking things -----------------------------------------------------------
 
 //    checkConvergenceEnergy();
 //    checkConvergenceTimestep();
-//    checkingPerihelion();
+//    checkingPerihelion(Relativistic);
 //    checkingGravitation(); // only works for earth and sun
 //    findingInitialEscapeVelocity();  // only works for earth and sun
 //    findingInitialCircularVelocity(years);  // only works for earth and su
@@ -216,6 +216,7 @@ void checkingPerihelion(){
 
     double time_verlet = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
     cout << "CPU time: " << time_verlet<<endl;
+}
 
 void checkConvergenceTimestep(){
     Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
