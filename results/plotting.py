@@ -18,7 +18,7 @@ def findFiles(stikkord):
 
     return filer, planets
 
-stikkord = "-euler"
+stikkord = "-verlet"
 # -euler,-verlet,-allplanets
 
 filer, planets = findFiles(stikkord)
@@ -48,7 +48,7 @@ for i in range(len(filer)):
     plot(x[-1],y[-1],'ko',markersize=1.5)
     
 legend(loc=1)
-title("Orbit %s" %stikkord)
+title("Orbit %s for %g years" %(stikkord,time[-1]))
 xlabel("Position, x-direction [AU]")
 ylabel("Position, y-direction [AU]")
 savefig("plots/plotof-%s%s%s.pdf"%(planets[0],planets[1],stikkord))
@@ -58,15 +58,15 @@ figure()
 plot(time, totangu,linewidth=1.0) 
 title("Angular momentum %s" %stikkord)
 xlabel("Time [Years]")
-ylabel("Angular momentum [AU/year]")
+ylabel("Angular momentum [$kg AU^2/year$]")
 ymax = max(totangu)
 ymin = min(totangu)
-ylim([ymin*0.999,ymax*1.001])
+ylim([ymin*0.9999999,ymax*1.0000001])
 savefig("plots/angularmomentum%s.pdf"%stikkord)
 legend()
 tight_layout()
 
-
+"""
 figure(figsize=(7,8))
 subplot(3,1, 1)
 title("Total kinetic energy")
@@ -75,7 +75,7 @@ xlabel("Time [Years]")
 ylabel("$E_k$ [$J_{ast}$]")
 ymax = max(totkin)
 ymin = min(totkin)
-ylim([ymin*0.9999,ymax*1.0001])
+ylim([ymin*0.99,ymax*1.01])
 legend()
 tight_layout()
 
@@ -86,18 +86,16 @@ xlabel("Time [Years]")
 ylabel("$E_p$ [$J_{ast}$]")
 ymax = max(totpot)
 ymin = min(totpot)
-ylim([ymin*0.9999,ymax*1.0001])
+ylim([ymin*0.99,ymax*1.01])
 legend()
 tight_layout()
-
-subplot(3,1, 3)
+"""
+#subplot(3,1, 3)
+figure()
 title("Total energy %s" %stikkord)
 plot(time, totkin+totpot)
-xlabel("Time [Years]")
-ylabel("$E_p+E_k$ [$J_{ast}$]")
-ymax = max(totkin+totpot)
-ymin = min(totkin+totpot)
-ylim([ymin*0.9999,ymax*1.0001])
+xlabel("Time [Years]", Fontsize=12)
+ylabel("$E_p+E_k$ [ $J_{ast}$]", Fontsize=12)
 ticklabel_format(style = 'sci', axis = 'y')
 savefig("plots/totalenergy%s.pdf"%stikkord)
 legend()

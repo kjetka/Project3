@@ -84,7 +84,7 @@ for i in range(1,6):
     if i<=4:
         figure(i)
         legend()
-        savefig("plots/Jupitermass_is_%s_earth.pdf"%masses[i-4])
+        savefig("plots/Jupitermass_is_%s_earth.pdf"%masses[i-5])
     else:
         figure(i)
         legend()

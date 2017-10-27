@@ -29,8 +29,8 @@ for i in range(len(filer)):
     plt.plot(x,y, '--' if abs(beta -3.1)<=0.1 else '-',linewidth=1.0,label = "$\\beta$ = %.1f"%beta)
     beta = beta + 0.3
 plt.title("Changing the gravitational force (time = %.1f years)"%time[-1])
-plt.xlabel("Position, x-direction")
-plt.ylabel("Position, y-direction")
+plt.xlabel("Position, x-direction [AU]")
+plt.ylabel("Position, y-direction [AU]")
 plt.legend()
 plt.savefig("plots/diffenrent_gravitation.pdf")
 plt.show()
