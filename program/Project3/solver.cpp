@@ -10,7 +10,7 @@ using namespace arma;
 using namespace std;
 using namespace std::chrono;
 
-Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit, double stepsPerYear_){
+Solver::Solver(string systemtype_, bool choiseOfMethod_, bool relativistic_, double timelimit, double stepsPerYear_){
     //Systemtype: appends to the filename - easy to see the variables.
 
     // Variables ----------------------
@@ -24,7 +24,7 @@ Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit, doubl
     numberOfPlanets =0;
     systemtype = systemtype_;
     choiseOfMethod = choiseOfMethod_; // True -> velocity verlet // False -> Euler
-
+    relativistic = relativistic_;
     // -------------------------------
     m_listPlanets.reserve(20);
     energy_prev = 0;
@@ -232,7 +232,7 @@ void Solver::updateTotalAcceleration_andPotEnergy(Planet &current, double beta){
         if(current.name != other.name){
             double reldistance = current.relativeDistance(other);
 
-            current.acceleration += current.accelerationFromOther(other, reldistance, beta);
+            current.acceleration += current.accelerationFromOther(other, reldistance, beta, relativistic);
             mat accelerationFromOther(mat &a_other, double &distance);
 
             // OBS! current.FromOtherPotEnergy must be after current.accelerationFromOther

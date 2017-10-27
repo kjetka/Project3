@@ -26,12 +26,13 @@ class Solver
         bool choiseOfMethod;
         double energy_prev;
         double stepsPerYear;
+        bool relativistic;
 
     public:
         friend class Planet;
 
         vector<Planet> m_listPlanets;
-        Solver(string systemtype_, bool choiseOfMethod, double timelimit, double stepsPerYear_);
+        Solver(string systemtype_, bool choiseOfMethod, bool relativistic_, double timelimit, double stepsPerYear_);
         void add(Planet thisplanet);
 
         void velocityVerlet(Planet &current, double beta);
