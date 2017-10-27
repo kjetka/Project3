@@ -18,8 +18,8 @@ By applying Newtons 2.law on component form we achieve two more equations, in th
 
 Equation \ref{eq:Newton} is in reality two seperate, independent equations, one for the x-direction and the other for the y-direction. 
  
-
-
+ 
+  
 \subsection{Units and scaling}
 
 A computer has a limited bit-resolution and the distances and timescale are large when computing the solar system. This means that it is important to use appropriate units. The distance between the sun and the earth is defined as 1 Astronomical unit (1 Au) and the timescale used in this project will be in units of 1 year. 
@@ -60,10 +60,10 @@ This gives that the dimensionless expression can be stated as:
 In the two dimensional system $ r = (x,y) = (r\cos\theta, r\sin\theta) $. Using the notation $ 	\dot{p}  = \dv{p}{t}$, this gives the following coupled differential equations: 
 
 \begin{align}
-\dot{v}_x  &=  \frac{4\pi^2r\cos\theta}{{r}^3}  = \frac{4\pi^2x}{{r}^3} \\
-\dot{v}_y	 &= -\frac{4\pi^2r\sin\theta}{{r}^3}  = \frac{4\pi^2y}{{r}^3}\\
-	\dot{x}  &= v_x\\
-	\dot{y}  &= v_y\\
+\dot{v}_x  &=  \frac{4\pi^2r\cos\theta}{{r}^3}  = \frac{4\pi^2x}{{r}^3}  \label{eq:vx}\\
+\dot{v}_y	 &= -\frac{4\pi^2r\sin\theta}{{r}^3}  = \frac{4\pi^2y}{{r}^3 \label{eq:vy}}\\
+	\dot{x}  &= v_x \label{eq:x}\\
+	\dot{y}  &= v_y \label{eq:y}\\
 \end{align}
 
 \subsection{Energy considerations}

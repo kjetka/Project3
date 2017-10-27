@@ -269,7 +269,7 @@ void Solver::test_circular(Planet current, double time){
 
 void Solver::findingPerihelion(Planet &current){
      Planet& sun_ = m_listPlanets[0];
-     mat rel_distance = sun_.position-current.position;
+     mat rel_distance = current.position-sun_.position;
      current.sunDistance =  sqrt(dot(rel_distance, rel_distance));
      if (current.sunDistance < current.minPeriphelion){
         current.minPeriphelion = current.sunDistance;
