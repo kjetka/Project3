@@ -55,7 +55,7 @@ void Solver::Euler(Planet &current, double beta){
 
 }
 
-void Solver::algorithm(bool printfile, double beta){
+void Solver::algorithm(bool printfile, double beta, bool stationarySun_periophelion){
 
     if (choiseOfMethod==true){cout << "Running velocity verlet"<<endl;}
     else                    cout << "Running Euler" << endl;
@@ -65,9 +65,14 @@ void Solver::algorithm(bool printfile, double beta){
     //initializing and opening files
     ofstream *outFiles = new ofstream [numberOfPlanets];
     if (printfile) initializeFiles(outFiles, systemtype);
+    double loop_start = 0;
+    if (stationarySun_periophelion) loop_start = 1;
 
     while (time <= timeLimit){
-        for (signed int i=0; i < numberOfPlanets; i++) {
+
+        // OBS: CHANGE i back to i=0!!!!!!!
+
+        for (signed int i=loop_start; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
 
             writeValues(outFiles[i], current,  time);
@@ -83,7 +88,7 @@ void Solver::algorithm(bool printfile, double beta){
 
             else {Euler(current, beta);}
 
-            //findingPerihelion(Planet &current, time)
+            if (stationarySun_periophelion) findingPerihelion(current, time);
 
             //testEnergy(current);
             //testCircular( current, time);
@@ -191,7 +196,7 @@ void Solver::checkConvergence(double eps, double &dt){
         sun.absposition_start = r_start_s;
         sun.distance =   dist_start_s;
 
-        algorithm(false, beta); //not printing
+        algorithm(false, beta, false); //not printing
 
         end_energy =  planet.kinEnergy + planet.potEnergy + sun.kinEnergy + sun.potEnergy;
 

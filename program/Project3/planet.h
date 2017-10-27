@@ -45,8 +45,8 @@ class Planet{
 
         Planet(double mass_, double x, double y, double vx, double vy, std::string name_);
 
-        double relativeDistance(Planet otherPlanet);
-        mat accelerationFromOther(Planet otherPlanet, double &distance, double beta);
+        double relativeDistance(Planet& otherPlanet);
+        mat accelerationFromOther(Planet& otherPlanet, double &distance, double beta);
 
         void kineticEnergyUpdate();
         double fromOtherPotentialEnergy(Planet & other,double& distance);

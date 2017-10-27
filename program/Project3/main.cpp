@@ -21,7 +21,7 @@ int main(){
 
 // Bodycentric coordinates --------------------------------------------------
 
-//    double x,y,z,vx,vy,vz;
+    double x,y,z,vx,vy,vz;
 
     planetname ="earth";
     readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
@@ -31,88 +31,88 @@ int main(){
     readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet sun(1.0, x,y,vx,vy, planetname);
 
-//    planetname ="mars";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet mars(6.6e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="mars";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet mars(6.6e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-//    planetname ="uranus";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet uranus(8.8e25/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="uranus";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet uranus(8.8e25/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
     planetname ="jupiter";
     readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
     Planet jupiter(1.9e27/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-//    planetname ="mercury";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet mercury(3.3e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="mercury";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet mercury(3.3e23/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-//    planetname ="neptun";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet neptun(1.03e26/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="neptun";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet neptun(1.03e26/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-//    planetname ="pluto";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet pluto(1.31e22/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="pluto";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet pluto(1.31e22/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-//    planetname ="saturn";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet saturn(5.5e26/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="saturn";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet saturn(5.5e26/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
 
-//    planetname ="venus";
-//    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
-//    Planet venus(4.9e24/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+    planetname ="venus";
+    readingInitialValues(planetname, x,  y,  z,  vx,  vy,  vz);
+    Planet venus(4.9e24/m_sun, x, y, vx,vy, planetname); // (mass,x,y,vx,vy)
+
+// ----------------------------------------------------------------------------
+
+
+//Sun as origin --------------------------------------------------------------
+    Planet earth_00(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun_00(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet mercury_00(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
 
 // ----------------------------------------------------------------------------
 
 
-// Sun as origin --------------------------------------------------------------
-//    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
-//    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
-//    Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
-
-// ----------------------------------------------------------------------------
-
-// Then you chose what method you want to simuate with (Euler or Velocity Verlet):
 
 
 // Euler's method -------------------------------------------------------------
+/*
+    clock_t start_, finish_;
+    start_ = clock();
 
-//    clock_t start_, finish_;
-//    start_ = clock();
+    Solver euler("euler", false, years, stepsPerYear);
 
-//    Solver euler("euler", false, years, stepsPerYear);
+    euler.add(sun);
+    euler.add(earth);
+    euler.algorithm(true, 2, false); // true -> print to file // false -> don't print
+    finish_ = clock();
+    double time_euler = (double) (finish_ - start_)/double((CLOCKS_PER_SEC ));
 
-//    euler.add(sun);
-//    euler.add(earth);
-//    euler.algorithm(true, 2); // true -> print to file // false -> don't print
-//    finish_ = clock();
-//    double time_euler = (double) (finish_ - start_)/double((CLOCKS_PER_SEC ));
-
-//    cout<< "CPU time: " <<time_euler<<endl;
-
+    cout<< "CPU time: " <<time_euler<<endl;
+*/
 // -----------------------------------------------------------------------------
 
 
 // Velocity Verlet-------------------------------------------------------------
 
-//    clock_t start_2, finish_2;
-//    start_2 = clock();
-//    //stepsPerYear = 1000;
-//    //for Mercury: 7*3600*360;
-//    Solver verlet("verlet", true, years, stepsPerYear);
+  /*  clock_t start_2, finish_2;
+    start_2 = clock();
+    stepsPerYear = 1000;
+    //for Mercury: 7*3600*360;
+    Solver verlet("verlet", true, years, stepsPerYear);
 
 
-//    // OBS! ADD SUN FIRST
-//    verlet.add(sun);
-//    //verlet.add(mercury);
-//    verlet.add(earth);
-//    verlet.algorithm(true, 2); // true -> print to file // false -> don't print
-//    finish_2 = clock();
+    // OBS! ADD SUN FIRST
+    verlet.add(sun);
+    //verlet.add(mercury);
+    verlet.add(earth);
+    verlet.algorithm(true, 2, false); // true -> print to file // false -> don't print
+    finish_2 = clock();
 
-//    double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
-//    cout << "CPU time: " << time_verlet<<endl;
-
+    double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
+    cout << "CPU time: " << time_verlet<<endl;
+*/
 // ----------------------------------------------------------------------------
 
 
@@ -133,7 +133,7 @@ int main(){
 //    verletAll.add(saturn);
 //    verletAll.add(neptun);
 //    verletAll.add(mars);
-//    verletAll.algorithm(true, 2);
+//    verletAll.algorithm(true, 2, false);
 //    finish_2 = clock();
 
 //    double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
@@ -142,18 +142,8 @@ int main(){
 
 // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
 
-// Three-body ------------------------------------------------------------------
 
-//    Solver threebody("3body", true, years, stepsPerYear);
-
-//    mat massJupiter = vec({1./1e3, 10./1e3, 1.});
-//    string filename[] = {"3body_m1e0", "3body_m1e1", "3body_m1e3"};
-//    for (int i =0; i<3; i++){
-//        Solver threebody(filename[i], true, years, stepsPerYear);
-
-//    threebody.algorithm(true, 2);
-
-// New three body --------------------------------------------------------------
+//  Three body --------------------------------------------------------------
 
 //    mat massFactor = vec({1.0,10.0, 1000.0});
 
@@ -167,25 +157,25 @@ int main(){
 //        threeBody.add(earth);
 //        threeBody.add(sun);
 //        threeBody.add(jupiter);
-//        threeBody.algorithm(true, 2);
+//        threeBody.algorithm(true, 2, false);
 //    }
 
 // ------------------------------------------------------------------------------
 
 // Three body bodycentric coordinates -------------------------------------------
-
+/*
+    // Finding centre of mass
     Solver findR("findR", true, years, stepsPerYear);
+    Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
 
-    Planet earth(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
-    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
-    Planet jupiter(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
-
-    findR.add(earth);
-    findR.add(sun);
-    findR.add(jupiter);
-
+    findR.add(earth_simple);
+    findR.add(sun_simple);
+    findR.add(jupiter_simple);
     mat R = findR.findCenterOfMass();
 
+    // Using centre of mass to do calculations
     Solver threeBodyCentric("3bodyCentric", true, years, stepsPerYear);
 
     Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
@@ -195,9 +185,8 @@ int main(){
     threeBodyCentric.add(earth_bc);
     threeBodyCentric.add(sun_bc);
     threeBodyCentric.add(jupiter_bc);
-
-    threeBodyCentric.algorithm(true, 2);
-
+    threeBodyCentric.algorithm(true, 2, false);
+*/
 // -----------------------------------------------------------------------------
 
 // Here you can check the energy convergence for different timesteps:
@@ -227,6 +216,25 @@ int main(){
 //    findingInitialCircularVelocity(years);  // only works for earth and sun
 
 // ----------------------------------------------------------------------------
+
+
+
+    clock_t start_3, finish_3;
+    start_3 = clock();
+    stepsPerYear = 7*3600*360;;
+    years = 100;
+    Solver peripeli("peripeli", true, years, stepsPerYear);
+
+
+    // OBS! ADD SUN FIRST
+    peripeli.add(sun_00);
+    peripeli.add(mercury_00);
+    peripeli.algorithm(false, 2, true); // true -> print to file // false -> don't print
+    finish_3 = clock();
+
+    double time_verlet = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
+    cout << "CPU time: " << time_verlet<<endl;
+
 
     return 0;
 }
@@ -274,7 +282,7 @@ void findingInitialCircularVelocity(int years){
 
         test_initial.add(earth);
         test_initial.add(sun);
-        test_initial.algorithm(true, 2);
+        test_initial.algorithm(true, 2, false);
         v += dv;
     }
 }
@@ -295,7 +303,7 @@ void findingInitialEscapeVelocity(int years ){
 
         test_initial.add(earth);
         test_initial.add(sun);
-        test_initial.algorithm(true, 2);
+        test_initial.algorithm(true, 2, false);
 
         v += dv;
     }
@@ -310,7 +318,7 @@ void checkingGravitation(int years, Planet earth, Planet sun, double stepsPerYea
 
         gravitation.add(earth);
         gravitation.add(sun);
-        gravitation.algorithm(true, beta);
+        gravitation.algorithm(true, beta, false);
 
         beta += 0.3;
     }

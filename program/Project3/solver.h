@@ -38,7 +38,7 @@ class Solver
         void Euler(Planet &currentplanet, double beta);
 
 
-        void algorithm(bool printfile, double beta);
+        void algorithm(bool printfile, double beta, bool stationarySun_periophelion);
 
         void updateTotalAcceleration_andPotEnergy(Planet &currentPlanet, double beta);
         void updateVelocity(Planet &currentPlanet);

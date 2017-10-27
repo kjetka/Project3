@@ -33,53 +33,28 @@ By choosing a small $ h $, it is sufficient to truncate the sum after n=1, givin
 
 \subsection{The Velocity Verlet method}
 
-The velocity Verlet can be derived from the same Taylor expansion as the Euler method, equation \ref{eq:Taylor}. However, here we will truncate the expansion after $ n=2 $ and compare the two steps $ x(t\pm h) $. A simple substitution $ h\rightarrow -h' $ gives the $ x_{i-1} $ expression, when compared to the originale Tayler expansion: 
+The velocity Verlet can be derived from the same Taylor expansion as the Euler method, equation \ref{eq:Taylor}. As with the Euler method, we will truncate the taylor series for position after n=1. However, for the velocity there exist a similar Taylor series: $  v_{i+1} = v_i + h\dot{v}_i + \frac{h}{2} \ddot{v}_i + O(h^3)$. Unfortunately, there is no expression for $ \ddot{v}_i $, but it can be approximated by $ h\ddot{v}_i \simeq \dot{v}_{i+1}-\dot{v}_i$. Adding this to the expression for $ v_{i+1} $ and doing some simple algebra one get the final expression for the velocity:
+
+\begin{equation}
+v_{i+1} = v_i +  \frac{h}{2} \left(\dot{v}_{i+1}+\dot{v}_i\right)+ O(h^3) \label{eq:vel_verlet}
+\end{equation}
+
+Looking a bit closer at equation \ref{eq:vel_verlet}, there is a immediate problem. In order to calculate $ v_{i+1} $ one need to already know $ v_{i+1} $. This problem can be solved by updating the velocity in two steps, which gives the following algorithm:
 
 \begin{align}
-x_{i+1} &= x_i + h\dot{x}_i + \frac{h^2}{2} \ddot{x}_i + O(h^3)\\
-x_{i-1} &= x_i - h\dot{x}_i + \frac{h^2}{2} \ddot{x}_i - O(h^3)
-\end{align}
+v_{i+\frac{1}{2}} &= v_i + \frac{h}{2} a_i\\
+x_{i+1} &= x_i + v_{i+\frac{1}{2}}\\
+a_{i+1} &= \frac{F_{i+1}}{m}\\
+v_{i+1} &=v_{i+\frac{1}{2}}. + \frac{h}{2} a_{i+1}\\
+\end{align} 
 
-When we add $x_{i+1} + x_{i-1}  $ we see that the first order expression disappears, together with the truncation error of order $ h^3 $, resulting in: 
-
-\begin{equation}
-x_{i+1} = 2x_i -x_{i-1} + h^2 \ddot{x} + O(h^4)
-\end{equation}
+The numerical cost of the algorithm can be understood when analysing the number of floating points operations. In the case of the velocity verlet method there are 8 FLOPS per iteration and dimension. As the value $ \frac{h}{2} $ a constant, it can be calculated in advance of the loop, thus reducing the FLOPS to 6. This gives a total of 12 FLOPS per iteration for the two dimensional system. 
 
 
-
-
-Verlet velocity method uses forward euler method as a fundament, but introduces a new taylor expansion of the velocity $v'(x)$ .
-\begin{equation*}
-v'(x+h)=v'(x)+hv''(x)+\mathcal{O}(h^2)
-\end{equation*}
-While discretizing the variables and using the relation $a(x)=v'(x)$, $v''_i$ may be expressed using $a_i$ and $a_{i+1}$.
-\begin{equation*}
-v''_i=\frac{a_{i+1}-a_i}{h}+\mathcal{O}(h) 
-\end{equation*}
-Inserted into a discretized second order taylor expansion of $v(x)$, an expression for $v_{i+1}$ is achieved.
-\begin{equation}
-v_{i+1}=v_i+h\frac{a_{i+1}+a_i}{2} + \mathcal{O}(h^3)
-\end{equation}
-A second order taylor expansion is also used to approximate $x_{i+1}$ where $x'_i=v_i$ and $x''_i=a_i$
-\begin{equation}
-x_{i+1}=x_i+hv_i+\frac{h^2}{2}a_i + \mathcal{O}(h^3)
-\end{equation}
-
-
-
-
-Euler
-Velocity verlet
-FLOPS ulike metoder
 
 \subsection{Choice of origin}
 
 As every planet in the solar system is moving, choosing a point of  origin is not straight forwards. For the smaller systems, ie. the "sun-earth"-system, we chose to select the suns position at the start as the origin. This allows the sun to move. Another choice of origin is the solar system barycentre, which we utilized when calculating the entire solar system. Using the barrycentre can give a prettier picture of the physics which is (nummerically) unfolding, as every object will rotate around this point.
-
-
-\subsection{Unit test}
-UNIT TESTS ??????
 
 
 \subsection{Object orientation}
@@ -99,9 +74,3 @@ When all the calculations are taken care of by the solver class and all the prop
 	verlet.algorithm("input variables");
 \end{lstlisting}
 
-
-Classes
-	Instanser
-	deklerasjon
-	friend class
-	
