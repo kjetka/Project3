@@ -7,31 +7,33 @@ from scipy.optimize import curve_fit
 
 import glob, os
 mappe = "text/"
+
 def findFiles(stikkord):
     filer = []
     timesteps = []
-    for file in glob.glob(mappe + "*.txt"):
+    for file in glob.glob(mappe + "*.txt")
         if stikkord in file:
+            print "Yes"
             filer.append(file)
             dt = file[len(mappe):-len(stikkord)-4]
             timesteps.append(dt)
 
     return filer, timesteps
 
-filer, timesteps = findFiles("-timesteps-eu")#"-timesteps-ve"
+filer, timesteps = findFiles("-timestep_eu")#"-timesteps_ve"
 
-plt.figure()
-for file in filer:  
-    time,x,y,vx,vy,kin,pot,ang = loadtxt(file,unpack=True, skiprows=1)
-        
-    plt.plot(x,y)
-    title("Earth's orbit for 100 years with dt=%s" %dt)
-    plt.hold('on')
+print filer, timesteps
 
-#plt.axis([-1.2,2.0,-1.2,1.2])
-plt.title('The earth orbit for beta = %.2f' %beta)
-plt.xlabel('Posistion, x-direction')
-plt.ylabel('Posistion, y-direction')
-#plt.plot(0,0,'o', label = "The sun")
-plt.legend()
-plt.savefig('orbit_beta_is_%.2f.pdf'%beta)
+figure(figsize=(7,8))
+
+for file in filer:
+    subplot()
+    time,x,y,vx,vy,kin,pot,ang = loadtxt(file,unpack=True, skiprows=1) 
+    plot(x,y)
+    plot(x[-1],y[-1],'o')
+    title("Earth's orbit for 100 years with dt=%s %s" %(timesteps[i][:-5],stikkord))
+    xlabel("Position, x-direction [AU]")
+    ylabel("Position, y-direction [AU]")
+    
+    
+show()
