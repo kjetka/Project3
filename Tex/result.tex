@@ -1,17 +1,12 @@
-with steps per year: 7*3600*360
-Running velocity verlet
-Perihelion position after 100 years: 0.307498, -0.000933806
-Perihelion angle after 100 years: -626.38 arc seconds
-CPU time: 3248.07
+\subsection{Two body system}
 
+We started out with a two body system consisting of the sun and the earth. The sun's position stared in zero. We wanted to find out what initial velocity the earth needed to have, for the orbit of the earth to be circular. The result can be found in Figure \ref{fig:circular_orbit}.
 
-Result:		
-	- Find out which initial velocity that gives a circular motion (plot)
 \begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/circular_orbit.pdf}\caption{This is a plt of the orbit with different initial velocities. The circular orbit has a velocity between 6.24 and 6.33. $2 \pi \approx 6.28$ and that is the initial velocity that gives a circular orbit. }\label{fig:circular_orbit}
+\includegraphics[width=1.1\linewidth]{../results/plots/circular_orbit.pdf}\caption{This is a plot of the orbit with different initial velocities. The circular orbit has a velocity between 6.24 and 6.33. $2 \pi \approx 6.28$ and that is the initial velocity that gives a circular orbit \ref. }\label{fig:circular_orbit}
 \end{figure}
 
-	- Test stability (energy-stability) as function of dt (both Verlet and Euler)
+As mentioned in the method part of this report, we used two different methods to solve the differential equations, to simulate the motion, Euler's method and the Velocity Verlet method. We started out by plotting circular motion of the earth with different time steps (see Figure \ref{fig:timesteps-euler} and \ref{fig:timesteps-verlet})to be able to evaluate the two methods.
 	
 \begin{figure}[H]
 \includegraphics[width=1.1\linewidth]{../results/plots/different_timesteps_Eulers method.pdf}\caption{This is a plot of the earth's orbit for 100 years using Euler's method, with different timesteps.}\label{fig:timesteps-euler}
@@ -21,88 +16,82 @@ Result:
 \includegraphics[width=1.1\linewidth]{../results/plots/different_timesteps_Velocity Verlet method.pdf}\caption{This is a plot of the earth's orbit for 100 years using the Velocity Verlet method, with different timesteps.}\label{fig:timesteps-verlet}
 \end{figure}		
 
-Weird results - I think we should look at this tomorrow...	
-	
-	- Plot the earth orbiting the sun
-3 YEARS:
-Running velocity verlet
-CPU time: 0.013
-Running Euler
-CPU time: 0.17
-		
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/plotof-earthsun-euler.pdf}\caption{This is a plot of the earth's orbit for 100 years using Euler's method, with 1000 timesteps per year, to simulate the motion.}\label{fig:earth-sun-euler}
-\end{figure}		
-	
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/plotof-earthsun-verlet.pdf}\caption{This is a plot of the earth's orbit for 100 years using the velocity Verlet method, with 1000 timesteps per year, to simulate the motion.}\label{fig:earth-sun-verlet}
-\end{figure}	
+Another way to compare two methods are looking at the CPU time. In Table \ref{tab:CPUtime} the CPU time for the two method are listed. We can see that the difference between them are small.
 
-	- Check that angular moment is conserved. 
-
-We should have better plots - not totally flat ones.
-
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/angularmomentum-euler.pdf}\caption{This is a plot of the angular momentum of the sun-earth system for 100 years using Euler's method, with 1000 timesteps per year.}\label{fig:angluarmomentum-euler}
-\end{figure}	
-
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/angularmomentum-verlet.pdf}\caption{This is a plot of the angular momentum of the sun-earth system for 100 years using the velocity Verlet method, with 1000 timesteps per year.}\label{fig:angularmomentum-verlet}
-\end{figure}	
-
-	- Check (for the circular orbit) that the energy is conserved (plot - both kin and pot separated and together?)
-
-NEED SOME NUMBERS HERE:
-
-\begin{table}[H]\caption{This is a table that list how the energy oscillates in the two different method (plot in appendix).}\label{tab:energy_oscillations}
-\begin{tabular}{ccc}
- & Euler's Method & Velocity Verlet Method\\ \hline
-Kinetic energy oscillation & & \\
-Potential energy oscillation & & \\
-Total energy oscillation & & \\
+\begin{table}[H]\caption{This table compares the CPU time of Euler's method and the Velocity Verlet method (VV method) that calculates the motion of the earth with 1000 time steps per year and changing the years. The CPU time is almost the same. It might also be difficult to compare because most of the CPU time comes from printing to file and other technicalities.}\label{tab:CPUtime}
+\begin{tabular}[width=\linewidth]{cccc}
+Years & \small{CPU time [s]}  & \small{CPU time [s]} & \small{Difference}\\ 
+& \small{Euler's method:} & \small{the VV Method}: & \small{CPU time [s]:}\\ \hline
+20 & 0.921 & 0.891 & 0.03\\
+100 & 4.515 & 4.422 & 0.093\\
+1000 & 46.047 & 45.484 & 0.563\\
 \end{tabular}
 \end{table}
 
-Put these in the appendix?
+%\begin{figure}[H]
+%\includegraphics[width=0.9\linewidth]{../results/plots/plotof-earthsun-euler.pdf}\caption{This is a plot of the earth's orbit for 100 years using Euler's method, with 1000 timesteps per year, to simulate the motion.}\label{fig:earth-sun-euler}
+%\end{figure}		
+%	
+%\begin{figure}[H]
+%\includegraphics[width=0.9\linewidth]{../results/plots/plotof-earthsun-verlet.pdf}\caption{This is a plot of the earth's orbit for 100 years using the velocity Verlet method, with 1000 timesteps per year, to simulate the motion.}\label{fig:earth-sun-verlet}
+%\end{figure}	
+
+\subsection{Conservation}
+
+First we checked if the angular momentum of the two body system was conserved. Figure \ref{fig:angluarmomentum-euler} and \ref{fig:angularmomentum-verlet} shows the results. The angular momentum is not totally conserved. The values are oscillating and there is an increase in the angular momentum when we use the Velocity Verlet method and a decrease when we use Euler's method. The scale of the change though is on the level of $10^{-10}$ for Euler's and $10^{-11}$ for Velocity Verlet. That is small compared to the whole value that are on the $10^{-5}$.
 
 \begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/totalenergy-euler.pdf}\caption{This is a plot of the total energy of the sun-earth system for 100 years using Euler's method, with 1000 timesteps per year.}\label{fig:totalenergy-euler}
+\includegraphics[width=0.9\linewidth]{../results/plots/angularmomentum-euler.pdf}\caption{This is a plot of the angular momentum of the sun-earth system for 20 years using Euler's method, with 1000 timesteps per year.}\label{fig:angluarmomentum-euler}
 \end{figure}	
 
 \begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/totalenergy-verlet.pdf}\caption{This is a plot of the total energy of the sun-earth system for 100 years using the velocity Verlet method, with 1000 timesteps per year.}\label{fig:totalenergy-verlet}
-\end{figure}
-
-	- Find escape velocity (plot)
-	 	- Compare exact and numerical results
-	 	
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/escape_velocity.pdf}\caption{This is a plot of the sun-earth system for different initial velocities. The plot shows the nessesary inital velocity to escape the sun.}\label{fig:escape_velocity}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/escape_velocity_closeto_exact.pdf}\caption{This is a plot of the sun-earth system for different initial velocities. The plot shows initial velocities near the exact escapevelocity, $2\pi\sqrt{2} \approx 8.88 $. }\label{fig:escape_velocity_near_exact}
-\end{figure}
-
-	- Find exact escape velocity (theory?)
-
-Exact escape velocity:
-$$ E_p + E_k = 0 + 0 \implies \frac{g M_E M_S}{r^2} =\frac{1}{2}M_Ev^2$$
-$$ v^2 = \frac{4 \pi^2 M_E}{M_E  1^2} AU^2 \implies v = \sqrt{2}2\pi$$
-
-	- Changing beta (plot)
-		- Comment result + What happens when beta -> 3 ? (last part in discussion?
-
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/diffenrent_gravitation.pdf}\caption{This is a plot of the sun-earth system for different gravitational forces. The gravitational force is given by $ F = \frac{-GM_EM_S}{r^\beta}$ and in the plot $\beta$ is changed from it's normal value $\beta = 2$ to $\beta = 3.1$.}\label{fig:different_gravitation}
-\end{figure}
-
-	- How much does Jupiter alter Earth's orbit?
-	- Position of Jupiter and Earth (plot)	
-	
-\begin{figure}[H]
-\includegraphics[width=1.1\linewidth]{../results/plots/diffenrent_gravitation.pdf}\caption{This is a plot of the three body system, Jupiter, Earth and Sun, with the origin in sun at time = 0.}\label{fig:three_body_sun_origin}
+\includegraphics[width=0.9\linewidth]{../results/plots/angularmomentum-verlet.pdf}\caption{This is a plot of the angular momentum of the sun-earth system for 20 years using the velocity Verlet method, with 1000 timesteps per year.}\label{fig:angularmomentum-verlet}
 \end{figure}	
+
+The other important parameter that needs to be conserved is the energy. Figure \ref{fig:totalenergy-euler} and \ref{fig:totalenergy-verlet} shows the energy development of the two methods, Euler's and Velocity Verlet respectively. The total energy is oscillating like the angular momentum and slightly changing, but the scales are small here two. Table \ref{tab:energy_oscillations} lists the difference in the oscillation amplitudes of the two methods. 
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/plots/totalenergy-euler.pdf}\caption{This is a plot of the total energy of the sun-earth system for 20 years using Euler's method, with 1000 timesteps per year.}\label{fig:totalenergy-euler}
+\end{figure}	
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/plots/totalenergy-verlet.pdf}\caption{This is a plot of the total energy of the sun-earth system for 20 years using the velocity Verlet method, with 1000 timesteps per year.}\label{fig:totalenergy-verlet}
+\end{figure}
+
+\begin{table}[H]\caption{This is a table that list how the energy oscillates in the two different method. These are only approximate values that are read form the plots of the energies (Figure \ref{fig:totalenergy-euler} and \ref{fig:totalenergy-verlet}). Plot of kinetic and potential energies can be found in the appendix.} \label{tab:energy_oscillations}
+\begin{tabular}{ccc}
+Oscillation of: & Euler's: & Velocity Verlet:\\ \hline
+Kinetic energy [ $J_{ast}$]: & $0.8\cdot10^{-6}$ & $1.5 \cdot 10^{-9}$  \\
+Potential energy [ $J_{ast}$]: & $1.5\cdot 10^{-6}$ & $3\cdot10^{-9}$  \\
+Total energy [ $J_{ast}$]:  & $ 5 \cdot 10^{-6}$ & $2\cdot10^{-9}$ \\
+\end{tabular}
+\end{table}
+
+\subsection{Checking gravitational forces}
+
+To check the gravitational force working on the earth from the sun in our two body system, we started by testing earth's necessary initial velocity to escape the sun, the escape velocity. Figure \ref{fig:escape_velocity_exact} shows the plot of the exact escape velocity and Figure \ref{fig:escape_velocity_near_exact} show some of the velocities near the exact escape velocity.
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/plots/escape_velocity.pdf}\caption{This is a plot of the sun-earth system for the exact initial velocity that allows the earth to escape the sun.}\label{fig:escape_velocity_exact}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/plots/escape_velocity_closeto_exact.pdf}\caption{This is a plot of the sun-earth system for different initial velocities. The plot shows initial velocities near the exact escapevelocity, $2\pi\sqrt{2} \approx 8.88 $. }\label{fig:escape_velocity_near_exact}
+\end{figure}
+
+Next we wanted to see what happened if we changed the gravitational force. The gravitational force is given by $ F = \frac{-GM_EM_S}{r^\beta}$ where $\beta$ is 2. In Figure \ref{fig:different_gravitation} we plotted the motion of the earth with different $\beta$ between 2 and 3.
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/plots/diffenrent_gravitation.pdf}\caption{This is a plot of the sun-earth system for different gravitational forces. The gravitational force is given by $ F = \frac{-GM_EM_S}{r^\beta}$ and in the plot $\beta$ is changed from it's normal value $\beta = 2$ to $\beta = 3.1$.}\label{fig:different_gravitation}
+\end{figure}
+
+\subsection{Three body problem:}
+
+Thereafter we added a planet to our system and got a three body problem. Figure \ref{fig:three_body_sun_origin} shows the motion of the planets.
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/plots/Jupitermass_is_1_0000_earth.pdf}\caption{This is a plot of the three body system, Jupiter, Earth and Sun, with the origin in sun at time = 0.}\label{fig:three_body_sun_origin}
+\end{figure}
 
 	Ok - if initial values are correct.
 	

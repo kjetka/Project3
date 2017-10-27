@@ -18,7 +18,7 @@ def findFiles(stikkord):
 
     return filer, planets
 
-stikkord = "-verlet"
+stikkord = "-euler"
 # -euler,-verlet,-allplanets
 
 filer, planets = findFiles(stikkord)
@@ -65,7 +65,7 @@ ylim([ymin*0.9999999,ymax*1.0000001])
 savefig("plots/angularmomentum%s.pdf"%stikkord)
 legend()
 tight_layout()
-"""
+
 
 figure(figsize=(7,8))
 subplot(3,1, 1)
@@ -73,9 +73,9 @@ title("Total kinetic energy")
 plot(time, totkin)
 xlabel("Time [Years]")
 ylabel("$E_k$ [ $J_{ast}$]")
-ymax = max(totkin)
-ymin = min(totkin)
-ylim([ymin*0.99,ymax*1.01])
+#ymax = max(totkin)
+#ymin = min(totkin)
+#ylim([ymin*0.99,ymax*1.01])
 legend()
 tight_layout()
 
@@ -97,17 +97,17 @@ plot(time[1:], totkin[1:]+totpot[1:])
 xlabel("Time [Years]", Fontsize=12)
 ylabel("$E_p+E_k$ [ $J_{ast}$]", Fontsize=12)
 ticklabel_format(style = 'sci', axis = 'y')
-savefig("plots/totalenergy_alone%s.pdf"%stikkord)
+savefig("plots/totalenergy_all%s.pdf"%stikkord)
 legend()
 tight_layout()
-"""
+
 figure()
 title("Total energy %s" %stikkord)
 plot(time[1:], totkin[1:]+totpot[1:])
 xlabel("Time [Years]", Fontsize=12)
 ylabel("$E_p+E_k$ [ $J_{ast}$]", Fontsize=12)
 ticklabel_format(style = 'sci', axis = 'y')
-savefig("plots/totalenergy_alone%s.pdf"%stikkord)
+savefig("plots/totalenergy%s.pdf"%stikkord)
 legend()
 tight_layout()
 

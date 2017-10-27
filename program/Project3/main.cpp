@@ -21,7 +21,7 @@ int main(){
 
     double m_sun = 2.0*1e30;
     int years = 20;
-    int stepsPerYear = 100;
+    int stepsPerYear = 1000;
 
     // Checking things -----------------------------------------------------------
 
@@ -35,9 +35,9 @@ int main(){
 
     // Running things ------------------------------------------------------------
 
-//    velocityVerletAllPlanets(stepsPerYear);
-//    runWithEuler(year, stepsPerYear);
-    //runWithVelocityVerlet(years, stepsPerYear);
+    //velocityVerletAllPlanets(years, stepsPerYear);
+    runWithEuler(years, stepsPerYear);
+    runWithVelocityVerlet(years, stepsPerYear);
 
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
@@ -63,7 +63,7 @@ int main(){
     // Three body bodycentric coordinates -------------------------------------------
 
        // Finding centre of mass
-
+/*
     Solver findR("findR", true, false, years, stepsPerYear);
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
@@ -87,7 +87,7 @@ int main(){
     threeBodyCentric.add(sun_bc);
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
-
+*/
 
 
 
