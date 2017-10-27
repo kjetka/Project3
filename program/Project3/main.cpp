@@ -20,7 +20,7 @@ void runWithVelocityVerlet(int years, double stepsPerYear);
 int main(){
 
     double m_sun = 2.0*1e30;
-    int years = 20;
+    int years = 100;
     double stepsPerYear = 1000;
 
     // Checking things -----------------------------------------------------------
@@ -35,9 +35,9 @@ int main(){
 
     // Running things ------------------------------------------------------------
 
-//    velocityVerletAllPlanets(stepsPerYear);
-//    runWithEuler(year, stepsPerYear);
-    runWithVelocityVerlet(years, stepsPerYear);
+    velocityVerletAllPlanets(years, stepsPerYear);
+    runWithEuler(20, stepsPerYear);
+    runWithVelocityVerlet(20, stepsPerYear);
 
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
