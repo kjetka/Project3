@@ -1,9 +1,104 @@
 
+In this project we tested two numerical integration techniques, the Euler method and the velocity Verlet method.  This section is largely based on Hjort-Jensen \cite{Jensen}	
+
+
+
+\subsection{The Euler  method}
+
+
+When evaluating the function $ x(t)$ in the interval between $ t $ and $ t+h $ it is natural to do a Taylor expansion:  
+
+\begin{equation}
+x(t+h) = x(t) +\sum\limits_{n=1}^{\infty} 	\frac{ h^n}{n!}\dv[n]{x(t)}{t}   \label{eq:Taylor}
+\end{equation}
+
+By choosing a small $ h $, it is sufficient to truncate the sum after n=1, giving  $ x(t+h) = x(t) + h \dv{x}{t} + O(h^2) $. The term$ O(h^2) $ contains the rest of  the infinite sum, often called the truncation error. In order for a computer to use this method it is necessary to discretise  the expression, substituting $ x(t) \rightarrow x( t_i ) \rightarrow x_i$. The Euler method can thus be expressed as 
+
+\begin{equation}
+	x_{i+1} = x_i + h\dot{x}_i + O(h^2)
+\end{equation}
+ 
+ Combining this with equations  \ref{eq:vx} and \ref{eq:x} we get an algorithm for doing a  1 dimentional integration for the solar system:
+ 
+ \begin{align}
+ a_i &= F(t_i)\\
+ v_{i+1} &= v_i + ha_i\\
+  x_{i+1} &= x_i + hx_i
+ \end{align}
+ 
+\textbf{ This gives in total 4 floating points operations per iteration, per dimension. For our two dimentional system this results in a total of 8N FLOPS per iteration, with $ N = \frac{1}{h} $.}
+ 
+ 
+
+
+\subsection{The Velocity Verlet method}
+
+The velocity Verlet can be derived from the same Taylor expansion as the Euler method, equation \ref{eq:Taylor}. However, here we will truncate the expansion after $ n=2 $ and compare the two steps $ x(t\pm h) $. A simple substitution $ h\rightarrow -h' $ gives the $ x_{i-1} $ expression, when compared to the originale Tayler expansion: 
+
+\begin{align}
+x_{i+1} &= x_i + h\dot{x}_i + \frac{h^2}{2} \ddot{x}_i + O(h^3)\\
+x_{i-1} &= x_i - h\dot{x}_i + \frac{h^2}{2} \ddot{x}_i - O(h^3)
+\end{align}
+
+When we add $x_{i+1} + x_{i-1}  $ we see that the first order expression disappears, together with the truncation error of order $ h^3 $, resulting in: 
+
+\begin{equation}
+x_{i+1} = 2x_i -x_{i-1} + h^2 \ddot{x} + O(h^4)
+\end{equation}
+
+
+
+
+Verlet velocity method uses forward euler method as a fundament, but introduces a new taylor expansion of the velocity $v'(x)$ .
+\begin{equation*}
+v'(x+h)=v'(x)+hv''(x)+\mathcal{O}(h^2)
+\end{equation*}
+While discretizing the variables and using the relation $a(x)=v'(x)$, $v''_i$ may be expressed using $a_i$ and $a_{i+1}$.
+\begin{equation*}
+v''_i=\frac{a_{i+1}-a_i}{h}+\mathcal{O}(h) 
+\end{equation*}
+Inserted into a discretized second order taylor expansion of $v(x)$, an expression for $v_{i+1}$ is achieved.
+\begin{equation}
+v_{i+1}=v_i+h\frac{a_{i+1}+a_i}{2} + \mathcal{O}(h^3)
+\end{equation}
+A second order taylor expansion is also used to approximate $x_{i+1}$ where $x'_i=v_i$ and $x''_i=a_i$
+\begin{equation}
+x_{i+1}=x_i+hv_i+\frac{h^2}{2}a_i + \mathcal{O}(h^3)
+\end{equation}
+
+
+
+
 Euler
 Velocity verlet
 FLOPS ulike metoder
 
-UNIT TESTS
+\subsection{Choice of origin}
+
+As every planet in the solar system is moving, choosing a point of  origin is not straight forwards. For the smaller systems, ie. the "sun-earth"-system, we chose to select the suns position at the start as the origin. This allows the sun to move. Another choice of origin is the solar system barycentre, which we utilized when calculating the entire solar system. Using the barrycentre can give a prettier picture of the physics which is (nummerically) unfolding, as every object will rotate around this point.
+
+
+\subsection{Unit test}
+UNIT TESTS ??????
+
+
+\subsection{Object orientation}
+In order to simplify the calculation of an ensemble of planets, each with velocities, positions, energies and angular momentum, it is useful to generalize the code in an object oriented way. We chose to create one class for the planets, where all the internal dynamics (energies, position, velocity, ...) were stored. The forces experienced by the planets are specific for this project and we kept this in the Planet class, so that the second class, the Solver class, could be more general and easier reused.
+
+This Solver class is were all the technicalities are located, including the different integration methods. For each time step one need the location of every planet in the system and Solver includes therefore a function that for each time step loop over all the planets. In order to update their position it is necessary to again loop over all the different planets in order to find the total gravitational force exerted on the current planet.  
+
+When all the calculations are taken care of by the solver class and all the properties of the different planets are stored in each planet object. This means that the main part of the program only needs to initialize the different planetary instances , adding these to the a instance of the Solver class which is initialized according to what output we want to achieve, see the snippet below for how this looks in 'main'. 
+ 
+\begin{lstlisting}[language=C++]
+	Planet earth("Initializing inputs");
+		Planet sun("Initializing inputs");
+	Solver verlet("Initializing inputs");
+	verlet.add(earth);
+	verlet.add(sun);
+	verlet.add(mercury);
+	verlet.algorithm("input variables");
+\end{lstlisting}
+
 
 Classes
 	Instanser
