@@ -27,11 +27,13 @@ class Solver
         double energy_prev;
         double stepsPerYear;
 
+        bool relativistic;
+
     public:
         friend class Planet;
 
         vector<Planet> m_listPlanets;
-        Solver(string systemtype_, bool choiseOfMethod, double timelimit, double stepsPerYear_);
+        Solver(string systemtype_, bool choiseOfMethod, bool relativistic_, double timelimit, double stepsPerYear_);
         void add(Planet thisplanet);
 
         void velocityVerlet(Planet &current, double beta);
@@ -52,7 +54,7 @@ class Solver
 
         void findingPerihelion(Planet &current, double time);
         mat findCenterOfMass();
-
+        void momentumSun(double& sun_vx, double& sun_vy);
 
         //void writeAllPlanetsPosition(ofstream &outfile, double time);
         void writeValues(ofstream& outfile, Planet& current, double time);

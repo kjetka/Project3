@@ -10,7 +10,7 @@ using namespace arma;
 using namespace std;
 using namespace std::chrono;
 
-Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit, double stepsPerYear_){
+Solver::Solver(string systemtype_, bool choiseOfMethod_, bool relativistic_, double timelimit, double stepsPerYear_){
     //Systemtype: appends to the filename - easy to see the variables.
 
     // Variables ----------------------
@@ -23,6 +23,7 @@ Solver::Solver(string systemtype_, bool choiseOfMethod_, double timelimit, doubl
     dt_half = dt/2;
     numberOfPlanets =0;
     systemtype = systemtype_;
+    relativistic = relativistic_;
     choiseOfMethod = choiseOfMethod_; // True -> velocity verlet // False -> Euler
 
     // -------------------------------
@@ -284,6 +285,24 @@ mat Solver::findCenterOfMass(){
     }
     mat centerofmass = top/bottom;
     return centerofmass;
+}
+
+void Solver::momentumSun(double& sun_vx, double& sun_vy){
+    vec p_other_planets = vec({0,0});
+    int j = 0;
+    for (int i=0; i < numberOfPlanets; i++) {
+       Planet &current = m_listPlanets.at(i);
+       if (current.name == "sun") {
+           j = i;
+       }
+
+           else   p_other_planets += current.mass*current.velocity;
+
+    }
+    Planet &sunny = m_listPlanets.at(j);
+    vec v_sun = p_other_planets/sunny.mass;
+    sun_vx = v_sun[0];
+    sun_vy = v_sun[1];
 }
 
 

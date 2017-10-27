@@ -21,7 +21,7 @@ int main(){
 
     double m_sun = 2.0*1e30;
     int years = 20;
-    double stepsPerYear = 1000;
+    int stepsPerYear = 100;
 
     // Checking things -----------------------------------------------------------
 
@@ -37,7 +37,7 @@ int main(){
 
 //    velocityVerletAllPlanets(stepsPerYear);
 //    runWithEuler(year, stepsPerYear);
-    runWithVelocityVerlet(years, stepsPerYear);
+    //runWithVelocityVerlet(years, stepsPerYear);
 
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
@@ -52,7 +52,6 @@ int main(){
     //        Planet jupiter(1.9e27/m_sun*massFactor[i], 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
     //        string type = "massJupiter_" + to_string(massFactor[i]);
     //        Solver threeBody(type, true, years, stepsPerYear);
-
     //        threeBody.add(earth);
     //        threeBody.add(sun);
     //        threeBody.add(jupiter);
@@ -62,9 +61,40 @@ int main(){
     // ------------------------------------------------------------------------------
 
     // Three body bodycentric coordinates -------------------------------------------
+
+       // Finding centre of mass
+
+    Solver findR("findR", true, false, years, stepsPerYear);
+    Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
+    double sun_vx = 0; double sun_vy = 0;
+
+    findR.add(earth_simple);
+    findR.add(sun_simple);
+    findR.add(jupiter_simple);
+    mat R = findR.findCenterOfMass();
+    findR.momentumSun( sun_vx,  sun_vy);
+
+    // Using centre of mass to do calculations
+    Solver threeBodyCentric("3bodyCentric", true, false, years, stepsPerYear);
+
+    Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
+    Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],sun_vx,sun_vy, "sun"); // WHAT IS THE INITIAL VELOCITY NEEDED? (MOMENT = 0)
+    Planet jupiter_bc(1.9e27/m_sun, 5.2-R[0], 0.0-R[1], 0.0, 0.434*2*M_PI, "jupiter");
+
+    threeBodyCentric.add(earth_bc);
+    threeBodyCentric.add(sun_bc);
+    threeBodyCentric.add(jupiter_bc);
+    threeBodyCentric.algorithm(true, 2, false);
+
+
+
+
+
     /*
     // Finding centre of mass
-    Solver findR("findR", true, years, stepsPerYear);
+    Solver findR("findR", true, false, years, stepsPerYear);
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
     Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
@@ -75,7 +105,7 @@ int main(){
     mat R = findR.findCenterOfMass();
 
     // Using centre of mass to do calculations
-    Solver threeBodyCentric("3bodyCentric", true, years, stepsPerYear);
+    Solver threeBodyCentric("3bodyCentric", true, false, years, stepsPerYear);
 
     Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
     Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],0.0,0.0, "sun"); // WHAT IS THE INITIAL VELOCITY NEEDED? (MOMENT = 0)
@@ -85,7 +115,8 @@ int main(){
     threeBodyCentric.add(sun_bc);
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
-*/
+    */
+
 
     // ----------------------------------------------------------------------------
 
@@ -99,7 +130,7 @@ void runWithEuler(int years, double stepsPerYear){
     clock_t start_, finish_;
     start_ = clock();
 
-    Solver euler("euler", false, years, stepsPerYear);
+    Solver euler("euler", false,false,  years, stepsPerYear);
 
     euler.add(sun);
     euler.add(earth);
@@ -116,7 +147,7 @@ void runWithVelocityVerlet(int years, double stepsPerYear){
 
     clock_t start_2, finish_2;
     start_2 = clock();
-    Solver verlet("verlet", true, years, stepsPerYear);
+    Solver verlet("verlet", true,false,  years, stepsPerYear);
 
     verlet.add(sun);
     verlet.add(earth);
@@ -175,7 +206,7 @@ void velocityVerletAllPlanets(int years, double stepsPerYear){
 
     clock_t start_2, finish_2;
     start_2 = clock();
-    Solver verletAll("allplanets", true, years, stepsPerYear);
+    Solver verletAll("allplanets", true,false,  years, stepsPerYear);
 
     // OBS! ADD SUN FIRST
     verletAll.add(sun);
@@ -204,7 +235,7 @@ void checkingPerihelion(){
     start_3 = clock();
     double stepsPerYear = 1000;
     int years = 100;
-    Solver periheli("periheli", true, years, stepsPerYear);
+    Solver periheli("periheli", true, false, years, stepsPerYear);
 
     periheli.add(sun);
     periheli.add(mercury);
@@ -225,10 +256,10 @@ void checkConvergenceTimestep(){
     mat stepsPerYear = vec({10, 100, 1000});
     for (unsigned int i=0; i<stepsPerYear.size(); i++){
         type = to_string(stepsPerYear[i]) + "timestep_eu";
-        Solver timesteps_eu(type, false, years, stepsPerYear[i]);
+        Solver timesteps_eu(type, false, false, years, stepsPerYear[i]);
 
         type2 = to_string(stepsPerYear[i]) + "timestep_ve";
-        Solver timesteps_ve(type2, true, years, stepsPerYear[i]);
+        Solver timesteps_ve(type2, true, false, years, stepsPerYear[i]);
 
         timesteps_eu.add(sun);
         timesteps_eu.add(earth);
@@ -246,8 +277,8 @@ void checkConvergenceEnergy(){
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
 
     double stepsPerYear;
-    Solver converg_verlet("converg_verlet", true, 10, stepsPerYear);
-    Solver converg_euler("converg_euler", false, 10, stepsPerYear);
+    Solver converg_verlet("converg_verlet", true,false,  10, stepsPerYear);
+    Solver converg_euler("converg_euler", false,false,  10, stepsPerYear);
     converg_verlet.add(earth);
     converg_verlet.add(sun);
     converg_euler.add(earth);
@@ -296,7 +327,7 @@ void findingInitialCircularVelocity(int years){
         Planet earth(0.000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, years, stepsPerYear);
+        Solver test_initial(type, true, false, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -316,7 +347,7 @@ void findingInitialEscapeVelocity(){
         Planet earth(0.0000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, years, stepsPerYear);
+        Solver test_initial(type, true, false, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -336,7 +367,7 @@ void checkingGravitation(){
 
     while (beta <= 3.1){
         string type = "beta-is-" + to_string(beta);
-        Solver gravitation(type, true, years, stepsPerYear);
+        Solver gravitation(type, true, false, years, stepsPerYear);
 
         gravitation.add(earth);
         gravitation.add(sun);
