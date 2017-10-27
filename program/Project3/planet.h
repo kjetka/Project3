@@ -1,7 +1,7 @@
 #ifndef PLANET_H
 #define PLANET_H
 #include <iostream>
-#include <armadillo>
+
 #include <cstdlib>
 #include <cmath>
 #include <fstream>
@@ -34,9 +34,9 @@ class Planet{
         int dimension = 2;
         double angularMomentum;
         double absposition_start;
-        double min_x_Periphelion;
-        double min_y_Periphelion;
-        double minPeriphelion;
+        double min_x_Perihelion;
+        double min_y_Perihelion;
+        double minPerihelion;
         double sunDistance;
 
 
@@ -48,9 +48,9 @@ class Planet{
         double relativeDistance(Planet otherPlanet);
         mat accelerationFromOther(Planet otherPlanet, double &distance, double beta);
 
-        void kinEnergyUpdate();
-        double FromOtherPotEnergy(Planet & other,double& distance);
-       void AngularMomentum_update();
+        void kineticEnergyUpdate();
+        double fromOtherPotentialEnergy(Planet & other,double& distance);
+       void angularMomentumUpdate();
 
 };
 

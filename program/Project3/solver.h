@@ -40,23 +40,23 @@ class Solver
 
         void algorithm(bool printfile, double beta);
 
-        void updateTotalAcceleration_potEN(Planet &currentPlanet, double beta);
+        void updateTotalAcceleration_andPotEnergy(Planet &currentPlanet, double beta);
         void updateVelocity(Planet &currentPlanet);
         void updatePosition(Planet &currentPlanet);
         void updateTotalAcceleration(Planet &currentPlanet);
-        void check_convergence(double eps, double &dt);
+        void checkConvergence(double eps, double &dt);
 
-        void test_energy( Planet current);
-        void test_circular(Planet current, double time);
-        void test_angularmoment(Planet current);
+        void testEnergy( Planet current);
+        void testCircular(Planet current, double time);
+        void testAngularmoment(Planet current);
 
-        void findingPerihelion(Planet &current);
-        mat find_center_of_mass();
+        void findingPerihelion(Planet &current, double time);
+        mat findCenterOfMass();
 
 
         //void writeAllPlanetsPosition(ofstream &outfile, double time);
-        void writevalues(ofstream& outfile, Planet& current, double time);
-        void writeheader(ofstream& outfile, int dimension);
+        void writeValues(ofstream& outfile, Planet& current, double time);
+        void writeHeader(ofstream& outfile, int dimension);
         void initializeFiles(ofstream *outFiles, string nameinfo);
 
 };

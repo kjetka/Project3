@@ -19,18 +19,18 @@ def findFiles(stikkord):
 
 stikkord = "earth-beta-is"
 filer = findFiles(stikkord)
-
+figure(figsize=(5,5))
 print "filer er" 
 print filer
-beta = 2.3
+beta = 2.2
 
 for i in range(len(filer)):
-    time, x,y,vx,vy,KineticEnergy,PotentialEnergy = np.loadtxt(filer[i],unpack=True, skiprows=1)
-    plt.plot(x,y, label = "beta = %.1f"%beta)
+    time,x ,y ,vx ,vy ,KineticEnergy ,PotentialEnergy , Angular = np.loadtxt(filer[i],unpack=True, skiprows=1)
+    plt.plot(x,y, '--' if abs(beta -3.1)<=0.1 else '-',linewidth=1.0,label = "$\\beta$ = %.1f"%beta)
     beta = beta + 0.3
-plt.title("Changing the gravitational force")
+plt.title("Changing the gravitational force (time = %.1f years)"%time[-1])
 plt.xlabel("Position, x-direction")
 plt.ylabel("Position, y-direction")
 plt.legend()
-plt.savefig("diffenrent_gravitation.pdf")
+plt.savefig("plots/diffenrent_gravitation.pdf")
 plt.show()
