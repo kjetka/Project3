@@ -7,7 +7,6 @@ from scipy.optimize import curve_fit
 
 import glob, os
 mappe = "text/"
-
 def findFiles(stikkord):
     filer = []
     timesteps = []

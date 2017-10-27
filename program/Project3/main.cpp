@@ -99,7 +99,7 @@ void runWithEuler(int years, double stepsPerYear){
     clock_t start_, finish_;
     start_ = clock();
 
-    Solver euler("euler", false, years, stepsPerYear);
+    Solver euler("euler", false,relativistic,  years, stepsPerYear);
 
     euler.add(sun);
     euler.add(earth);
@@ -202,18 +202,20 @@ void checkingPerihelion(){
     Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
     clock_t start_3, finish_3;
     start_3 = clock();
-    double stepsPerYear = 1000;
-    int years = 100;
-    Solver periheli("periheli", true, years, stepsPerYear);
+    stepsPerYear = 7*3600*360;;
+    years = 100;
 
-    periheli.add(sun);
-    periheli.add(mercury);
-    periheli.algorithm(false, 2, true); // true -> print to file // false -> don't print
+
+    Solver peripeli("peripeli", true,true,  years, stepsPerYear);
+
+    // OBS! ADD SUN FIRST
+    peripeli.add(sun_00);
+    peripeli.add(mercury_00);
+    peripeli.algorithm(false, 2, true); // true -> print to file // false -> don't print
     finish_3 = clock();
 
-    double time_perihelion = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
-    cout << "CPU time: " << time_perihelion<<endl;
-}
+    double time_verlet = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
+    cout << "CPU time: " << time_verlet<<endl;
 
 void checkConvergenceTimestep(){
     Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
@@ -221,21 +223,16 @@ void checkConvergenceTimestep(){
     string type, type2;
     int years = 100;
 
-    mat stepsPerYear = vec({10, 100, 1000});
-    for (unsigned int i=0; i<stepsPerYear.size(); i++){
-        type = to_string(stepsPerYear[i]) + "timestep_eu";
-        Solver timesteps_eu(type, false, years, stepsPerYear[i]);
+cout << "------------------------------"<<endl;
+cout << "Peripeli no rel:"<<endl;
 
-        type2 = to_string(stepsPerYear[i]) + "timestep_ve";
-        Solver timesteps_ve(type2, true, years, stepsPerYear[i]);
 
-        timesteps_eu.add(sun);
-        timesteps_eu.add(earth);
-        timesteps_ve.add(sun);
-        timesteps_ve.add(earth);
+     Solver peripeli_noRel("peripeli",true,false,  years, stepsPerYear);
+    // OBS! ADD SUN FIRST
+    peripeli_noRel.add(sun_00);
+    peripeli_noRel.add(mercury_00);
+    peripeli_noRel.algorithm(false, 2, true); // true -> print to file // false -> don't print
 
-        timesteps_eu.algorithm(true, 2, false);
-        timesteps_ve.algorithm(true, 2, false);
 
     }
 }
@@ -283,7 +280,7 @@ void readingInitialValues(string filename, double &x, double &y , double &z, dou
     vz = stod(myLines[5])*speed_years;
 }
 
-void findingInitialCircularVelocity(int years){
+void findingInitialCircularVelocity(int years, bool relativistic){
     double start_v = 1.9*M_PI;
     double end_v = 2.1*M_PI;
     double stepsPerYear = 50;
@@ -295,7 +292,7 @@ void findingInitialCircularVelocity(int years){
         Planet earth(0.000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, years, stepsPerYear);
+        Solver test_initial(type, true, relativistic, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -315,7 +312,7 @@ void findingInitialEscapeVelocity(){
         Planet earth(0.0000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, years, stepsPerYear);
+        Solver test_initial(type, true, relativistic,years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -331,11 +328,10 @@ void checkingGravitation(){
 
     double years = 5;
     double beta = 2.2;
-    double stepsPerYear = 1000;
 
     while (beta <= 3.1){
         string type = "beta-is-" + to_string(beta);
-        Solver gravitation(type, true, years, stepsPerYear);
+        Solver gravitation(type, true, relativistic,5, stepsPerYear);
 
         gravitation.add(earth);
         gravitation.add(sun);
