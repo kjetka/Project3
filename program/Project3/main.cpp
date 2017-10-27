@@ -133,6 +133,7 @@ int main(){
 //    verletAll.add(saturn);
 //    verletAll.add(neptun);
 //    verletAll.add(mars);
+
 //    verletAll.algorithm(true, 2, false);
 //    finish_2 = clock();
 
@@ -144,22 +145,36 @@ int main(){
 
 
 //  Three body --------------------------------------------------------------
+/*
+    Solver threeBody("threebody_masses",true, 10, 50 );
+    mat massFactor = vec({1.0,10.0, 1000.0});
 
-//    mat massFactor = vec({1.0,10.0, 1000.0});
+    Planet earth_3(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun_3(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet jupiter_3(1.9e27/m_sun*massFactor[0], 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
 
-//    for(unsigned int i = 0; i<massFactor.size();i++){
-//        Planet earth(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
-//        Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
-//        Planet jupiter(1.9e27/m_sun*massFactor[i], 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
-//        string type = "massJupiter_" + to_string(massFactor[i]);
-//        Solver threeBody(type, true, years, stepsPerYear);
+    threeBody.add(earth_3);
+    threeBody.add(sun_3);
+    threeBody.add(jupiter_3);
+    double sun_vx = 0; double sun_vy = 0;
+    threeBody.momentumSun( sun_vx,  sun_vy);
+    Planet sun_3_new(1.0, 0.0,0.0,sun_vx,sun_vy, "sun");
 
-//        threeBody.add(earth);
-//        threeBody.add(sun);
-//        threeBody.add(jupiter);
-//        threeBody.algorithm(true, 2, false);
-//    }
 
+
+    for(unsigned int i = 0; i<massFactor.size();i++){
+        Planet earth(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
+        Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+        Planet jupiter(1.9e27/m_sun*massFactor[i], 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
+        string type = "massJupiter_" + to_string(massFactor[i]);
+        Solver threeBody(type, true, years, stepsPerYear);
+
+        threeBody.add(earth);
+        threeBody.add(sun);
+        threeBody.add(jupiter);
+        threeBody.algorithm(true, 2, false);
+    }
+*/
 // ------------------------------------------------------------------------------
 
 // Three body bodycentric coordinates -------------------------------------------
@@ -169,17 +184,19 @@ int main(){
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
     Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
+    double sun_vx = 0; double sun_vy = 0;
 
     findR.add(earth_simple);
     findR.add(sun_simple);
     findR.add(jupiter_simple);
     mat R = findR.findCenterOfMass();
+    findR.momentumSun( sun_vx,  sun_vy);
 
     // Using centre of mass to do calculations
     Solver threeBodyCentric("3bodyCentric", true, years, stepsPerYear);
 
     Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
-    Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],0.0,0.0, "sun"); // WHAT IS THE INITIAL VELOCITY NEEDED? (MOMENT = 0)
+    Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],sun_vx,sun_vy, "sun"); // WHAT IS THE INITIAL VELOCITY NEEDED? (MOMENT = 0)
     Planet jupiter_bc(1.9e27/m_sun, 5.2-R[0], 0.0-R[1], 0.0, 0.434*2*M_PI, "jupiter");
 
     threeBodyCentric.add(earth_bc);
@@ -217,8 +234,8 @@ int main(){
 
 // ----------------------------------------------------------------------------
 
-
-
+//PERIPHELION CALC!!!
+/*
     clock_t start_3, finish_3;
     start_3 = clock();
     stepsPerYear = 7*3600*360;;
@@ -235,7 +252,7 @@ int main(){
     double time_verlet = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
     cout << "CPU time: " << time_verlet<<endl;
 
-
+*/
     return 0;
 }
 

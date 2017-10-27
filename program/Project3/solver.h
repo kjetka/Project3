@@ -52,7 +52,7 @@ class Solver
 
         void findingPerihelion(Planet &current, double time);
         mat findCenterOfMass();
-
+        void momentumSun(double &sun_vx, double &sun_vy);
 
         //void writeAllPlanetsPosition(ofstream &outfile, double time);
         void writeValues(ofstream& outfile, Planet& current, double time);
