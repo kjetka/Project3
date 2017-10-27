@@ -22,12 +22,12 @@ int main(){
     double m_sun = 2.0*1e30;
     int years = 20;
     double stepsPerYear = 1000;
-    bool Relativistic = false;
+
     // Checking things -----------------------------------------------------------
 
 //    checkConvergenceEnergy();
 //    checkConvergenceTimestep();
-//    checkingPerihelion(Relativistic);
+//    checkingPerihelion();
 //    checkingGravitation(); // only works for earth and sun
 //    findingInitialEscapeVelocity();  // only works for earth and sun
 //    findingInitialCircularVelocity(years);  // only works for earth and su
@@ -99,7 +99,7 @@ void runWithEuler(int years, double stepsPerYear){
     clock_t start_, finish_;
     start_ = clock();
 
-    Solver euler("euler", false,relativistic,  years, stepsPerYear);
+    Solver euler("euler", false, years, stepsPerYear);
 
     euler.add(sun);
     euler.add(earth);
@@ -202,20 +202,17 @@ void checkingPerihelion(){
     Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
     clock_t start_3, finish_3;
     start_3 = clock();
-    stepsPerYear = 7*3600*360;;
-    years = 100;
+    double stepsPerYear = 1000;
+    int years = 100;
+    Solver periheli("periheli", true, years, stepsPerYear);
 
-
-    Solver peripeli("peripeli", true,true,  years, stepsPerYear);
-
-    // OBS! ADD SUN FIRST
-    peripeli.add(sun_00);
-    peripeli.add(mercury_00);
-    peripeli.algorithm(false, 2, true); // true -> print to file // false -> don't print
+    periheli.add(sun);
+    periheli.add(mercury);
+    periheli.algorithm(false, 2, true); // true -> print to file // false -> don't print
     finish_3 = clock();
 
-    double time_verlet = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
-    cout << "CPU time: " << time_verlet<<endl;
+    double time_perihelion = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
+    cout << "CPU time: " << time_perihelion<<endl;
 }
 
 void checkConvergenceTimestep(){
@@ -224,16 +221,21 @@ void checkConvergenceTimestep(){
     string type, type2;
     int years = 100;
 
-cout << "------------------------------"<<endl;
-cout << "Peripeli no rel:"<<endl;
+    mat stepsPerYear = vec({10, 100, 1000});
+    for (unsigned int i=0; i<stepsPerYear.size(); i++){
+        type = to_string(stepsPerYear[i]) + "timestep_eu";
+        Solver timesteps_eu(type, false, years, stepsPerYear[i]);
 
+        type2 = to_string(stepsPerYear[i]) + "timestep_ve";
+        Solver timesteps_ve(type2, true, years, stepsPerYear[i]);
 
-     Solver peripeli_noRel("peripeli",true,false,  years, stepsPerYear);
-    // OBS! ADD SUN FIRST
-    peripeli_noRel.add(sun_00);
-    peripeli_noRel.add(mercury_00);
-    peripeli_noRel.algorithm(false, 2, true); // true -> print to file // false -> don't print
+        timesteps_eu.add(sun);
+        timesteps_eu.add(earth);
+        timesteps_ve.add(sun);
+        timesteps_ve.add(earth);
 
+        timesteps_eu.algorithm(true, 2, false);
+        timesteps_ve.algorithm(true, 2, false);
 
     }
 }
@@ -281,7 +283,7 @@ void readingInitialValues(string filename, double &x, double &y , double &z, dou
     vz = stod(myLines[5])*speed_years;
 }
 
-void findingInitialCircularVelocity(int years, bool relativistic){
+void findingInitialCircularVelocity(int years){
     double start_v = 1.9*M_PI;
     double end_v = 2.1*M_PI;
     double stepsPerYear = 50;
@@ -293,7 +295,7 @@ void findingInitialCircularVelocity(int years, bool relativistic){
         Planet earth(0.000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, relativistic, years, stepsPerYear);
+        Solver test_initial(type, true, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -313,7 +315,7 @@ void findingInitialEscapeVelocity(){
         Planet earth(0.0000030, 1.0, 0.000, 0.0, v, "earth"); // (mass,x,y,vx,vy)
         Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
         string type = "v_ini_is" + to_string(v);
-        Solver test_initial(type, true, relativistic,years, stepsPerYear);
+        Solver test_initial(type, true, years, stepsPerYear);
 
         test_initial.add(earth);
         test_initial.add(sun);
@@ -329,10 +331,11 @@ void checkingGravitation(){
 
     double years = 5;
     double beta = 2.2;
+    double stepsPerYear = 1000;
 
     while (beta <= 3.1){
         string type = "beta-is-" + to_string(beta);
-        Solver gravitation(type, true, relativistic,5, stepsPerYear);
+        Solver gravitation(type, true, years, stepsPerYear);
 
         gravitation.add(earth);
         gravitation.add(sun);

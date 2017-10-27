@@ -33,13 +33,12 @@ double Planet::relativeDistance(Planet& otherPlanet){
 }
 
 
-mat Planet::accelerationFromOther(Planet& otherPlanet, double &distance, double beta, bool relativistic_test){
+mat Planet::accelerationFromOther(Planet& otherPlanet, double &distance, double beta){
 
     // Defining the relativistic part:
     double l = abs(position[0]*velocity[1]-velocity[0]*position[1]);
     double c = 63239.7263; // AU per year
-    double relativistic = 1;
-    if (relativistic_test) relativistic = (1+(3*l*l/(distance*distance*c*c)));
+    double relativistic = (1+(3*l*l/(distance*distance*c*c)));
 
     return ((-fourpi2*otherPlanet.mass)/pow(distance,beta+1))*(position-otherPlanet.position)*relativistic;
 }
