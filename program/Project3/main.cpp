@@ -213,6 +213,7 @@ void checkingPerihelion(){
 
     double time_perihelion = (double) (finish_3 - start_3)/double((CLOCKS_PER_SEC ));
     cout << "CPU time: " << time_perihelion<<endl;
+
 }
 
 void checkConvergenceTimestep(){
