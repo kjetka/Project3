@@ -18,7 +18,7 @@ def findFiles(stikkord):
 
     return filer, planets
 
-stikkord = "-allplanets"
+stikkord = "-euler"
 # -euler,-verlet,-allplanets
 
 filer, planets = findFiles(stikkord)
@@ -27,6 +27,7 @@ print filer,planets
 
 totkin =[]
 totpot = []
+totangu = []
 
 figure(figsize=(5,5))
 
@@ -37,27 +38,34 @@ for i in range(len(filer)):
     if i==0:
         totkin = KineticEnergy
         totpot = PotentialEnergy
+        totangu = Angular
     else:
         totkin += KineticEnergy
         totpot += PotentialEnergy
+        totangu += Angular
+        
     plot(x,y, 'o' if planets[i] == "sun" else '-', linewidth=1.0,label= planets[i])
     plot(x[-1],y[-1],'ko',markersize=1.5)
     
 legend(loc=1)
-title("Orbits %s" %stikkord)
+title("Orbit %s" %stikkord)
 xlabel("Position, x-direction [AU]")
 ylabel("Position, y-direction [AU]")
 savefig("plots/plotof-%s%s%s.pdf"%(planets[0],planets[1],stikkord))
 tight_layout()
 
 figure()
-plot(time, Angular,linewidth=1.0) 
+plot(time, totangu,linewidth=1.0) 
 title("Angular momentum %s" %stikkord)
 xlabel("Time [Years]")
 ylabel("Angular momentum [AU/year]")
+ymax = max(totangu)
+ymin = min(totangu)
+ylim([ymin*0.999,ymax*1.001])
 savefig("plots/angularmomentum%s.pdf"%stikkord)
 legend()
 tight_layout()
+
 
 figure(figsize=(7,8))
 subplot(3,1, 1)
@@ -65,6 +73,9 @@ title("Total kinetic energy")
 plot(time, totkin)
 xlabel("Time [Years]")
 ylabel("$E_k$ [$J_{ast}$]")
+ymax = max(totkin)
+ymin = min(totkin)
+ylim([ymin*0.9999,ymax*1.0001])
 legend()
 tight_layout()
 
@@ -73,6 +84,9 @@ title("Total potential energy")
 plot(time, totpot)
 xlabel("Time [Years]")
 ylabel("$E_p$ [$J_{ast}$]")
+ymax = max(totpot)
+ymin = min(totpot)
+ylim([ymin*0.9999,ymax*1.0001])
 legend()
 tight_layout()
 
@@ -81,9 +95,12 @@ title("Total energy %s" %stikkord)
 plot(time, totkin+totpot)
 xlabel("Time [Years]")
 ylabel("$E_p+E_k$ [$J_{ast}$]")
+ymax = max(totkin+totpot)
+ymin = min(totkin+totpot)
+ylim([ymin*0.9999,ymax*1.0001])
+ticklabel_format(style = 'sci', axis = 'y')
 savefig("plots/totalenergy%s.pdf"%stikkord)
 legend()
 tight_layout()
-
 
 show()
