@@ -11,11 +11,12 @@ We started out with a two body system consisting of the sun and the earth. The o
 As mentioned in the method part of this report, we used two different methods to solve the differential equations, to simulate the motion, Euler's method and the Velocity Verlet method. We started out by plotting the circular motion of the earth with different time steps (see Figure \ref{fig:timesteps-euler} and \ref{fig:timesteps-verlet})to be able to evaluate the two methods.
 	
 \begin{figure}[H]
-\includegraphics[width=0.9\linewidth]{../results/plots/different_timesteps_Eulers method.pdf}\caption{This is a plot of the earth's orbit for 100 years using Euler's method, with different timesteps.}\label{fig:timesteps-euler}
+\includegraphics[width=0.9\linewidth]{../results/plots/different_timesteps_Eulers_method.pdf}\caption{This is a plot of the earth's orbit for 100 years using Euler's method, with different timesteps.}\label{fig:timesteps-euler}
 \end{figure}		
 
+After 
 \begin{figure}[H]
-\includegraphics[width=0.9\linewidth]{../results/plots/different_timesteps_Velocity Verlet method.pdf}\caption{This is a plot of the earth's orbit for 100 years using the Velocity Verlet method, with different timesteps.}\label{fig:timesteps-verlet}
+	\includegraphics[width=0.9\linewidth]{../results/plots/different_timesteps_Velocity_Verlet_method.pdf}\caption{This is a plot of the earth's orbit for 100 years using the Velocity Verlet method, with different timesteps.}\label{fig:timesteps-verlet}
 \end{figure}		
 
 Another way to compare two methods are looking at the CPU time. In Table \ref{tab:CPUtime} the CPU time for the two method are listed. We can see that the difference between them are small, but the velocity Verlet algorithm is slower than the Euler method. 

@@ -45,18 +45,18 @@ for i in range(len(filer)):
     figure(1)
     plot(x,y, label = planets[i])
 
+
 figure(1)
 legend()
-xlabel('x, Au')
-xlabel('y, Au')
+xlabel('x-direction, Au')
+ylabel('y-direction, Au')
 title('Position of 3-body system around barrycentre')
 savefig('plots/3bodyCentric_position.pdf')
 
 figure()
-plot(time , totangu, label = 'Total angular momentum')
-ylabel(r'Angular momentum, $kgAu^2/year$')
+plot(time , totangu*1e6, label = 'Total angular momentum')
+ylabel(r'Angular momentum, $\mu kgAu^2/year')
 xlabel('time, years')
-ylim([0.0136,0.0137])
 legend()
 title('Angular momentum for the three-body system')
 savefig('plots/3bodyCentric_angular.pdf')
@@ -79,3 +79,14 @@ show()
 
 
 
+
+figure 
+
+figure()
+plot(time , totangu*1e6, label = 'Total angular momentum')
+ylabel(r'Angular momentum, $\mu kgAu^2/year')
+xlabel('time, years')
+ticklabel_format(style='plain', axis='x', scilimits=(0,0))
+legend()
+title('Angular momentum for the three-body system')
+show()
