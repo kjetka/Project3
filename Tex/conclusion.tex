@@ -1,3 +1,7 @@
-The fact that the velocity Verlet method has a smaller amplitude in the oscillations for both the angular momentum and energy and has a smaller deviation of the centre of the oscillations in the energy-plot than the Euler-simulation, indicates that Verlet method is more stable and that it conserves energy better. 
 
-comment on code
+
+The fact that the velocity Verlet method has a smaller amplitude in the oscillations for both the angular momentum and energy and has a smaller deviation of the centre of the oscillations in the energy-plot than the Euler-simulation, indicates that Verlet method is more stable and that it conserves energy better. It is also more precise with larger integration steps, allowing the program to run with bigger increments, which could help speed up the program.
+
+It was also found that the initial values of velocities plays a big part in the shape of the orbit of the planets, determining whether a planet escapes or orbit in a circular or elliptical fashion. Every object also influences the orbit of the other objects in the solar system, the extent determined by the interplanetary distance and the mass of the objects. In addition we found that the perihelion of Mercury is dependent on a relativistic correction.  
+
+Object orienting was a very convenient method in order to simulate several planets. Generalizing it into one planet class and one class were all calculations were done proved to be an insufficient structure. A more generalized code could have a class with the different integration methods,   another for doing the actual calculations and a third for the initial values. This would have generalized the code more and added simplicity in each class as they would be more purpose built, rather than filling the multi-purpose role our solver and main class did in this project. 
