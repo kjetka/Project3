@@ -43,10 +43,25 @@ for i in range(len(filer)):
         totpot += PotentialEnergy
         totangu += Angular
     figure(1)
-    plot(x,y)
+    plot(x,y, label = planets[i])
+
+figure(1)
+legend()
+xlabel('x, Au')
+xlabel('y, Au')
+title('Position of 3-body system around barrycentre')
+savefig('plots/position_3bodyCentric.pdf')
 
 figure()
-plot(time , totangu)
+plot(time , totangu, label = 'Total angular momentum')
+ylabel(r'Angular momentum, $kgAu^2/year$')
+xlabel('time, years')
+#ylim([-0.016,-0.01])
+legend()
+title('Angular momentum for the three-body system')
+savefig('plots/angular_3bodyCentric.pdf')
+
+
 #ylim([0.01365,0.01368])
 
 figure()
@@ -56,6 +71,8 @@ xlabel('time, years')
 ylim([-0.016,-0.01])
 legend()
 title('Energy for the three-body system')
+savefig('plots/energy_3bodyCentric.pdf')
+
 show()
 
 

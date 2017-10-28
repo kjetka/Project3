@@ -21,7 +21,7 @@ int main(){
 
     double m_sun = 2.0*1e30;
     int years = 50;
-    int stepsPerYear = 9000;
+    int stepsPerYear = 1000;
 
     // Checking things -----------------------------------------------------------
 
@@ -63,7 +63,7 @@ int main(){
     // Three body bodycentric coordinates -------------------------------------------
 
        // Finding centre of mass
-
+/*
     Solver findR("findR", true, false, years, stepsPerYear);
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
@@ -90,7 +90,7 @@ int main(){
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
 
-
+*/
 
 
     /*
@@ -117,9 +117,10 @@ int main(){
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
     */
-
+checkingPerihelion();
 
     // ----------------------------------------------------------------------------
+
 
     return 0;
 }
@@ -233,13 +234,14 @@ void checkingPerihelion(){
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
     Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
     clock_t start_3, finish_3;
-    start_3 = clock();
-    double stepsPerYear = 1000;
+    double stepsPerYear =  7*360*3600;
     int years = 100;
-    Solver periheli("periheli", true, false, years, stepsPerYear);
+
+    Solver periheli("periheli", true, false, 100, stepsPerYear);
 
     periheli.add(sun);
     periheli.add(mercury);
+    start_3 = clock();
     periheli.algorithm(false, 2, true); // true -> print to file // false -> don't print
     finish_3 = clock();
 
