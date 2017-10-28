@@ -5,18 +5,18 @@ In the classical description of the solar system, there is only a single force w
  F_G = - G\frac{M_{1}M_2}{r ^2} \label{eq:F_G}
 \end{equation}
 
-By applying Newtons 2.law on component form we achieve two more equations, in the case of a two dimensional system. 
+By applying Newtons 2.law on component form, we achieve two more equations, in the case of a two dimensional system. 
 \begin{equation}
 \dv[2]{\vec{r	}}{t} = \frac{\vec{F}_G}{M_2} \label{eq:Newton}
 \end{equation}
 
-Equation \ref{eq:Newton} is in reality two seperate, independent equations, one for the x-direction and the other for the y-direction. 
+Equation \ref{eq:Newton} is in reality two separate, independent equations, one for the x-direction and the other for the y-direction. 
  
  
   
 \subsection{Units and scaling}
 
-A computer has a limited bit-resolution and the distances and timescale are large when computing the solar system. This means that it is important to use appropriate units. The distance between the sun and the earth is defined as 1 Astronomical unit (1 Au) and the timescale used in this project will be in units of 1 year. 
+A computer has a limited bit-resolution and the distances and time scales are large when computing the solar system. This means that it is important to use appropriate units. The distance between the sun and the earth is defined as 1 Astronomical unit (1 Au) and the time scale used in this project will be in units of 1 year. 
 
 
 For simplicity we will define a new unite of energy: $ J_{ast}  = \frac{m_{planet}}{\abs{M_{sun}}} \left(\frac{Au}{year}\right)^2$, where $ \abs{M_{sun}} $. In reallity this is simply Joule with a prefactor. This prefactor can be obtained by inserting the values into $ J_{ast} $:
@@ -36,7 +36,7 @@ We know that the earth needs one year to orbit the sun, meaning that $ v = \frac
 % For the rest of this section  all variables will be dimensionless.
 
 
-For the case of the earth - sun system one can assume that the sun is stationary, as $ M_{sun}>> M_{earth} $. The force experienced by the earth is thus centrifugal, which means that $ a = \frac{v^2}{r} $, with $ v = 2\pi r /1year $.  
+For the case of the two body earth - sun system one can assume that the sun is stationary, as $ M_{sun}>> M_{earth} $. The force experienced by the earth is thus centrifugal, which means that $ a = \frac{v^2}{r} $, with $ v = 2\pi r /1year $.  
 Combining this with equations \ref{eq:F_G} and \ref{eq:Newton} it is possible to scale the equations in the following manner:
 
 \begin{align}
@@ -51,8 +51,7 @@ This gives that the dimensionless expression can be stated as:
 		\dv{\tilde{v}}{\tilde{t}} = \frac{4\pi^2}{\tilde{r}^2} 
 	\end{equation}
 	
-In the two dimensional system $ r = (x,y) = (r\cos\theta, r\sin\theta) $. Using the notation $ 	\dot{p}  = \dv{p}{t}$, this gives the following coupled differential equations: 
-
+In the two dimensional case $ r = (x,y) = (r\cos\theta, r\sin\theta) $. Using the notation $ 	\dot{p}  = \dv{p}{t}$, this gives the following coupled differential equations: 
 \begin{align}
 \dot{v}_x  &=  \frac{4\pi^2r\cos\theta}{{r}^3}  = \frac{4\pi^2x}{{r}^3}  \label{eq:vx}\\
 \dot{v}_y	 &= -\frac{4\pi^2r\sin\theta}{{r}^3}  = \frac{4\pi^2y}{{r}^3 \label{eq:vy}}\\
@@ -68,7 +67,7 @@ As with any physical system, the total energy has to be conserved. The potential
 	E_{tot} = \frac{1}{2}mv^2 - \frac{G	M_1M_2}{r} \label{eq: toten}
 \end{equation}
 
- In addition, the angular momentum $ (\vec{L}) $ of the system has to be preserved. This is because there are no additional sources of torque ($ \vec{\tau} $) once the system has been initialized and $ \vec{\tau} = \dv{{\vec{L}}}{t} =0$. As a result all the absolute value of $ \vec{L} $ hast to be constant. 
+ In addition, the angular momentum $ (\vec{L}) $ of the system has to be preserved. This is because there are no additional sources of torque ($ \vec{\tau} $) once the system has been initialized and $ \vec{\tau} = \dv{{\vec{L}}}{t} =0$. As a result all the absolute value of $ \vec{L} $ has to be constant. 
 
 In order to maintain in the gravitational field of another object, the distance between them needs to be smaller than $ \infty $. However, with a large enough velocity it is possible to escape. By setting  equation \ref{eq: toten} equal to $ 0 $ one obtains the lowest escape velocity $ v_{esc} $: 
 
@@ -91,9 +90,13 @@ Vi har ingen beregninger med sol i sentrum, men bruker sol ved t=0 som posisjon.
 Hvorfor bør egentlig være barrycentre til univers?
 
 \subsection{Perihelion precession}
-\textit{Can the observed perihelion precession of Mercury be explained by the general theory of relativity?}
 
-The perihelion is the position on the orbit where the planet is closest
+With a two body problem, only one force working on the planet, Mercury's elliptical orbit should be fixed if there where only non-relativistic Newtonian forces working on it. Mercury's orbit has been observed to rotate even when the forces from the other planets are subtracted away. If we add a relativistic part to the force, the rotation of the elliptical orbit can be explained. The gravitational force with the relativistic part is:
 
+\begin{equation}\label{eq:rel_force}
+F_G = \frac{GMm}{r^2}\left[ 1 + \frac{3l^2}{r^2c^2}\right]
+\end{equation}
+	
+Here $l$ is the magnitude of the angular momentum, $l = |\textbf{r}\times \textbf{v}|$, of the planet per unit mass and $c$ is the speed of light. To be able to see the rotation, we look at the movement of the perihelion, the position where Mercury is closest to the sun.
 
 

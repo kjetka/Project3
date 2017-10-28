@@ -1,3 +1,5 @@
+We started with a two body system and did some calculations with both Euler's method and the Velocity Verlet method. Thereafter we added another planet, Jupiter, and saw how this affected the system. At last we added all the planets using initial conditions from NASA \cite{nasa} [FIX THIS LATER]. Our solar system thus far had been non-relativistic, only  Newtonian forces was taken into consideration. To investigate how relativistic forces affect the solar system, we looked at the perihelion precession of Mercury.
+
 \subsection{Two body system}
 
 We started out with a two body system consisting of the sun and the earth. The sun's position stared in zero. We wanted to find out what initial velocity the earth needed to have, for the orbit of the earth to be circular. The result can be found in Figure \ref{fig:circular_orbit}.
@@ -85,9 +87,9 @@ Next we wanted to see what happened if we changed the gravitational force. The g
 \includegraphics[width=0.9\linewidth]{../results/plots/diffenrent_gravitation.pdf}\caption{This is a plot of the sun-earth system for different gravitational forces. The gravitational force is given by $ F = \frac{-GM_EM_S}{r^\beta}$ and in the plot $\beta$ is changed from it's normal value $\beta = 2$ to $\beta = 3.1$.}\label{fig:different_gravitation}
 \end{figure}
 
-\subsection{Three body problem:}
+\subsection{Three body system}
 
-Thereafter we added a planet to our system and got a three body problem. Figure \ref{fig:three_body_sun_origin} shows the motion of the planets.
+Next we added a planet, Jupiter, to our system and got a three body problem. Figure \ref{fig:three_body_sun_origin} shows the motion of the planets.
 
 \begin{figure}[H]
 \includegraphics[width=0.9\linewidth]{../results/plots/Jupitermass_is_1_0000_earth.pdf}\caption{This is a plot of the three body system, Jupiter, Earth and Sun, with the origin in sun at time = 0.}\label{fig:three_body_sun_origin}
@@ -110,8 +112,13 @@ Thereafter we added a planet to our system and got a three body problem. Figure 
 	- Compare with 3e)
 	- Extend to all planets (plot)
 	
+	
+\subsection{All planets}
+
+At last we added all the planets with initial conditions form NASA \cite{nasa}. Figure \ref{fig:solarsystem_allplanets} shows the orbits of all the planets and Figure \ref{fig:solarsystem_innerplanets} shows the inner planet's orbits, because they are difficult to in the other plot.  
+
 \begin{figure}[H]
-\includegraphics[width=1\linewidth]{../results/plots/plotof-earthjupiter-allplanets.pdf}\caption{This is a plot of the Solar System after 200 years of motion.}\label{fig:solarsystem_allplanets}
+\includegraphics[width=1\linewidth]{../results/plots/plotof-earthjupiter-allplanets.pdf}\caption{This is a plot of the Solar System after 100 years of motion.}\label{fig:solarsystem_allplanets}
 \end{figure}
 
 
@@ -119,17 +126,14 @@ Thereafter we added a planet to our system and got a three body problem. Figure 
 \includegraphics[width=1\linewidth]{../results/plots/innerplanets-verletAll.pdf}\caption{This is a plot of planets closest to the sun in the Solar System after 30 years of motion.}\label{fig:solarsystem_innerplanets}
 \end{figure}
 	
-	- Find perihelion for both relativistic and non-relativistic (table)
+\subsection{Considering relativistic force}
 	
-\begin{table}\caption{This is a table with the Perihelion information about Mercury after one century, 100 years.}\label{tab:Perihelion}
+As a last point we wanted to see how relativistic forces affect the orbits. We used the perihelion precession of Mercury to explore this. Table \ref{tab:Perihelion} shows the perihelion position of Mercury after 100 years of orbiting the sun alone with no other planets affecting the movement. The table lists the position with non-relativistic forces and relativistic forces.
+	
+\begin{table}\caption{This is a table with the Perihelion information about Mercury after one century, 100 years. The perihelion precession is observed to be 43 arc seconds and, as we can see, this fits well with our result.}\label{tab:Perihelion}
 \begin{tabular}{ccc}
  & Newtonian & Relativistic\\ \hline
 Position [AU]: & ( , ) & ( , )\\
 Angle [arcseconds]: & & \\
 \end{tabular}
 \end{table}
-
-	- Relativistic - should be a few magnitudes smaller.	
-
-	-  Can the observed perihelion
-precession of Mercury be explained by the general theory of relativity?
