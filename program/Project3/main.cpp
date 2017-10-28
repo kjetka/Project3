@@ -20,7 +20,7 @@ void runWithVelocityVerlet(int years, double stepsPerYear, bool printfile);
 int main(){
 
     double m_sun = 2.0*1e30;
-    int years = 50;
+    int years = 100;
     int stepsPerYear = 1000;
 
     // Checking things -----------------------------------------------------------
@@ -30,13 +30,18 @@ int main(){
 //    checkingPerihelion();
 //    checkingGravitation(); // only works for earth and sun
 //    findingInitialEscapeVelocity();  // only works for earth and sun
-//    findingInitialCircularVelocity(years);  // only works for earth and su
+     //findingInitialCircularVelocity(2);  // only works for earth and su
 
 
     // Running things ------------------------------------------------------------
 
     //velocityVerletAllPlanets(years, stepsPerYear);
 
+     //runWithEuler(years, stepsPerYear, true);
+     //runWithVelocityVerlet(years, stepsPerYear, true);
+
+    //
+     /*
     vec whichyears = vec({1e2,1e3,1e4});
     for(int i =0; i<3; i++){
     int years = whichyears[i];
@@ -45,6 +50,7 @@ int main(){
     runWithEuler(years, stepsPerYear, false);
     cout << "-----------" <<endl;
     }
+    */
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
 
@@ -69,11 +75,11 @@ int main(){
     // Three body bodycentric coordinates -------------------------------------------
 
        // Finding centre of mass
-/*
+
     Solver findR("findR", true, false, years, stepsPerYear);
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
-    Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
+    Planet jupiter_simple(0.00095, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
     double sun_vx = 0; double sun_vy = 0;
 
 
@@ -83,56 +89,39 @@ int main(){
     mat R = findR.findCenterOfMass();
     findR.momentumSun( sun_vx,  sun_vy);
 
-    cout << sun_vx<< "   " << sun_vy <<endl;
     // Using centre of mass to do calculations
     Solver threeBodyCentric("3bodyCentric", true, false, years, stepsPerYear);
 
     Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
     Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],sun_vx,sun_vy, "sun");
-    Planet jupiter_bc(1.9e27/m_sun, 5.2-R[0], 0.0-R[1], 0.0, 0.434*2*M_PI, "jupiter");
+    Planet jupiter_bc(0.00095, 5.2-R[0], 0.0-R[1], 0.0, 0.434*2*M_PI, "jupiter");
 
     threeBodyCentric.add(earth_bc);
     threeBodyCentric.add(sun_bc);
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
 
-*/
 
-/*
-stepsPerYear = 800;
-    // Finding centre of mass
-    Solver findR("findR", true, false, years, stepsPerYear);
-    Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
-    Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
-    Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
 
-    findR.add(earth_simple);
-    findR.add(sun_simple);
-    findR.add(jupiter_simple);
-    mat R = findR.findCenterOfMass();
+    // Three-body sun as origin
 
-    // Using centre of mass to do calculations
-    Solver threeBodyCentric("3bodyCentric", true, false, years, stepsPerYear);
+    Solver threeBodyNoBary("3bodynoBary", true, false, years, stepsPerYear);
+    threeBodyNoBary.add(earth_simple);
+    threeBodyNoBary.add(sun_simple);
+    threeBodyNoBary.add(jupiter_simple);
+    threeBodyNoBary.algorithm(true, 2, false);
 
-    Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
-    Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],0.0,0.0, "sun"); // WHAT IS THE INITIAL VELOCITY NEEDED? (MOMENT = 0)
-    Planet jupiter_bc(1.9e27/m_sun, 5.2-R[0], 0.0-R[1], 0.0, 0.434*2*M_PI, "jupiter");
 
-    threeBodyCentric.add(earth_bc);
-    threeBodyCentric.add(sun_bc);
-    threeBodyCentric.add(jupiter_bc);
-    threeBodyCentric.algorithm(true, 2, false);
+
 
 //checkingPerihelion();
-*/
-    // ----------------------------------------------------------------------------
 
 
     return 0;
 }
 
 void runWithEuler(int years, double stepsPerYear, bool printfile){
-    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet earth(3e-6, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
 
     clock_t start_, finish_;
@@ -150,21 +139,21 @@ void runWithEuler(int years, double stepsPerYear, bool printfile){
 }
 
 void runWithVelocityVerlet(int years, double stepsPerYear, bool printfile){
-    Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
-    Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
+    Planet earth_verlet(3e-6, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
+    Planet sun_verlet(1.0, 0.0,0.0,0.0,0.0, "sun");
 
-    clock_t start_2, finish_2;
+    clock_t start_, finish_;
+
     Solver verlet("verlet", true,false,  years, stepsPerYear);
 
-    verlet.add(sun);
-    verlet.add(earth);
-    start_2 = clock();
-    verlet.algorithm( printfile, 2, false); // true -> print to file // false -> don't print
-    finish_2 = clock();
+    verlet.add(sun_verlet);
+    verlet.add(earth_verlet);
+    start_ = clock();
+    verlet.algorithm(printfile, 2, false); // true -> print to file // false -> don't print
+    finish_ = clock();
+    double time_verlet = (double) (finish_ - start_)/double((CLOCKS_PER_SEC ));
 
-    double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
-    cout << "CPU time Verlet: " << time_verlet<<endl;
-
+    cout<< "CPU time Verlet: " <<time_verlet<<endl;
 }
 
 void velocityVerletAllPlanets(int years, double stepsPerYear){
@@ -241,7 +230,7 @@ void checkingPerihelion(){
     Planet mercury(3.3e23/m_sun,0.3075, 0, 0, 12.44,"mercury");
     clock_t start_3, finish_3;
     double stepsPerYear =  7*360*3600;
-    int years = 100;
+    int years = 1;
 
     Solver periheli("periheli", true, false, 100, stepsPerYear);
 

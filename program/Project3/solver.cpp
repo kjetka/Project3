@@ -47,17 +47,15 @@ void Solver::velocityVerlet(Planet &current, double beta){
 
 
 void Solver::Euler(Planet &current, double beta){
-    //works only for earth sun
     //Planet other = m_listPlanets.at(1);
     updateTotalAcceleration_andPotEnergy(current, beta);
     //current.acceleration = current.accelerationFromOther(other, distance);
     current.velocity += current.acceleration*dt;
     current.position += current.velocity*dt;
-
 }
 
-void Solver::algorithm(bool printfile, double beta, bool stationarySun_periophelion){
 
+void Solver::algorithm(bool printfile, double beta, bool stationarySun_periophelion){
     if (choiseOfMethod==true){cout << "Running velocity verlet"<<endl;}
     else                    cout << "Running Euler" << endl;
 

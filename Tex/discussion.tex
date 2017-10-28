@@ -1,6 +1,46 @@
-\textit{Can the observed perihelion precession of Mercury be explained by the general theory of relativity?}
+
+\subsection{Stability of the methods}
+
+As we see from the figures describing the movement of the earth-sun system, figures  \ref{fig:timesteps-euler} \ref{fig:timesteps-verlet},  the velocity Verlet seems to conserve the motion of the earth around the sun better with a increase in dt. 
+
+However, the plots  \ref{fig:angularmomentum-verlet} and
+\ref{fig:angluarmomentum-euler} indicates that the angular momentum is not well conserved in either integration method used in this project. For a circular motion the angular momentum should oscillate, but with the same amplitude and around a constant value. The Euler method plot shows a constant amplitude, but the maximum and minimum is  decreasing with time, indicating that system looses angular momentum and thus not conserving it. The Verlet plot shows an increasing amplitude, but the minimum of the oscillation is not changing. This can be explained by the fact that the calculations were conducted with a movable sun and a origin fixed at the sun's position at $ t=0 years $. As the sun is moving the total angular momentum of the system changes, as the barycentre of the sun and earth moves around. It is thus impossible to claim that the total angular momentum is conserved or not based on this plot alone. 
+
+The total energy also needs to be conserved and by investigating figures \ref{fig:totalenergy-verlet} and \ref{fig:toten_eu_ver} it is clear that the energies coming from the Euler-simulation oscillates with a larger amplitude than the velocity verlet method does. The development of the total energy is very similar to the development of the angular momentum. Thought it is difficult to see, the total energy of the Euler-simulation decreases more than the Verlet simulation increases the total energy. 
+
+Although the Euler method consist is faster the velocity Verlet method, owing to the fact that it has two fewer FLOPS per time iteration, figure \ref{fig:circular_orbit} shows that the Verlet method works better for smaller time-resolution, which allows for fewer iterations per year and a possible increase in speed of the overall program. 
+
+
+\subsection{Effects of initial values}
+
+The effect of initial conditions is obvious when considering figures \ref{fig:circular_orbit} and \ref{fig:escape_velocity_near_exact}. If the initial velocity is greater than $ v = 2\pi $, the orbit will have an elliptical shape and the larger the initial velocity, the longer the orbit will be. In our simulations we were unable to simulate an infinite distance away from the sun (requirement for an escaped planet) and it is thus a bit difficult to numerically determine the exact escape velocity. Velocities lower than that required to keep an perfect circular orbit will also be elliptical, but with the initial starting position as the point furthest away from the sun. 
+
+The origin is another choice of initial values which effects the physics at hand. For the case of figure \ref{fig:3bodynobary} it is clear that the all the objects in the 3-body simulation is moving and the barycentre is not  in the origin throughout the simulation. As the total momentum of this system is not $ 0 $, we see that the entire system is moving in the y-direction, most clearly indicated by the sun. This effects the other planets, as the mass of the sun is many times larger than the other masses. When we compensated the suns initial velocity so that the total momentum was $ 0 $ and placed origin in the barycentre, see figure \ref{fig:3bodybary}, the interactions between the planets are easier to see. However, this is a relatively small effect as the system in both figures were simulated for 100 years. 
+
+In order to see the effect Jupiter has on the orbit of the earth it is useful to compare figure \ref{fig:plotof-earthsun-verlet} to  figure \ref{fig:3bodybary}. When Jupiter is included, the orbit of the earth changes from a circular to an elliptical shape. This trend is seen even clearer in figure \ref{fig:jupitermassis10}, where the mass of jupiter is $ 10m_{sun} $. Here the motion of the sun is much more substantial and the earth is not only following an elliptical orbit, but the orbit seems to shift with the position of the sun and jupiter. 
+
+As the mass of jupiter is increased to $ 1000m_{sun} $ in figure \ref{fig:jupitermassis10000earth}, the entire system gets very chaotic. As the sun is attracted to Jupiter, it follows Jupiters orbit. This again effects the orbit of Jupiter. While the sun is chasing Jupiter the earth seems to orbit follow the sun, as this is the closest object and the force of the gravitation is proportional to $ 1/r^2 $ with $ r $ being the distance between two objects. The earth also indicates were the sun and jupiter are closest, as it experience the force from Jupiter stronger at certain points in the plot than others. 
 
 
 
+
+
+
+
+
+\subsection{The full solar system}
+
+Figure \ref{fig:solarsystem_allplanets} shows that the outer planets in the solar system takes a long time to orbit the sun. However, over a period of 30 years, the massive, outer planets does not move much. In figure  \ref{fig:solarsystem_innerplanets} this shows in the elliptical orbits of the inner planets. 
+
+However, for mercury the simple newtonian force is not enough. The observed periphelion angle of $ 43 $ arc seconds is coherent with the results of the simulation with the relativistic correction. Simulations using only Newtonian gravitational force should produce a closed orbital, as seen in ie. figure \ref{fig:3bodybary}. 
+
+The closed orbitals that we expect from a pure Newtonian gravitational force, as indicated in figure \ref{fig:circular_orbit} for the case of the initial velocity equal to $ 2\pi $. 
+
+
+\textbf{VILDE:
+Discussion:
+- Discuss stability of velocity verlet (3 body)
+- Discuss difference 3e) and 3f) (3 body)
+}
 
 

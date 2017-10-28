@@ -52,9 +52,7 @@ The numerical cost of the algorithm can be understood when analysing the number 
 
 
 
-\subsection{Choice of origin}
 
-As every planet in the solar system is moving, choosing a point of  origin is not straight forwards. For the smaller systems, ie. the "sun-earth"-system, we chose to select the suns position at the start as the origin. This allows the sun to move. Another choice of origin is the solar system barycentre, which we utilized when calculating the entire solar system. Using the barrycentre can give a prettier picture of the physics which is (nummerically) unfolding, as every object will rotate around this point.
 
 
 \subsection{Object orientation}
@@ -74,3 +72,18 @@ When all the calculations are taken care of by the solver class and all the prop
 	verlet.algorithm("input variables");
 \end{lstlisting}
 
+
+
+\subsection{Choice of origin}
+
+The choice of origin is important, as it effects the physics of the system. As the sun is massively more massive than the earth and any other object in the solar system, it would be a good approximation to have the sun fixed in the origin. For the two-body simulations we chose to define the initial position of the sun as the origin instead, allowing the sun to move freely. However, this opens up for the sun to move away from the origin which affects the orbital of the earth. 
+
+For the simulations of the three-body solar system it was necessary too choose the barycentre of the universe as origin. This position, $ \vec{R} $ is chosen so that the mass-weighted position of all the planets relative to R is zero:
+
+\begin{equation}
+	\sum\limits_{i=i}^{N} m_i(r_i-R) = 0 \label{eq:barycentre}
+\end{equation}
+
+In addition the sun had to be initialized with velocities so that the total momentum of the system was $\vec{p}_{system}= 0 $, or else the system would slowly move further and further away from origin. Thus the initial velocity of the sun must equal $ \vec{v}_{sun} = \frac{1}{M} \sum\limits_{i=0}^{N} m_iv_i $ for N planets in the sun-planet system and a total mass of the system equal to $ M $. With this choice of initial velocities the barycentre will be in the origin throughout the simulations, given that the momentum is conserved numerically. 
+
+When simulating the full solar system we used positions and velocities given by NASA \cite{nasa}, with the barycentre as origin. 

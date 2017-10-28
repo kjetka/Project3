@@ -8,15 +8,18 @@ def findFiles(stikkord):
         if stikkord in file:
             filer.append(file)
     return filer
-"""
+
 findFiles("earth-v_ini")
 
-print filer
 
+print filer
+color = ['g','r', 'c','m', 'y', 'k', 'brown', 'hotpink', 'orange', 'purple']
+i=0
 figure()
 for file in filer:  
-    time,x,y,vx,vy,kin, pot = loadtxt(file,unpack=True, skiprows=1)
-    plot(x,y, label = "$v_{ini}$ = %.2f" %vy[0])
+    time,x,y,vx,vy,kin, pot, angmom = loadtxt(file,unpack=True, skiprows=1)
+    plot(x,y, color[i], label = "$v_{init}$ = %.2f" %vy[0])
+    i+=1
 
 x_circ = np.linspace(-1,1,100)
 
@@ -24,10 +27,12 @@ axis([-1.2,2.0,-1.2,1.2])
 title('Finding the circular orbit')
 xlabel('Posistion, x-direction')
 ylabel('Posistion, y-direction')
-plot(0,0,'o', label = "The sun")
-plot(x_circ, np.sqrt(1-x_circ**2),'y--', label='Circuar orbit')
-plot(x_circ, -np.sqrt(1-x_circ**2),'y--')
+sun_pl = color[i]+'o'
+plot(0,0,sun_pl, label = "Sun")
+plot(x_circ, np.sqrt(1-x_circ**2),'b--', label='Circuar orbit')
+plot(x_circ, -np.sqrt(1-x_circ**2),'b--')
 legend()
+
 savefig('plots/circular_orbit.pdf')
 
 """
@@ -44,8 +49,8 @@ legend()
 title('Energy convergence - circular orbit')
 xlabel('log(Timestep [year])')
 ylabel('$\log(\Delta E_{tot}) $')
-savefig('plots/convergence_euler.pdf')
-
+#savefig('plots/convergence_euler.pdf')
+show()
 # I think we have reach the occillation
     
     
@@ -53,4 +58,4 @@ savefig('plots/convergence_euler.pdf')
     
     
     
-    
+"""
