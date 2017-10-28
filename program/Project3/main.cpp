@@ -20,8 +20,8 @@ void runWithVelocityVerlet(int years, double stepsPerYear);
 int main(){
 
     double m_sun = 2.0*1e30;
-    int years = 20;
-    int stepsPerYear = 1000;
+    int years = 50;
+    int stepsPerYear = 9000;
 
     // Checking things -----------------------------------------------------------
 
@@ -36,8 +36,8 @@ int main(){
     // Running things ------------------------------------------------------------
 
     //velocityVerletAllPlanets(years, stepsPerYear);
-    runWithEuler(years, stepsPerYear);
-    runWithVelocityVerlet(years, stepsPerYear);
+   // runWithEuler(years, stepsPerYear);
+    //runWithVelocityVerlet(years, stepsPerYear);
 
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
@@ -63,12 +63,13 @@ int main(){
     // Three body bodycentric coordinates -------------------------------------------
 
        // Finding centre of mass
-/*
+
     Solver findR("findR", true, false, years, stepsPerYear);
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun_simple(1.0, 0.0,0.0,0.0,0.0, "sun");
     Planet jupiter_simple(1.9e27/m_sun, 5.2, 0.0, 0.0, 0.434*2*M_PI, "jupiter");
     double sun_vx = 0; double sun_vy = 0;
+
 
     findR.add(earth_simple);
     findR.add(sun_simple);
@@ -76,18 +77,18 @@ int main(){
     mat R = findR.findCenterOfMass();
     findR.momentumSun( sun_vx,  sun_vy);
 
+    cout << sun_vx<< "   " << sun_vy <<endl;
     // Using centre of mass to do calculations
     Solver threeBodyCentric("3bodyCentric", true, false, years, stepsPerYear);
 
     Planet earth_bc(0.000030, 1.0-R[0], 0.000-R[1], 0.0, 2*M_PI, "earth");
-    Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],sun_vx,sun_vy, "sun"); // WHAT IS THE INITIAL VELOCITY NEEDED? (MOMENT = 0)
+    Planet sun_bc(1.0, 0.0-R[0],0.0-R[1],sun_vx,sun_vy, "sun");
     Planet jupiter_bc(1.9e27/m_sun, 5.2-R[0], 0.0-R[1], 0.0, 0.434*2*M_PI, "jupiter");
 
     threeBodyCentric.add(earth_bc);
     threeBodyCentric.add(sun_bc);
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
-*/
 
 
 

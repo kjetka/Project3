@@ -276,15 +276,14 @@ void Solver::testCircular(Planet current, double time){
 }
 
 mat Solver::findCenterOfMass(){
-    mat top = vec({0,0});
-    mat bottom = vec({0,0});
+    double total_mass = 0;
+    vec sum_m_r = vec({0,0});
     for(unsigned int i = 0; i<m_listPlanets.size(); i++){
         Planet current = m_listPlanets[i];
-        top += current.mass*current.position;
-        bottom += current.mass;
+        total_mass += current.mass;
+        sum_m_r += current.mass*current.position;
     }
-    mat centerofmass = top/bottom;
-    return centerofmass;
+    return 1.0/total_mass*sum_m_r;
 }
 
 void Solver::momentumSun(double& sun_vx, double& sun_vy){
@@ -296,11 +295,12 @@ void Solver::momentumSun(double& sun_vx, double& sun_vy){
            j = i;
        }
 
-           else   p_other_planets += current.mass*current.velocity;
+        else    p_other_planets += current.mass*current.velocity;
 
     }
+
     Planet &sunny = m_listPlanets.at(j);
-    vec v_sun = p_other_planets/sunny.mass;
+    vec v_sun = - p_other_planets/sunny.mass;
     sun_vx = v_sun[0];
     sun_vy = v_sun[1];
 }
