@@ -50,16 +50,16 @@ legend()
 xlabel('x, Au')
 xlabel('y, Au')
 title('Position of 3-body system around barrycentre')
-savefig('plots/position_3bodyCentric.pdf')
+savefig('plots/3bodyCentric_position.pdf')
 
 figure()
 plot(time , totangu, label = 'Total angular momentum')
 ylabel(r'Angular momentum, $kgAu^2/year$')
 xlabel('time, years')
-#ylim([-0.016,-0.01])
+ylim([0.0136,0.0137])
 legend()
 title('Angular momentum for the three-body system')
-savefig('plots/angular_3bodyCentric.pdf')
+savefig('plots/3bodyCentric_angular.pdf')
 
 
 #ylim([0.01365,0.01368])
@@ -71,7 +71,7 @@ xlabel('time, years')
 ylim([-0.016,-0.01])
 legend()
 title('Energy for the three-body system')
-savefig('plots/energy_3bodyCentric.pdf')
+savefig('plots/3bodyCentric_energy.pdf')
 
 show()
 

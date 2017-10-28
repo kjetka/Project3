@@ -1,3 +1,14 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{Jensen}
+Morten Hjorth-Jensen.
+\newblock Computational physics: Lecture notes fall 2015.
+\newblock Department of Physics, University of Oslo, 8 2015.
+\newblock Chapter 2 and 6.
+
+\bibitem{nasa}
+Solar system dynamics.
+\newblock \url{https://ssd.jpl.nasa.gov/horizons.cgi#top}.
+\newblock Accessed: 2017-10-28.
 
 \end{thebibliography}

@@ -48,7 +48,7 @@ void Solver::velocityVerlet(Planet &current, double beta){
 
 void Solver::Euler(Planet &current, double beta){
     //works only for earth sun
-    Planet other = m_listPlanets.at(1);
+    //Planet other = m_listPlanets.at(1);
     updateTotalAcceleration_andPotEnergy(current, beta);
     //current.acceleration = current.accelerationFromOther(other, distance);
     current.velocity += current.acceleration*dt;

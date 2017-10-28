@@ -14,8 +14,8 @@ void checkConvergenceEnergy();
 void checkConvergenceTimestep();
 void checkingPerihelion();
 void velocityVerletAllPlanets(int years, double stepsPerYear);
-void runWithEuler(int years, double stepsPerYear);
-void runWithVelocityVerlet(int years, double stepsPerYear);
+void runWithEuler(int years, double stepsPerYear, bool printfile);
+void runWithVelocityVerlet(int years, double stepsPerYear, bool printfile);
 
 int main(){
 
@@ -36,8 +36,8 @@ int main(){
     // Running things ------------------------------------------------------------
 
     //velocityVerletAllPlanets(years, stepsPerYear);
-   // runWithEuler(years, stepsPerYear);
-    //runWithVelocityVerlet(years, stepsPerYear);
+    runWithVelocityVerlet(years, stepsPerYear, false);
+    runWithEuler(years, stepsPerYear, false);
 
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
@@ -92,8 +92,8 @@ int main(){
 
 */
 
-
-    /*
+/*
+stepsPerYear = 800;
     // Finding centre of mass
     Solver findR("findR", true, false, years, stepsPerYear);
     Planet earth_simple(0.000030, 1.0, 0.000, 0.0, 2*M_PI, "earth"); // (mass,x,y,vx,vy)
@@ -116,48 +116,48 @@ int main(){
     threeBodyCentric.add(sun_bc);
     threeBodyCentric.add(jupiter_bc);
     threeBodyCentric.algorithm(true, 2, false);
-    */
-checkingPerihelion();
 
+//checkingPerihelion();
+*/
     // ----------------------------------------------------------------------------
 
 
     return 0;
 }
 
-void runWithEuler(int years, double stepsPerYear){
+void runWithEuler(int years, double stepsPerYear, bool printfile){
     Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
 
     clock_t start_, finish_;
-    start_ = clock();
 
     Solver euler("euler", false,false,  years, stepsPerYear);
 
     euler.add(sun);
     euler.add(earth);
-    euler.algorithm(true, 2, false); // true -> print to file // false -> don't print
+    start_ = clock();
+    euler.algorithm(printfile, 2, false); // true -> print to file // false -> don't print
     finish_ = clock();
     double time_euler = (double) (finish_ - start_)/double((CLOCKS_PER_SEC ));
 
-    cout<< "CPU time: " <<time_euler<<endl;
+    cout<< "CPU time Euler: " <<time_euler<<endl;
 }
 
-void runWithVelocityVerlet(int years, double stepsPerYear){
+void runWithVelocityVerlet(int years, double stepsPerYear, bool printfile){
     Planet earth(3e-6, 1.0, 0.000, 0.0,2*M_PI, "earth"); // (mass,x,y,vx,vy)
     Planet sun(1.0, 0.0,0.0,0.0,0.0, "sun");
 
     clock_t start_2, finish_2;
-    start_2 = clock();
     Solver verlet("verlet", true,false,  years, stepsPerYear);
 
     verlet.add(sun);
     verlet.add(earth);
-    verlet.algorithm(true, 2, false); // true -> print to file // false -> don't print
+    start_2 = clock();
+    verlet.algorithm( printfile, 2, false); // true -> print to file // false -> don't print
     finish_2 = clock();
 
     double time_verlet = (double) (finish_2 - start_2)/double((CLOCKS_PER_SEC ));
-    cout << "CPU time: " << time_verlet<<endl;
+    cout << "CPU time Verlet: " << time_verlet<<endl;
 
 }
 

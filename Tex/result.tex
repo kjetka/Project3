@@ -20,10 +20,10 @@ As mentioned in the method part of this report, we used two different methods to
 
 Another way to compare two methods are looking at the CPU time. In Table \ref{tab:CPUtime} the CPU time for the two method are listed. We can see that the difference between them are small.
 
-\begin{table}[H]\caption{This table compares the CPU time of Euler's method and the Velocity Verlet method (VV method) that calculates the motion of the earth with 1000 time steps per year and changing the years. The CPU time is almost the same. It might also be difficult to compare because most of the CPU time comes from printing to file and other technicalities.}\label{tab:CPUtime}
+\begin{table}[H]\caption{Comparison of CPU time of Euler's method (E) and the Velocity Verlet method (VV method) that calculates the motion of the earth with 1000 time steps per year and changing the years. The CPU time is almost the same. It might also be difficult to compare because most of the CPU time comes from printing to file and other technicalities.}\label{tab:CPUtime}
 \begin{tabular}[width=\linewidth]{cccc}
-Years & \small{CPU time [s]}  & \small{CPU time [s]} & \small{Difference}\\ 
-& \small{Euler's method:} & \small{the VV Method}: & \small{CPU time [s]:}\\ \hline
+Years & \small{CPU time [s]}  & \small{CPU time [s]} & \small{Change in}\\ 
+& \small{E method:} & \small{ VV Method}: & \small{CPU time [s]:}\\ \hline
 20 & 0.921 & 0.891 & 0.03\\
 100 & 4.515 & 4.422 & 0.093\\
 1000 & 46.047 & 45.484 & 0.563\\
@@ -94,6 +94,30 @@ Next we added a planet, Jupiter, to our system and got a three body problem. Fig
 \begin{figure}[H]
 \includegraphics[width=0.9\linewidth]{../results/plots/Jupitermass_is_1_0000_earth.pdf}\caption{This is a plot of the three body system, Jupiter, Earth and Sun, with the origin in sun at time = 0.}\label{fig:three_body_sun_origin}
 \end{figure}
+
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{../results/plots/3bodyCentric_position}
+	\caption{}
+	\label{fig:3bodycentricposition}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{../results/plots/3bodyCentric_angular}
+	\caption{}
+	\label{fig:3bodycentricangular}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{../results/plots/3bodyCentric_energy}
+	\caption{}
+	\label{fig:3bodycentricenergy}
+\end{figure}
+
 
 	Ok - if initial values are correct.
 	
