@@ -36,9 +36,15 @@ int main(){
     // Running things ------------------------------------------------------------
 
     //velocityVerletAllPlanets(years, stepsPerYear);
+
+    vec whichyears = vec({1e2,1e3,1e4});
+    for(int i =0; i<3; i++){
+    int years = whichyears[i];
+    cout << "years: "<< years <<endl;
     runWithVelocityVerlet(years, stepsPerYear, false);
     runWithEuler(years, stepsPerYear, false);
-
+    cout << "-----------" <<endl;
+    }
 
     // Here you can check how jupiter's mass changes the three body system, earth, sun and jupiter:
 

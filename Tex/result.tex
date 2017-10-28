@@ -18,16 +18,18 @@ As mentioned in the method part of this report, we used two different methods to
 \includegraphics[width=1.1\linewidth]{../results/plots/different_timesteps_Velocity Verlet method.pdf}\caption{This is a plot of the earth's orbit for 100 years using the Velocity Verlet method, with different timesteps.}\label{fig:timesteps-verlet}
 \end{figure}		
 
-Another way to compare two methods are looking at the CPU time. In Table \ref{tab:CPUtime} the CPU time for the two method are listed. We can see that the difference between them are small.
+Another way to compare two methods are looking at the CPU time. In Table \ref{tab:CPUtime} the CPU time for the two method are listed. We can see that the difference between them are small, but the velocity Verlet algorithm is slower than the Euler method. 
 
-\begin{table}[H]\caption{Comparison of CPU time of Euler's method (E) and the Velocity Verlet method (VV method) that calculates the motion of the earth with 1000 time steps per year and changing the years. The CPU time is almost the same. It might also be difficult to compare because most of the CPU time comes from printing to file and other technicalities.}\label{tab:CPUtime}
-\begin{tabular}[width=\linewidth]{cccc}
-Years & \small{CPU time [s]}  & \small{CPU time [s]} & \small{Change in}\\ 
-& \small{E method:} & \small{ VV Method}: & \small{CPU time [s]:}\\ \hline
-20 & 0.921 & 0.891 & 0.03\\
-100 & 4.515 & 4.422 & 0.093\\
-1000 & 46.047 & 45.484 & 0.563\\
-\end{tabular}
+
+\begin{table}[H]\caption{Comparison of CPU time of Euler's method and the Velocity Verlet method (VV). Calculations were performed with 1000 time steps per year. As the CPU-time also calculate the time spent on updating energies and calling several functions, one will not be able to read out the CPU time of the euler/velocity verlet loop alone.}\label{tab:CPUtime}
+	\begin{tabular}[width=\linewidth]{cccc}
+		Years &\small{ time Euler  } & \small{time VVerlet} & \small{$\Delta time $} \\
+		& (ms)&(ms) &(ms)\\ \hline 
+		    
+		100 & 88.728 & 93.646 & 4.912 \\
+		1000 & 812.486 & 852.949   &40.46\\	
+		10000 & 	8145.7  & 8504.06   &358.36
+	\end{tabular}
 \end{table}
 
 %\begin{figure}[H]

@@ -1,32 +1,12 @@
 
-
-
+In this report we have modelled the solar system using Newtons law of gravitation and, for the case of mercury, with a relativistic correction. In order to integrate the dynamics of the solar system both the Euler and the Velocity Verlet methods of integration has been used. Benchmarks and comparisons of energy and angular momentum conservation shows that the Velocity Verlet method is the more stable alternative. 
 The program used in this project can be found at \href{https://github.com/kjetka/Project3}{Github}. 
 
-  Egen klasse for å kjøre algoritmer i (tidsteg, skrive fil) 
-     
-PLAN:  
-Torsdag: 
-  Kjetil: Teori, metode, (intro?), Fikse angulærmoment 
-  Vilde: Plots, andre resultater (CPU-tid...),  (skrive resultater)
-
-
-
-Test: 		
-Energy conservation, modulus "position" (lengde vektor) bevart
-				Alle vectorer samme str.
-
-
-
-	Printe + plotte energi stabilitet mellom euler og verlet.
 
 
 To do:
 	OBS Unit tests
-	
-	3b:
-								Forklare objektorientering, hvorfor deler kan generaliseres. 
-	
+
 	3c: 					  
 	- Find out which initial velocity that gives a circular motion (plot)
 	- Test stability (energy-stability) as function of dt (both Verlet and Euler)

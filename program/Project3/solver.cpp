@@ -76,7 +76,7 @@ void Solver::algorithm(bool printfile, double beta, bool stationarySun_periophel
         for (signed int i=loop_start; i < numberOfPlanets; i++) {
             Planet &current = m_listPlanets.at(i);
 
-            writeValues(outFiles[i], current,  time);
+              if (printfile) writeValues(outFiles[i], current,  time);
 
             /*  If it is the first timestep we need to
                 calculate the acceleration from the initial values */
